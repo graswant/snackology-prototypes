@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Snack Wall - Fridge Door v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;700&family=Permanent+Marker&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--sn-plum:#531C56;--sn-crimson:#B91F48;--sn-lime:#D7DF28;--fridge-white:#EEF0F0;--fridge-edge:#C8CBCC;--magnet-shadow:rgba(0,0,0,0.28)}
+body{background:var(--sn-plum);font-family:"Space Grotesk",sans-serif;color:white;overflow-x:hidden}
+.fake-section{padding:60px 40px;text-align:center;font-family:"Anton",sans-serif;font-size:clamp(28px,4vw,52px);letter-spacing:.04em;text-transform:uppercase;color:white;opacity:.35}
+
+/* SECTION WRAPPER */
+.fridge-section{background:linear-gradient(160deg,#2a0a2e 0%,#1a0820 100%);padding:70px 0 80px;position:relative;overflow:hidden}
+.fridge-section::before{content:"";display:block;height:3vw;min-height:24px;max-height:56px;background:linear-gradient(160deg,#2a0a2e 0%,#1a0820 100%);clip-path:polygon(0 100%,100% 0,100% 100%);margin-top:calc(-3vw + 1px);position:absolute;top:0;left:0;right:0;z-index:2}
+
+.fs-header{text-align:center;margin-bottom:48px;position:relative;z-index:3;padding:0 20px}
+.fs-overline{font-size:12px;letter-spacing:.28em;text-transform:uppercase;font-weight:700;color:var(--sn-lime);margin-bottom:8px;display:block}
+.fs-title{font-family:"Anton",sans-serif;font-size:clamp(44px,7vw,96px);font-weight:400;line-height:.92;letter-spacing:.03em;text-transform:uppercase;color:#fff;text-shadow:4px 4px 0 var(--sn-crimson)}
+.fs-sub{margin-top:12px;font-size:14px;color:rgba(255,255,255,.5)}
+
+/* FRIDGE BODY */
+.fridge-outer{max-width:680px;margin:0 auto;padding:0 20px;position:relative;z-index:3}
+.fridge-body{
+  background:linear-gradient(135deg,var(--fridge-white) 0%,#D8DBDC 50%,#CACECF 100%);
+  border-radius:18px;
+  border:5px solid var(--fridge-edge);
+  box-shadow:
+    inset -4px -4px 12px rgba(0,0,0,.12),
+    inset 4px 4px 12px rgba(255,255,255,.7),
+    0 20px 60px rgba(0,0,0,.5),
+    0 4px 16px rgba(0,0,0,.3);
+  position:relative;
+  /* Height is fixed — magnets scatter inside it */
+  height:520px;
+  overflow:visible;
+}
+@media(max-width:500px){.fridge-body{height:420px}}
+
+/* Fridge subtle texture */
+.fridge-body::after{
+  content:"";
+  position:absolute;inset:0;
+  border-radius:13px;
+  background:repeating-linear-gradient(180deg,transparent 0,transparent 3px,rgba(255,255,255,.06) 3px,rgba(255,255,255,.06) 4px);
+  pointer-events:none;
+}
+
+/* HANDLE */
+.fridge-handle{
+  position:absolute;
+  right:-18px;top:50%;transform:translateY(-50%);
+  width:12px;height:120px;
+  background:linear-gradient(90deg,#b0b3b5,#e0e3e4,#b0b3b5);
+  border-radius:6px;
+  box-shadow:2px 2px 8px rgba(0,0,0,.3);
+}
+
+/* MAGNET BASE */
+.magnet{
+  position:absolute;
+  cursor:pointer;
+  transition:transform .2s cubic-bezier(.34,1.56,.64,1), box-shadow .2s ease, z-index 0s;
+  transform-origin:center center;
+  opacity:0;
+  will-change:transform;
+}
+.magnet:hover{
+  z-index:100 !important;
+}
+.magnet:active{transform:scale(1.08) !important;}
+
+/* PHOTO MAGNET */
+.magnet-photo{
+  width:110px;
+  background:white;
+  padding:8px 8px 28px;
+  box-shadow:3px 5px 18px var(--magnet-shadow),1px 1px 0 rgba(0,0,0,.08);
+}
+.magnet-photo .photo-img{
+  width:100%;aspect-ratio:1;
+  display:flex;align-items:center;justify-content:center;
+  font-size:40px;
+  overflow:hidden;
+}
+.magnet-photo .photo-caption{
+  font-family:"Permanent Marker",cursive;
+  font-size:9px;
+  color:#333;
+  text-align:center;
+  margin-top:6px;
+  line-height:1.3;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+@media(max-width:500px){.magnet-photo{width:82px;padding:6px 6px 22px}.magnet-photo .photo-img{font-size:30px}.magnet-photo .photo-caption{font-size:7.5px}}
+
+/* PIN DOT on photo magnets */
+.magnet-photo::before{
+  content:"";
+  position:absolute;
+  top:-6px;left:50%;transform:translateX(-50%);
+  width:12px;height:12px;
+  border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#e05555,#8b1a1a);
+  box-shadow:0 2px 4px rgba(0,0,0,.4);
+  z-index:5;
+}
+
+/* ROUND MAGNET */
+.magnet-round{
+  width:54px;height:54px;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;
+  box-shadow:2px 4px 12px var(--magnet-shadow),inset 0 1px 0 rgba(255,255,255,.3);
+  border:2px solid rgba(255,255,255,.2);
+}
+@media(max-width:500px){.magnet-round{width:42px;height:42px;font-size:18px}}
+
+/* RECT MAGNET (brand/text) */
+.magnet-rect{
+  padding:8px 12px;
+  border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:"Anton",sans-serif;
+  font-size:11px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  box-shadow:2px 4px 12px var(--magnet-shadow),inset 0 1px 0 rgba(255,255,255,.2);
+  border:2px solid rgba(255,255,255,.15);
+  white-space:nowrap;
+}
+@media(max-width:500px){.magnet-rect{font-size:9px;padding:6px 9px}}
+
+/* NOTE PAPER */
+.magnet-note{
+  width:90px;
+  background:#FEFB9E;
+  padding:10px 8px 12px;
+  box-shadow:3px 5px 18px var(--magnet-shadow);
+  font-family:"Permanent Marker",cursive;
+  font-size:10px;
+  color:#333;
+  line-height:1.5;
+  text-align:center;
+}
+.magnet-note::before{
+  content:"";
+  position:absolute;
+  top:-6px;left:50%;transform:translateX(-50%);
+  width:12px;height:12px;
+  border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#4fc3f7,#0277bd);
+  box-shadow:0 2px 4px rgba(0,0,0,.4);
+  z-index:5;
+}
+@media(max-width:500px){.magnet-note{width:72px;font-size:8.5px}}
+
+/* ANIMATE IN */
+@keyframes magnetDrop{
+  0%{opacity:0;transform:var(--base-transform) translateY(-60px) scale(0.7)}
+  65%{transform:var(--base-transform) translateY(5px) scale(1.04)}
+  82%{transform:var(--base-transform) translateY(-2px) scale(.98)}
+  100%{opacity:1;transform:var(--base-transform)}
+}
+.magnet.dropped{animation:magnetDrop .55s cubic-bezier(.22,1.2,.36,1) forwards}
+
+/* CTA */
+.fs-cta{text-align:center;margin-top:36px;position:relative;z-index:3}
+.insta-btn{display:inline-flex;align-items:center;gap:10px;background:transparent;color:var(--sn-lime);font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;padding:13px 26px;border-radius:4px;text-decoration:none;border:3px solid var(--sn-lime);box-shadow:4px 4px 0 var(--sn-lime);transition:background .2s,transform .2s}
+.insta-btn:hover{background:var(--sn-lime);color:var(--sn-plum);transform:translate(-2px,-2px)}
+</style>
+</head>
+<body>
+
+<div class="fake-section" style="background:#F498AD;color:#531C56;">Brand Story Section</div>
+
+<section class="fridge-section">
+  <div class="fs-header">
+    <span class="fs-overline">Every Snack Has a Story</span>
+    <h2 class="fs-title">The Snack Wall</h2>
+    <p class="fs-sub">Our fridge. Your memories.</p>
+  </div>
+  <div class="fridge-outer">
+    <div class="fridge-body" id="fridgeBody">
+      <div class="fridge-handle"></div>
+    </div>
+  </div>
+  <div class="fs-cta">
+    <a href="https://instagram.com" target="_blank" class="insta-btn">See more on Instagram</a>
+  </div>
+</section>
+
+<div class="fake-section" style="background:linear-gradient(135deg,#D35C74,#E6572E);">Waitlist Section</div>
+
+<script>
+// All magnets: type, content, color, position hints
+const magnets = [
+  // Photo magnets — scattered across fridge
+  {type:"photo", emoji:"🎉", caption:"Mumbai Launch!", bg:"#f7e0e6", zone:{x:[8,22],y:[4,22]}, rot:[-7,-3]},
+  {type:"photo", emoji:"🌶", caption:"Spice Fest Delhi", bg:"#fdecd8", zone:{x:[55,72],y:[3,20]}, rot:[2,7]},
+  {type:"photo", emoji:"🥳", caption:"Pune Pop-Up",    bg:"#e8e0f0", zone:{x:[10,28],y:[42,62]}, rot:[-9,-4]},
+  {type:"photo", emoji:"🏆", caption:"Award Night!",   bg:"#ddeaf7", zone:{x:[58,76],y:[48,68]}, rot:[4,9]},
+  {type:"photo", emoji:"🎶", caption:"BLR Music Night",bg:"#e0f0e4", zone:{x:[30,50],y:[56,76]}, rot:[-5,2]},
+  {type:"photo", emoji:"🌟", caption:"Collab Day",     bg:"#fce4ec", zone:{x:[34,52],y:[8,26]}, rot:[-3,4]},
+
+  // Round magnets — small pops of colour
+  {type:"round", emoji:"🍕", bg:"#D7DF28", zone:{x:[72,84],y:[28,42]}, rot:[-5,5]},
+  {type:"round", emoji:"🎪", bg:"#5BBA47", zone:{x:[2,14],  y:[70,84]}, rot:[-8,8]},
+  {type:"round", emoji:"🔥", bg:"#B91F48", zone:{x:[76,88],y:[70,84]}, rot:[-6,6]},
+  {type:"round", emoji:"⭐", bg:"#145293", zone:{x:[40,54],y:[30,44]}, rot:[-10,10]},
+
+  // Text / brand magnets
+  {type:"rect", text:"SNACK FIRST", bg:"#531C56", color:"#D7DF28", zone:{x:[2,26],   y:[28,40]}, rot:[-4,1]},
+  {type:"rect", text:"EST. 2024",   bg:"#B91F48", color:"#fff",    zone:{x:[54,78],   y:[26,38]}, rot:[1,6]},
+
+  // Sticky notes
+  {type:"note", text:"Don't forget\nthe snacks!", zone:{x:[14,30], y:[74,90]}, rot:[-6,0]},
+  {type:"note", text:"Restock\nby Friday",        zone:{x:[60,76], y:[6,22]},  rot:[1,7]},
+];
+
+const fridge = document.getElementById("fridgeBody");
+
+function rand(min, max){ return Math.random()*(max-min)+min; }
+
+function pct(val, total){ return (val/100)*total; }
+
+function createMagnet(m, index){
+  const el = document.createElement("div");
+  el.className = "magnet";
+
+  const fw = fridge.offsetWidth;
+  const fh = fridge.offsetHeight;
+
+  // Position: random within zone (percentage of fridge size)
+  const leftPct = rand(m.zone.x[0], m.zone.x[1]);
+  const topPct  = rand(m.zone.y[0], m.zone.y[1]);
+  const rot     = rand(m.rot ? m.rot[0] : -8, m.rot ? m.rot[1] : 8);
+
+  el.style.left = leftPct + "%";
+  el.style.top  = topPct  + "%";
+  el.style.setProperty("--base-transform", "rotate("+rot+"deg)");
+  el.style.transform = "rotate("+rot+"deg)";
+  el.style.zIndex = 10 + index;
+
+  if(m.type === "photo"){
+    el.classList.add("magnet-photo");
+    el.innerHTML = '<div class="photo-img" style="background:'+m.bg+';">'+m.emoji+'</div><div class="photo-caption">'+m.caption+'</div>';
+    el.addEventListener("mouseenter", ()=>{ el.style.transform = "rotate("+rot+"deg) scale(1.12) translateY(-6px)"; el.style.boxShadow = "6px 12px 28px rgba(0,0,0,.45)"; });
+    el.addEventListener("mouseleave", ()=>{ el.style.transform = "rotate("+rot+"deg)"; el.style.boxShadow = ""; });
+  } else if(m.type === "round"){
+    el.classList.add("magnet-round");
+    el.style.background = "radial-gradient(circle at 35% 35%, "+lighten(m.bg)+", "+m.bg+")";
+    el.innerHTML = m.emoji;
+    el.addEventListener("mouseenter", ()=>{ el.style.transform = "rotate("+rot+"deg) scale(1.18)"; });
+    el.addEventListener("mouseleave", ()=>{ el.style.transform = "rotate("+rot+"deg)"; });
+  } else if(m.type === "rect"){
+    el.classList.add("magnet-rect");
+    el.style.background = m.bg;
+    el.style.color = m.color || "#fff";
+    el.innerHTML = m.text;
+    el.addEventListener("mouseenter", ()=>{ el.style.transform = "rotate("+rot+"deg) scale(1.1)"; });
+    el.addEventListener("mouseleave", ()=>{ el.style.transform = "rotate("+rot+"deg)"; });
+  } else if(m.type === "note"){
+    el.classList.add("magnet-note");
+    el.innerHTML = m.text.replace("\n","<br>");
+    el.addEventListener("mouseenter", ()=>{ el.style.transform = "rotate("+rot+"deg) scale(1.1) translateY(-4px)"; el.style.boxShadow = "5px 10px 24px rgba(0,0,0,.4)"; });
+    el.addEventListener("mouseleave", ()=>{ el.style.transform = "rotate("+rot+"deg)"; el.style.boxShadow = ""; });
+  }
+
+  fridge.appendChild(el);
+  return el;
+}
+
+function lighten(hex){
+  // Simple lighten for radial gradient highlight
+  let r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  r=Math.min(255,r+60);g=Math.min(255,g+60);b=Math.min(255,b+60);
+  return "#"+r.toString(16).padStart(2,"0")+g.toString(16).padStart(2,"0")+b.toString(16).padStart(2,"0");
+}
+
+let built = false;
+function buildMagnets(){
+  if(built) return; built = true;
+  const els = magnets.map((m,i) => createMagnet(m,i));
+  els.forEach((el,i) => setTimeout(() => el.classList.add("dropped"), i * 80 + 100));
+}
+
+new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) buildMagnets(); });
+}, {threshold: 0.15}).observe(fridge);
+</script>
+</body>
+</html>
