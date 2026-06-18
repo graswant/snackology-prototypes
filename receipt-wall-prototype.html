@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Snack Wall - Receipt Wall</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@600;700&family=Space+Grotesk:wght@400;500;700&family=Luckiest+Guy&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--sn-plum:#531C56;--sn-crimson:#B91F48;--sn-lime:#D7DF28;--sn-chompa-green:#5BBA47;--counter-dark:#1A1208;--receipt-paper:#F5F0E8;--receipt-ink:#1a1a1a;--receipt-faded:#666}
+body{background:var(--sn-plum);font-family:"Space Grotesk",sans-serif;color:white;overflow-x:hidden}
+.fake-section{padding:60px 40px;text-align:center;font-family:"Anton",sans-serif;font-size:clamp(28px,4vw,52px);letter-spacing:.04em;text-transform:uppercase;color:white;opacity:.35}
+.receipt-wall-section{background:var(--counter-dark);position:relative;padding:70px 0 80px;overflow:hidden}
+.receipt-wall-section::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(92deg,transparent 0,transparent 60px,rgba(255,255,255,.015) 60px,rgba(255,255,255,.015) 61px),repeating-linear-gradient(180deg,transparent 0,transparent 100px,rgba(0,0,0,.06) 100px,rgba(0,0,0,.06) 101px);pointer-events:none;z-index:0}
+.receipt-wall-section::before{content:"";display:block;height:3vw;min-height:24px;max-height:56px;background:var(--counter-dark);clip-path:polygon(0 100%,100% 0,100% 100%);margin-top:calc(-3vw + 1px);position:absolute;top:0;left:0;right:0;z-index:2}
+.rw-header{text-align:center;margin-bottom:52px;position:relative;z-index:3;padding:0 20px}
+.rw-overline{font-size:12px;letter-spacing:.28em;text-transform:uppercase;font-weight:700;color:var(--sn-lime);margin-bottom:8px;display:block}
+.rw-title{font-family:"Anton",sans-serif;font-size:clamp(44px,7vw,96px);font-weight:400;line-height:.92;letter-spacing:.03em;text-transform:uppercase;color:#fff;text-shadow:4px 4px 0 var(--sn-crimson)}
+.rw-sub{margin-top:14px;font-size:15px;color:rgba(255,255,255,.6);font-weight:500}
+.rw-sub a{color:var(--sn-lime);font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.rw-outer{max-width:1080px;margin:0 auto;padding:0 24px;position:relative;z-index:3}
+.receipt-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:start}
+.receipt-wrap{display:flex;justify-content:center}
+.receipt{background:var(--receipt-paper);width:100%;max-width:200px;font-family:"Courier Prime","Courier New",monospace;color:var(--receipt-ink);opacity:0;transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s ease;will-change:transform;box-shadow:2px 6px 20px rgba(0,0,0,.5),0 2px 4px rgba(0,0,0,.3);background-image:repeating-linear-gradient(180deg,transparent 0,transparent 19px,rgba(0,0,0,.025) 19px,rgba(0,0,0,.025) 20px);clip-path:polygon(0% 2.5%,2% 0%,4% 2.5%,6% 0%,8% 2.5%,10% 0%,12% 2.5%,14% 0%,16% 2.5%,18% 0%,20% 2.5%,22% 0%,24% 2.5%,26% 0%,28% 2.5%,30% 0%,32% 2.5%,34% 0%,36% 2.5%,38% 0%,40% 2.5%,42% 0%,44% 2.5%,46% 0%,48% 2.5%,50% 0%,52% 2.5%,54% 0%,56% 2.5%,58% 0%,60% 2.5%,62% 0%,64% 2.5%,66% 0%,68% 2.5%,70% 0%,72% 2.5%,74% 0%,76% 2.5%,78% 0%,80% 2.5%,82% 0%,84% 2.5%,86% 0%,88% 2.5%,90% 0%,92% 2.5%,94% 0%,96% 2.5%,98% 0%,100% 2.5%,100% 97%,98% 100%,96% 97%,94% 100%,92% 97%,90% 100%,88% 97%,86% 100%,84% 97%,82% 100%,80% 97%,78% 100%,76% 97%,74% 100%,72% 97%,70% 100%,68% 97%,66% 100%,64% 97%,62% 100%,60% 97%,58% 100%,56% 97%,54% 100%,52% 97%,50% 100%,48% 97%,46% 100%,44% 97%,42% 100%,40% 97%,38% 100%,36% 97%,34% 100%,32% 97%,30% 100%,28% 97%,26% 100%,24% 97%,22% 100%,20% 97%,18% 100%,16% 97%,14% 100%,12% 97%,10% 100%,8% 97%,6% 100%,4% 97%,2% 100%,0% 97%)}
+.receipt.aged{background-color:#EDE8DB;filter:sepia(.12)}
+.receipt.fresh{background-color:#FAFAF7}
+.receipt:hover{box-shadow:4px 16px 36px rgba(0,0,0,.7);z-index:10}
+.receipt-inner{padding:16px 13px 18px}
+.r-brand{text-align:center;border-bottom:1px dashed #aaa;padding-bottom:9px;margin-bottom:9px}
+.r-brand-name{font-family:"Luckiest Guy",cursive;font-size:16px;letter-spacing:.1em;color:var(--sn-plum);display:block}
+.r-brand-tag{font-size:6.5px;letter-spacing:.14em;text-transform:uppercase;color:#999;display:block;margin-top:1px}
+.r-photo{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:44px;margin-bottom:9px}
+.r-event{font-size:9.5px;font-weight:700;color:var(--sn-plum);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px;border-top:1px dashed #bbb;padding-top:7px}
+.r-lines{font-size:8px;line-height:1.75}
+.r-line{display:flex;justify-content:space-between;color:var(--receipt-faded)}
+.r-line.bold{color:var(--receipt-ink);font-weight:700;font-size:8.5px}
+.r-quip{text-align:center;font-weight:700;font-size:8.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--sn-plum);margin:9px 0 7px;border-top:1px dashed #bbb;border-bottom:1px dashed #bbb;padding:7px 4px;line-height:1.6}
+.r-barcode{margin-top:9px;text-align:center}
+.r-barcode-num{font-size:6.5px;letter-spacing:.1em;color:#aaa;margin-top:2px}
+@keyframes receiptUnroll{0%{opacity:0;transform:var(--tilt) translateY(-90px) scaleY(0.2)}65%{transform:var(--tilt) translateY(7px) scaleY(1.03)}82%{transform:var(--tilt) translateY(-3px) scaleY(.99)}100%{opacity:1;transform:var(--tilt)}}
+.receipt.dropped{animation:receiptUnroll .65s cubic-bezier(.22,1.2,.36,1) forwards}
+.rw-cta{text-align:center;margin-top:44px;position:relative;z-index:3}
+.insta-btn{display:inline-flex;align-items:center;gap:10px;background:transparent;color:var(--sn-lime);font-family:"Oswald",sans-serif;font-weight:700;font-size:14px;letter-spacing:.12em;text-transform:uppercase;padding:14px 28px;border-radius:4px;text-decoration:none;border:3px solid var(--sn-lime);box-shadow:4px 4px 0 var(--sn-lime);transition:background .2s,transform .2s,box-shadow .2s}
+.insta-btn:hover{background:var(--sn-lime);color:var(--sn-plum);transform:translate(-2px,-2px);box-shadow:6px 6px 0 rgba(215,223,40,.4)}
+@media(max-width:900px){.receipt-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:600px){.receipt-grid{grid-template-columns:repeat(2,1fr);gap:10px}.receipt{max-width:155px}}
+</style>
+</head>
+<body>
+<div class="fake-section" style="background:#F498AD;color:#531C56;">Brand Story Section</div>
+<section class="receipt-wall-section">
+  <div class="rw-header">
+    <span class="rw-overline">Every Event. Every Snack. Every Memory.</span>
+    <h2 class="rw-title">The Snack Wall</h2>
+    <p class="rw-sub">Receipts don't lie. &nbsp;<a href="#">@snackologyofficial</a></p>
+  </div>
+  <div class="rw-outer"><div class="receipt-grid" id="receiptGrid"></div></div>
+  <div class="rw-cta"><a href="https://instagram.com" target="_blank" class="insta-btn">See more on Instagram</a></div>
+</section>
+<div class="fake-section" style="background:linear-gradient(135deg,#D35C74,#E6572E);">Waitlist Section</div>
+<script>
+const receipts=[
+{emoji:"🎉",bg:"#B91F48",event:"Mumbai Launch Party",quip:"ZERO LEFTOVERS.\nZERO REGRETS.",items:[{k:"Guests",v:"200+"},{k:"Snacks Consumed",v:"ALL OF THEM"},{k:"Vibe",v:"IMMACULATE"}],total:"HAPPINESS: PRICELESS",tilt:"rotate(-2.5deg)",delay:0,age:"fresh",code:"SN2024-MUM-001"},
+{emoji:"🌶",bg:"#F47642",event:"Spice Festival Delhi",quip:"TOO SPICY?\nNEVER HEARD OF IT.",items:[{k:"Heat Level",v:"VOLCANIC"},{k:"Tissues Used",v:"MANY"},{k:"Coming Back?",v:"100%"}],total:"SPICE RATING: FIRE x3",tilt:"rotate(1.5deg)",delay:100,age:"aged",code:"SN2024-DEL-007"},
+{emoji:"🥳",bg:"#531C56",event:"Brand Pop-Up Pune",quip:"TABLE FOR ONE.\nSNACK FOR TWENTY.",items:[{k:"Samples Given",v:"500"},{k:"New Fans Made",v:"499"},{k:"That One Guy",v:"WRONG"}],total:"NET SCORE: PERFECT",tilt:"rotate(-3deg)",delay:200,age:"fresh",code:"SN2024-PUN-012"},
+{emoji:"🏆",bg:"#145293",event:"Award Night Mumbai",quip:"BEST SNACK BRAND.\nOBVIOUSLY.",items:[{k:"Trophies",v:"1 (SO FAR)"},{k:"Humble?",v:"WORKING ON IT"},{k:"Snacks At Podium",v:"YES"}],total:"STATUS: LEGENDARY",tilt:"rotate(2.5deg)",delay:50,age:"fresh",code:"SN2024-AWD-003"},
+{emoji:"🎶",bg:"#5BBA47",event:"Music Night Bengaluru",quip:"MUSIC + SNACKS =\nLIFE COMPLETE.",items:[{k:"Songs Played",v:"32"},{k:"Packs Sold",v:"800"},{k:"Encore?",v:"YES PLS"}],total:"GOOD TIMES: PRICELESS",tilt:"rotate(-1deg)",delay:150,age:"aged",code:"SN2024-BLR-019"},
+{emoji:"🍕",bg:"#D7DF28",event:"Office Snack Day",quip:"PRODUCTIVITY UP.\nSNACKS: GONE.",items:[{k:"Boxes Ordered",v:"12"},{k:"Survived To 5pm",v:"NONE"},{k:"Regrets",v:"ZERO"}],total:"ROI: DELICIOUS",tilt:"rotate(3deg)",delay:250,age:"fresh",code:"SN2024-OFF-044"},
+{emoji:"🎪",bg:"#A5C63E",event:"Street Food Carnival",quip:"STOOD IN QUEUE.\nWAS WORTH IT.",items:[{k:"Queue Length",v:"50 PEOPLE"},{k:"Wait Time",v:"20 MINS"},{k:"Complaints",v:"ZERO"}],total:"SATISFACTION: MAX",tilt:"rotate(-2deg)",delay:80,age:"fresh",code:"SN2024-CAR-028"},
+{emoji:"🌟",bg:"#D35C74",event:"Influencer Collab Day",quip:"NOT PAID TO SAY THIS.\nOK MAYBE A LITTLE.",items:[{k:"Reels Created",v:"60"},{k:"Views",v:"2M+"},{k:"Snacks On Camera",v:"ALL"}],total:"CLOUT: ACHIEVED",tilt:"rotate(1deg)",delay:180,age:"aged",code:"SN2024-INF-055"}
+];
+const grid=document.getElementById("receiptGrid");
+receipts.forEach((r,i)=>{
+const bars=Array.from({length:36},(_,j)=>{
+const x=(2+j*2.6).toFixed(1),h=(15+Math.sin(j*1.9+i*0.7)*6).toFixed(1),y=((28-parseFloat(h))/2).toFixed(1),w=j%6===0?2.2:j%3===0?1.5:1;
+return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" fill="#222"/>';
+}).join("");
+const wrap=document.createElement("div");
+wrap.className="receipt-wrap";
+wrap.innerHTML='<div class="receipt '+r.age+'" style="--tilt:'+r.tilt+';transform:'+r.tilt+';" data-delay="'+r.delay+'"><div class="receipt-inner"><div class="r-brand"><span class="r-brand-name">SNACKOLOGY</span><span class="r-brand-tag">Snack First. Ask Questions Never.</span></div><div class="r-photo" style="background:'+r.bg+';">'+r.emoji+'</div><div class="r-event">'+r.event+'</div><div class="r-lines">'+r.items.map(it=>'<div class="r-line"><span>'+it.k+'</span><span>'+it.v+'</span></div>').join("")+'</div><div class="r-quip">'+r.quip.split("\n").join("<br>")+'</div><div class="r-lines"><div class="r-line bold"><span>'+r.total+'</span></div></div><div class="r-barcode"><svg width="100%" height="28" viewBox="0 0 100 28">'+bars+'</svg><div class="r-barcode-num">'+r.code+'</div></div></div></div>';
+grid.appendChild(wrap);
+});
+const section=document.querySelector(".receipt-wall-section"),allR=document.querySelectorAll(".receipt");let done=false;
+new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting&&!done){done=true;allR.forEach(r=>setTimeout(()=>r.classList.add("dropped"),parseInt(r.dataset.delay)||0));}});},{threshold:0.1}).observe(section);
+allR.forEach(r=>{r.addEventListener("mouseleave",()=>{r.style.transform=getComputedStyle(r).getPropertyValue("--tilt").trim();});});
+</script>
+</body>
+</html>
