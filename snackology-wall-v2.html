@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Snackology Wall v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}html,body{margin:0;padding:0;overflow-x:hidden;background:#090909;color:#fff;font-family:'Space Grotesk',sans-serif}
+.section{background:#0b0b0b;padding:46px 0 58px;position:relative;overflow:hidden}
+.section:before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(255,255,255,.08),transparent 35%),linear-gradient(180deg,rgba(255,255,255,.03),transparent 35%);pointer-events:none}
+.inner{max-width:1460px;margin:0 auto;padding:0 22px;position:relative;z-index:1}
+.head{text-align:center;margin-bottom:20px}
+.kicker{display:block;color:#b7ff4a;letter-spacing:.28em;text-transform:uppercase;font-size:11px;font-weight:700;margin-bottom:8px}
+.title{font-family:'Anton',sans-serif;font-size:clamp(38px,6vw,82px);line-height:.9;letter-spacing:.03em;text-transform:uppercase}
+.sub{opacity:.68;font-size:14px;margin-top:10px}
+.band{position:relative;height:248px;margin:12px 0 18px;overflow:hidden;mask-image:linear-gradient(90deg,transparent 0,black 8%,black 92%,transparent 100%)}
+.band.rev{height:190px}
+.track{display:flex;gap:18px;position:absolute;left:0;top:50%;transform:translateY(-50%);will-change:transform;animation:scroll 44s linear infinite}
+.band.rev .track{animation-duration:56s;animation-direction:reverse}
+.band:hover .track{animation-play-state:paused}
+@keyframes scroll{from{transform:translate3d(0,-50%,0)}to{transform:translate3d(-50%,-50%,0)}}
+.card{width:252px;flex:0 0 auto;border-radius:30px;overflow:hidden;background:#111;box-shadow:0 18px 36px rgba(0,0,0,.35);transform:rotate(var(--rot));transition:transform .22s ease,box-shadow .22s ease;position:relative}
+.band.rev .card{width:360px;border-radius:28px}
+.card:hover{transform:translateY(-10px) scale(1.04) rotate(var(--rot));box-shadow:0 24px 42px rgba(0,0,0,.5)}
+.img{height:182px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:68px;position:relative}
+.band.rev .img{display:none}
+.name{position:absolute;left:12px;right:12px;bottom:10px;background:#111;border-radius:20px;padding:10px 14px;font-weight:700;font-size:16px;line-height:1.1;transform:translateY(24px);box-shadow:0 8px 22px rgba(0,0,0,.35);text-align:center}
+.card:hover .name{transform:translateY(0)}
+.body{padding:16px 18px 18px;background:#111;min-height:112px}
+.rating{color:#ffd34d;font-size:16px;letter-spacing:1px;margin-bottom:10px}
+.review{font-size:15px;line-height:1.45;color:#f2f2f2;opacity:.96}
+.author{display:flex;align-items:center;gap:10px;margin-top:14px}
+.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#8ef,#f8a);display:flex;align-items:center;justify-content:center;font-size:15px}
+.meta{font-size:13px;opacity:.78}
+.city{font-size:12px;opacity:.55;margin-top:2px}
+@media(max-width:900px){.band{height:208px}.band.rev{height:168px}.card{width:210px}.band.rev .card{width:300px}.img{height:154px}.name{font-size:14px}.review{font-size:13px}.body{min-height:100px}}
+@media(max-width:560px){.band{height:184px}.band.rev{height:156px}.card{width:180px;border-radius:24px}.band.rev .card{width:270px}.img{height:132px}.name{font-size:12px;padding:9px 11px}.review{font-size:12px}.body{padding:14px;min-height:92px}}
+</style>
+</head>
+<body>
+<section class="section">
+  <div class="inner">
+    <div class="head">
+      <span class="kicker">Snackology Wall</span>
+      <div class="title">Pictures on one band.<br>Reviews on the other.</div>
+      <div class="sub">Hover pauses the motion. Tap any photo to open Instagram.</div>
+    </div>
+    <div class="band">
+      <div class="track" id="photoTrack"></div>
+    </div>
+    <div class="band rev">
+      <div class="track" id="reviewTrack"></div>
+    </div>
+  </div>
+</section>
+<script>
+const photos=[
+  {name:'Mumbai Launch',emoji:'🎉',bg:'linear-gradient(135deg,#f2b0c1,#8b1f4c)',rot:'-7deg',url:'https://instagram.com'},
+  {name:'Delhi Spice Fest',emoji:'🌶️',bg:'linear-gradient(135deg,#f7d49d,#c95b2a)',rot:'4deg',url:'https://instagram.com'},
+  {name:'Pune Pop-Up',emoji:'🥳',bg:'linear-gradient(135deg,#d9c9f0,#60406f)',rot:'-4deg',url:'https://instagram.com'},
+  {name:'Bengaluru Night',emoji:'🎶',bg:'linear-gradient(135deg,#bfe7c6,#2f7750)',rot:'6deg',url:'https://instagram.com'},
+  {name:'Award Night',emoji:'🏆',bg:'linear-gradient(135deg,#c9e3ff,#2f5d93)',rot:'-5deg',url:'https://instagram.com'},
+  {name:'Street Carnival',emoji:'🎪',bg:'linear-gradient(135deg,#dff0a8,#6c9e2f)',rot:'3deg',url:'https://instagram.com'},
+  {name:'Office Snack Day',emoji:'🍕',bg:'linear-gradient(135deg,#f6ea8a,#d97d14)',rot:'-6deg',url:'https://instagram.com'},
+  {name:'Creator Collab',emoji:'🌟',bg:'linear-gradient(135deg,#f7cde3,#d15a83)',rot:'5deg',url:'https://instagram.com'}
+];
+const reviews=[
+  {stars:'★★★★★',text:'"Somehow made sampling feel premium and fun at the same time."',name:'Aarav Mehta',city:'Mumbai'},
+  {stars:'★★★★★',text:'"The snacks disappeared fast. The energy was even better."',name:'Nina Sharma',city:'Delhi'},
+  {stars:'★★★★★',text:'"Loved the booth setup. Super eye-catching and easy to remember."',name:'Rohit Iyer',city:'Pune'},
+  {stars:'★★★★★',text:'"Our team kept talking about it after the event ended."',name:'Meera Kulkarni',city:'Bengaluru'},
+  {stars:'★★★★★',text:'"Great brand presence and genuinely good product sampling."',name:'Karan Sethi',city:'Mumbai'},
+  {stars:'★★★★★',text:'"One of the most polished food activations we have seen."',name:'Ananya Rao',city:'Delhi'},
+  {stars:'★★★★★',text:'"Fun, friendly, and the snacks actually matched the hype."',name:'Sana Khan',city:'Pune'},
+  {stars:'★★★★★',text:'"Warm team, great vibe, and very shareable visuals."',name:'Aditya Bose',city:'Bengaluru'}
+];
+function photoCard(p,idx){return `<a class="card c${(idx%8)+1}" href="${p.url}" target="_blank" rel="noopener" style="--rot:${p.rot};--bg:${p.bg}"><div class="img" style="background:${p.bg}"><div class="cover">${p.emoji}</div><div class="name">${p.name}</div></div></a>`}
+function reviewCard(r,idx){const rot=((idx%2===0?1:-1)*(2+idx*.35)).toFixed(1);return `<div class="card c${(idx%8)+1}" style="--rot:${rot}deg"><div class="body"><div class="rating">${r.stars}</div><div class="review">${r.text}</div><div class="author"><div class="avatar">G</div><div class="meta"><div>${r.name}</div><div class="city">${r.city} • Google review</div></div></div></div></div>`}
+const pt=document.getElementById('photoTrack');
+const rt=document.getElementById('reviewTrack');
+const phtml=photos.map(photoCard).join('');pt.innerHTML=phtml+phtml;
+const rhtml=reviews.map(reviewCard).join('');rt.innerHTML=rhtml+rhtml;
+</script>
+</body>
+</html>
