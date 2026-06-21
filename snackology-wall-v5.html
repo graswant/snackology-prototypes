@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Snackology Wall</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}html,body{margin:0;padding:0;overflow-x:hidden;background:#090909;color:#fff;font-family:'Space Grotesk',sans-serif}
+.section{background:#0b0b0b;padding:46px 0 58px;position:relative;overflow:hidden}
+.section:before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(255,255,255,.08),transparent 35%);pointer-events:none}
+.inner{max-width:1460px;margin:0 auto;padding:0 22px;position:relative;z-index:1}
+.head{text-align:center;margin-bottom:24px}
+.kicker{display:block;color:#b7ff4a;letter-spacing:.28em;text-transform:uppercase;font-size:11px;font-weight:700;margin-bottom:8px}
+.title{font-family:'Anton',sans-serif;font-size:clamp(38px,6vw,82px);line-height:.9;letter-spacing:.03em;text-transform:uppercase}
+.sub{opacity:.55;font-size:13px;margin-top:10px}
+.band{position:relative;height:260px;margin:12px 0 22px;overflow:hidden;mask-image:linear-gradient(90deg,transparent 0,black 7%,black 93%,transparent 100%)}
+.band.rev{height:210px}
+.track{display:flex;position:absolute;left:0;top:50%;transform:translateY(-50%);will-change:transform;animation:scroll 50s linear infinite}
+.band.rev .track{animation-duration:65s;animation-direction:reverse}
+.band:hover .track,.band:active .track{animation-play-state:paused}
+@keyframes scroll{from{transform:translate3d(0,-50%,0)}to{transform:translate3d(-50%,-50%,0)}}
+.card{flex:0 0 auto;width:220px;border-radius:28px;overflow:hidden;background:#111;box-shadow:0 12px 32px rgba(0,0,0,.55);transform:rotate(var(--rot));transition:transform .25s ease,box-shadow .25s ease;position:relative;margin-right:-28px;z-index:1}
+.card:hover{transform:translateY(-16px) scale(1.07) rotate(0deg) !important;box-shadow:0 28px 52px rgba(0,0,0,.75);z-index:20}
+.img{height:200px;width:100%;object-fit:cover;display:block}
+.band.rev .card{width:340px;border-radius:26px;margin-right:16px;transform:rotate(var(--rot))}
+.band.rev .card:hover{transform:translateY(-8px) scale(1.02) rotate(0deg) !important;z-index:20}
+.band.rev .img{display:none}
+.body{padding:16px 18px 18px;background:#111}
+.stars{color:#ffd34d;font-size:15px;letter-spacing:1px;margin-bottom:8px}
+.review-text{font-size:13.5px;line-height:1.5;color:#efefef}
+.author{display:flex;align-items:center;gap:10px;margin-top:12px}
+.avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;color:#111}
+.meta{font-size:13px;opacity:.75;line-height:1.3}
+.source{font-size:11px;opacity:.45;margin-top:2px}
+@media(max-width:900px){.band{height:220px}.band.rev{height:182px}.card{width:190px;margin-right:-22px}.band.rev .card{width:290px;margin-right:14px}.img{height:170px}}
+@media(max-width:560px){.band{height:192px}.band.rev{height:164px}.card{width:162px;border-radius:22px;margin-right:-18px}.band.rev .card{width:265px;margin-right:12px}.img{height:144px}.review-text{font-size:12px}.body{padding:13px}}
+</style>
+</head>
+<body>
+<section class="section">
+  <div class="inner">
+    <div class="head">
+      <span class="kicker">Snackology Wall</span>
+      <div class="title">Events. Energy. Real talk.</div>
+      <div class="sub">Hover to pause &nbsp;·&nbsp; Tap any photo to see more on Instagram</div>
+    </div>
+    <div class="band"><div class="track" id="photoTrack"></div></div>
+    <div class="band rev"><div class="track" id="reviewTrack"></div></div>
+  </div>
+</section>
+<script>
+const base='https://raw.githubusercontent.com/graswant/snackology-prototypes/main/images/';
+const photos=[
+  {src:'A1.webp',rot:'-6deg'},{src:'A2.webp',rot:'4deg'},{src:'A3.webp',rot:'-3deg'},
+  {src:'A4.webp',rot:'7deg'},{src:'A5.webp',rot:'-5deg'},{src:'A6.jpg',rot:'3deg'},
+  {src:'A8.webp',rot:'-7deg'},{src:'A9.webp',rot:'5deg'},{src:'A10.webp',rot:'-4deg'},
+  {src:'A11.webp',rot:'6deg'},{src:'A12.webp',rot:'-3deg'},{src:'A13.webp',rot:'4deg'},
+  {src:'A14.webp',rot:'-6deg'},{src:'A15.webp',rot:'5deg'},{src:'A16.webp',rot:'-2deg'},
+  {src:'A17.webp',rot:'7deg'},{src:'A18.webp',rot:'-5deg'},{src:'A19.webp',rot:'3deg'},
+  {src:'A20.webp',rot:'-4deg'},{src:'A21.webp',rot:'6deg'},{src:'A22.webp',rot:'-7deg'},
+  {src:'A23.webp',rot:'4deg'},{src:'A24.webp',rot:'-3deg'},{src:'A25.webp',rot:'5deg'},
+  {src:'A26.webp',rot:'-6deg'},{src:'A27.webp',rot:'3deg'},{src:'A28.webp',rot:'-4deg'},
+  {src:'A29.webp',rot:'6deg'},{src:'A30.webp',rot:'-5deg'},{src:'A31.webp',rot:'4deg'},
+  {src:'A32.webp',rot:'-3deg'},{src:'A33.webp',rot:'7deg'},{src:'A34.webp',rot:'-6deg'},
+  {src:'A35.webp',rot:'5deg'}
+];
+const reviews=[
+  {text:'"When I saw Snackology I was surprised — after Biology, Zoology, Psychology... this name is really very nice. The taste of the products is amazing. I recommend everyone to give it a try."',name:'Tushar C.',color:'#f87fa5'},
+  {text:'"Love the multi grain snacks, so flavourful! Packaging looks great and convenient for use!"',name:'Ruchi S.',color:'#7de8ff'},
+  {text:'"Light, savory, and guilt-free — a fantastic alternative to traditional fried, calorie-dense chips."',name:'Nishtha S.',color:'#b7ff4a'},
+  {text:'"The yummiest and most healthy chips I\'ve had in a while — and they completely fit into my diet plan."',name:'Mehak S.',color:'#ffd34d'},
+  {text:'"Amazing authentic taste plus healthy snacks. Even kids enjoyed the products."',name:'Dr. Priyanka K.',color:'#f87fa5'},
+  {text:'"Love their wide variety of snacks. Helped a lot during international travel. Great for vegetarians."',name:'SaiLaxmi J.',color:'#7de8ff'},
+  {text:'"Really good product — fresh and crunchy snacks. I like it."',name:'Ashok R.',color:'#b7ff4a'},
+  {text:'"Awesome tasty snacks. Highly recommended."',name:'Ashok M.',color:'#ffd34d'},
+  {text:'"Really good products. Very tasty."',name:'Ruhani T.',color:'#f87fa5'},
+  {text:'"Great snacks, guilt free and tasty."',name:'G R.',color:'#7de8ff'},
+  {text:'"5 stars for tasty and healthy snacks! Highly recommended!"',name:'Anupam S.',color:'#b7ff4a'},
+  {text:'"Highly recommended! Must try! Good variety of flavours, health focused ingredient choices."',name:'Aastha',color:'#ffd34d'},
+  {text:'"Very good snacks — healthy, crunchy and fresh. I like it."',name:'Anshu R.',color:'#f87fa5'}
+];
+function photoCard(p){
+  return `<a class="card" href="https://instagram.com" target="_blank" rel="noopener" style="--rot:${p.rot}">
+    <img class="img" src="${base}${p.src}" alt="Snackology event" loading="lazy" />
+  </a>`;
+}
+function reviewCard(r,i){
+  const rot=((i%2===0?1:-1)*(1.2+i*.28)).toFixed(1);
+  const initials=r.name.split(' ').map(w=>w[0]).join('').substring(0,2);
+  return `<div class="card" style="--rot:${rot}deg">
+    <div class="body">
+      <div class="stars">★★★★★</div>
+      <div class="review-text">${r.text}</div>
+      <div class="author">
+        <div class="avatar" style="background:${r.color}">${initials}</div>
+        <div class="meta"><div>${r.name}</div><div class="source">Google Review</div></div>
+      </div>
+    </div>
+  </div>`;
+}
+const pt=document.getElementById('photoTrack');
+const rt=document.getElementById('reviewTrack');
+const ph=photos.map(photoCard).join('');pt.innerHTML=ph+ph;
+const rh=reviews.map(reviewCard).join('');rt.innerHTML=rh+rh;
+</script>
+</body>
+</html>
