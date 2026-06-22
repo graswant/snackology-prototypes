@@ -8,51 +8,65 @@
 <style>
 *{box-sizing:border-box}html,body{margin:0;padding:0;overflow-x:hidden;background:#0D0020;color:#fff;font-family:'Space Grotesk',sans-serif}
 .section{background:#0D0020;padding:46px 0 58px;position:relative;overflow:hidden}
-.section:before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(83,28,86,.18),transparent 50%);pointer-events:none}
+.section:before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(83,28,86,.22),transparent 55%);pointer-events:none}
 .inner{max-width:1460px;margin:0 auto;padding:0 22px;position:relative;z-index:1}
 .head{text-align:center;margin-bottom:24px}
 .kicker{display:block;color:#5BBA47;letter-spacing:.28em;text-transform:uppercase;font-size:11px;font-weight:700;margin-bottom:8px}
-.title{font-family:'Anton',sans-serif;font-size:clamp(38px,6vw,82px);line-height:.9;letter-spacing:.03em;text-transform:uppercase;color:#fff}
-.sub{opacity:.55;font-size:13px;margin-top:10px;color:#F498AD}
-.band{position:relative;height:260px;margin:12px 0 22px;overflow:hidden;mask-image:linear-gradient(90deg,transparent 0,black 7%,black 93%,transparent 100%)}
+.title{font-family:'Anton',sans-serif;font-size:clamp(32px,5.5vw,76px);line-height:.95;letter-spacing:.02em;text-transform:uppercase;color:#fff}
+.title .eye{font-style:normal}
+.sub{opacity:.65;font-size:14px;margin-top:12px;color:#F498AD;font-weight:500}
+.band{position:relative;height:260px;margin:12px 0 22px;overflow:hidden;mask-image:linear-gradient(90deg,transparent 0,black 7%,black 93%,transparent 100%);-webkit-mask-image:linear-gradient(90deg,transparent 0,black 7%,black 93%,transparent 100%)}
 .band.rev{height:210px}
-.track{display:flex;position:absolute;left:0;top:50%;transform:translateY(-50%);will-change:transform;animation:scroll 50s linear infinite}
-.band.rev .track{animation-duration:65s;animation-direction:reverse}
-.track.paused{animation-play-state:paused}
+.track{display:flex;position:absolute;left:0;top:50%;transform:translateY(-50%);will-change:transform;animation:scroll 70s linear infinite}
+.band.rev .track{animation-duration:90s;animation-direction:reverse}
+.track.paused{animation-play-state:paused !important}
 @keyframes scroll{from{transform:translate3d(0,-50%,0)}to{transform:translate3d(-50%,-50%,0)}}
-.card{flex:0 0 auto;width:220px;border-radius:28px;overflow:hidden;background:#1a0a2e;box-shadow:0 12px 32px rgba(0,0,0,.65);transform:rotate(var(--rot));transition:transform .25s ease,box-shadow .25s ease;position:relative;margin-right:-28px;z-index:1}
-.card:hover{transform:translateY(-16px) scale(1.07) rotate(0deg) !important;box-shadow:0 28px 52px rgba(83,28,86,.5);z-index:20}
+
+/* Photo cards */
+.card{flex:0 0 auto;width:220px;border-radius:28px;overflow:hidden;background:#1a0a2e;border:1.5px solid rgba(255,191,4,.13);box-shadow:0 12px 32px rgba(0,0,0,.65);transform:rotate(var(--rot));transition:transform .25s ease,box-shadow .25s ease;position:relative;margin-right:-28px;z-index:1}
+.card:hover{transform:translateY(-16px) scale(1.07) rotate(0deg) !important;box-shadow:0 28px 52px rgba(185,31,72,.35);z-index:20}
 .img{height:200px;width:100%;object-fit:cover;display:block}
-.band.rev .card{width:340px;border-radius:26px;margin-right:16px;transform:rotate(var(--rot));background:#130820}
-.band.rev .card:hover{transform:translateY(-8px) scale(1.02) rotate(0deg) !important;z-index:20}
+
+/* Review cards */
+.band.rev .card{width:340px;border-radius:26px;margin-right:16px;transform:rotate(var(--rot));background:#160826;border:1.5px solid rgba(255,191,4,.18)}
+.band.rev .card:hover{transform:translateY(-8px) scale(1.02) rotate(0deg) !important;box-shadow:0 24px 48px rgba(185,31,72,.3);z-index:20}
 .band.rev .img{display:none}
-.body{padding:16px 18px 18px;background:transparent}
-.stars{color:#FFBF04;font-size:15px;letter-spacing:1px;margin-bottom:8px}
-.review-text{font-size:13.5px;line-height:1.5;color:#f0eaf8}
+.body{padding:16px 18px 18px}
+.stars{color:#FFBF04;font-size:15px;letter-spacing:2px;margin-bottom:8px}
+.review-text{font-size:13.5px;line-height:1.55;color:#ede6f5}
 .author{display:flex;align-items:center;gap:10px;margin-top:12px}
-.avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;color:#fff}
-.meta{font-size:13px;opacity:.75;line-height:1.3;color:#f0eaf8}
+.avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;color:#fff}
+.meta{font-size:13px;line-height:1.3;color:#ede6f5}
+.meta-name{opacity:.9}
 .source{font-size:11px;opacity:.45;margin-top:2px}
-/* Card border accent */
-.band.rev .card{border:1px solid rgba(255,191,4,.10)}
+
+/* CTA */
+.cta-wrap{text-align:center;margin-top:18px}
+.cta{display:inline-block;padding:12px 32px;background:#B91F48;color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;letter-spacing:.06em;text-transform:uppercase;border-radius:100px;text-decoration:none;transition:background .2s ease,transform .2s ease}
+.cta:hover{background:#D35C74;transform:translateY(-2px)}
+
 @media(max-width:900px){.band{height:220px}.band.rev{height:182px}.card{width:190px;margin-right:-22px}.band.rev .card{width:290px;margin-right:14px}.img{height:170px}}
-@media(max-width:560px){.band{height:192px}.band.rev{height:164px}.card{width:162px;border-radius:22px;margin-right:-18px}.band.rev .card{width:265px;margin-right:12px}.img{height:144px}.review-text{font-size:12px}.body{padding:13px}}
+@media(max-width:560px){.band{height:192px}.band.rev{height:164px}.card{width:162px;border-radius:22px;margin-right:-18px}.band.rev .card{width:260px;margin-right:12px}.img{height:144px}.review-text{font-size:12px}.body{padding:13px 14px 14px}}
 </style>
 </head>
 <body>
 <section class="section">
   <div class="inner">
     <div class="head">
-      <span class="kicker">What People Are Saying</span>
-      <div class="title">Events. Energy. Real Talk.</div>
-      <div class="sub">Tap to pause &nbsp;·&nbsp; Real reviews from real snack lovers</div>
+      <span class="kicker">Snackology Wall</span>
+      <div class="title">Stalking us is encouraged&nbsp;👀</div>
+      <div class="sub">Follow along &mdash; the snacks are real, the chaos is documented.</div>
     </div>
-    <div class="band"><div class="track" id="photoTrack"></div></div>
-    <div class="band rev"><div class="track" id="reviewTrack"></div></div>
+    <div class="band" id="band1"><div class="track" id="photoTrack"></div></div>
+    <div class="band rev" id="band2"><div class="track" id="reviewTrack"></div></div>
+    <div class="cta-wrap">
+      <a class="cta" href="https://www.instagram.com/snackology.in/" target="_blank" rel="noopener">Follow @snackology.in &rarr;</a>
+    </div>
   </div>
 </section>
 <script>
 const base='https://raw.githubusercontent.com/graswant/snackology-prototypes/main/images/';
+const IG='https://www.instagram.com/snackology.in/';
 const photos=[
   {src:'A1.webp',rot:'-6deg'},{src:'A2.webp',rot:'4deg'},{src:'A3.webp',rot:'-3deg'},
   {src:'A4.webp',rot:'7deg'},{src:'A5.webp',rot:'-5deg'},{src:'A6.jpg',rot:'3deg'},
@@ -84,7 +98,7 @@ const reviews=[
 ];
 
 function photoCard(p){
-  return `<a class="card" href="https://instagram.com" target="_blank" rel="noopener" style="--rot:${p.rot}">
+  return `<a class="card" href="${IG}" target="_blank" rel="noopener" style="--rot:${p.rot}">
     <img class="img" src="${base}${p.src}" alt="Snackology event" loading="lazy" />
   </a>`;
 }
@@ -97,7 +111,7 @@ function reviewCard(r,i){
       <div class="review-text">${r.text}</div>
       <div class="author">
         <div class="avatar" style="background:${r.color}">${initials}</div>
-        <div class="meta"><div>${r.name}</div><div class="source">Google Review</div></div>
+        <div class="meta"><div class="meta-name">${r.name}</div><div class="source">Google Review</div></div>
       </div>
     </div>
   </div>`;
@@ -105,25 +119,29 @@ function reviewCard(r,i){
 
 const pt=document.getElementById('photoTrack');
 const rt=document.getElementById('reviewTrack');
-const ph=photos.map(photoCard).join('');pt.innerHTML=ph+ph;
-const rh=reviews.map(reviewCard).join('');rt.innerHTML=rh+rh;
+pt.innerHTML=photos.map(photoCard).join('')+photos.map(photoCard).join('');
+rt.innerHTML=reviews.map(reviewCard).join('')+reviews.map(reviewCard).join('');
 
-// Mobile touch pause — toggles on tap, doesn't interfere with scroll
-function addTouchPause(trackEl){
-  let startY=0;
-  trackEl.addEventListener('touchstart',function(e){
-    startY=e.touches[0].clientY;
-  },{passive:true});
-  trackEl.addEventListener('touchend',function(e){
-    const dy=Math.abs(e.changedTouches[0].clientY-startY);
-    if(dy<10){
-      // It's a tap, not a scroll — toggle pause
-      trackEl.classList.toggle('paused');
-    }
-  },{passive:true});
-}
-addTouchPause(pt);
-addTouchPause(rt);
+// Touch pause — tap anywhere on the section pauses/resumes BOTH bands together
+let isPaused=false;
+const allTracks=[pt,rt];
+const section=document.querySelector('.section');
+let touchStartY=0;
+
+section.addEventListener('touchstart',function(e){
+  touchStartY=e.touches[0].clientY;
+},{passive:true});
+
+section.addEventListener('touchend',function(e){
+  const dy=Math.abs(e.changedTouches[0].clientY - touchStartY);
+  if(dy < 12){
+    isPaused=!isPaused;
+    allTracks.forEach(t=>{
+      if(isPaused) t.classList.add('paused');
+      else t.classList.remove('paused');
+    });
+  }
+},{passive:true});
 </script>
 </body>
 </html>
