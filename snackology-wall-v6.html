@@ -15,34 +15,61 @@
 .title{font-family:'Anton',sans-serif;font-size:clamp(36px,6vw,82px);line-height:.95;letter-spacing:.02em;text-transform:uppercase;color:#fff}
 .sub{opacity:.65;font-size:14px;margin-top:12px;color:#F498AD;font-weight:500}
 
-.band{position:relative;height:260px;margin:12px 0 22px;overflow:hidden;
+/* Bands — extra vertical room so cards don't clip */
+.band{
+  position:relative;height:290px;margin:12px 0 28px;overflow:visible;
   mask-image:linear-gradient(90deg,transparent 0,black 7%,black 93%,transparent 100%);
   -webkit-mask-image:linear-gradient(90deg,transparent 0,black 7%,black 93%,transparent 100%)}
-.band.rev{height:210px}
+.band.rev{height:240px;overflow:hidden}
 
-.track{display:flex;position:absolute;left:0;top:50%;will-change:transform;animation:scroll 70s linear infinite}
+.track{
+  display:flex;position:absolute;left:0;top:50%;
+  will-change:transform;animation:scroll 70s linear infinite}
 .band.rev .track{animation-duration:90s;animation-direction:reverse}
-
-/* JS controls pause — no CSS hover/active on track */
-.track.paused{animation-play-state:paused}
-
 @keyframes scroll{from{transform:translate3d(0,-50%,0)}to{transform:translate3d(-50%,-50%,0)}}
 
-/* Photo cards — hover only on non-touch devices */
-.card{flex:0 0 auto;width:220px;border-radius:28px;overflow:hidden;background:#1a0a2e;
-  border:1.5px solid rgba(255,191,4,.15);
+/* Photo cards */
+.card{
+  flex:0 0 auto;width:220px;border-radius:28px;overflow:hidden;
+  background:#1a0a2e;border:1.5px solid rgba(255,191,4,.15);
   box-shadow:0 12px 32px rgba(0,0,0,.65);
   transform:rotate(var(--rot));
-  transition:transform .25s ease,box-shadow .25s ease;
-  position:relative;margin-right:-28px;z-index:1}
-@media(hover:hover){.card:hover{transform:translateY(-16px) scale(1.07) rotate(0deg) !important;box-shadow:0 28px 52px rgba(185,31,72,.35);z-index:20}}
+  transition:transform .3s ease,box-shadow .3s ease;
+  position:relative;margin-right:-28px;z-index:1;
+  -webkit-tap-highlight-color:transparent}
+/* Selected state — lifts card, shown on first tap */
+.card.selected{
+  transform:translateY(-22px) scale(1.08) rotate(0deg) !important;
+  box-shadow:0 32px 56px rgba(185,31,72,.45);
+  z-index:30}
+/* Desktop hover */
+@media(hover:hover){
+  .card:not(.selected):hover{
+    transform:translateY(-16px) scale(1.07) rotate(0deg) !important;
+    box-shadow:0 28px 52px rgba(185,31,72,.35);
+    z-index:20}}
 .img{height:200px;width:100%;object-fit:cover;display:block}
 
+/* Instagram tap hint overlay on selected card */
+.card .ig-hint{
+  position:absolute;bottom:0;left:0;right:0;
+  background:linear-gradient(transparent,rgba(13,0,32,.92));
+  color:#FFBF04;font-size:11px;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;text-align:center;
+  padding:18px 8px 10px;
+  opacity:0;transition:opacity .2s ease;
+  pointer-events:none}
+.card.selected .ig-hint{opacity:1}
+
 /* Review cards */
-.band.rev .card{width:340px;border-radius:26px;margin-right:16px;
+.band.rev .card{
+  width:340px;border-radius:26px;margin-right:16px;
   transform:rotate(var(--rot));background:#160826;
-  border:1.5px solid rgba(255,191,4,.22)}
-@media(hover:hover){.band.rev .card:hover{transform:translateY(-8px) scale(1.02) rotate(0deg) !important;box-shadow:0 24px 48px rgba(185,31,72,.3);z-index:20}}
+  border:1.5px solid rgba(255,191,4,.22);overflow:visible}
+@media(hover:hover){
+  .band.rev .card:hover{
+    transform:translateY(-8px) scale(1.02) rotate(0deg) !important;
+    box-shadow:0 24px 48px rgba(185,31,72,.3);z-index:20}}
 .band.rev .img{display:none}
 .body{padding:16px 18px 18px}
 .stars{color:#FFBF04;font-size:15px;letter-spacing:2px;margin-bottom:8px}
@@ -53,23 +80,34 @@
 .meta-name{opacity:.9}
 .source{font-size:11px;opacity:.45;margin-top:2px}
 
-/* Pause indicator */
-.pause-hint{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(60px);
-  background:rgba(13,0,32,.85);border:1px solid rgba(255,191,4,.3);
+/* Pause toast */
+.pause-hint{
+  position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(60px);
+  background:rgba(13,0,32,.9);border:1px solid rgba(255,191,4,.35);
   color:#FFBF04;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-  padding:8px 20px;border-radius:100px;opacity:0;transition:opacity .3s ease,transform .3s ease;
-  pointer-events:none;z-index:100}
+  padding:9px 22px;border-radius:100px;
+  opacity:0;transition:opacity .3s ease,transform .3s ease;
+  pointer-events:none;z-index:200}
 .pause-hint.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-.cta-wrap{text-align:center;margin-top:18px}
-.cta{display:inline-block;padding:12px 32px;background:#B91F48;color:#fff;
+.cta-wrap{text-align:center;margin-top:10px}
+.cta{
+  display:inline-block;padding:12px 32px;background:#B91F48;color:#fff;
   font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;
   letter-spacing:.06em;text-transform:uppercase;border-radius:100px;
   text-decoration:none;transition:background .2s ease,transform .2s ease}
 .cta:hover{background:#D35C74;transform:translateY(-2px)}
 
-@media(max-width:900px){.band{height:220px}.band.rev{height:182px}.card{width:190px;margin-right:-22px}.band.rev .card{width:290px;margin-right:14px}.img{height:170px}}
-@media(max-width:560px){.band{height:192px}.band.rev{height:164px}.card{width:162px;border-radius:22px;margin-right:-18px}.band.rev .card{width:260px;margin-right:12px}.img{height:144px}.review-text{font-size:12px}.body{padding:13px 14px 14px}}
+@media(max-width:900px){
+  .band{height:250px}.band.rev{height:210px}
+  .card{width:190px;margin-right:-22px}
+  .band.rev .card{width:290px;margin-right:14px}
+  .img{height:170px}}
+@media(max-width:560px){
+  .band{height:220px}.band.rev{height:190px}
+  .card{width:162px;border-radius:22px;margin-right:-18px}
+  .band.rev .card{width:260px;margin-right:12px}
+  .img{height:144px}.review-text{font-size:12px}.body{padding:13px 14px 14px}}
 </style>
 </head>
 <body>
@@ -87,11 +125,12 @@
     </div>
   </div>
 </section>
-<div class="pause-hint" id="pauseHint">⏸ PAUSED &mdash; TAP TO RESUME</div>
+<div class="pause-hint" id="pauseHint"></div>
 
 <script>
 const base='https://raw.githubusercontent.com/graswant/snackology-prototypes/main/images/';
 const IG='https://www.instagram.com/snackology.in/';
+
 const photos=[
   {src:'A1.webp',rot:'-6deg'},{src:'A2.webp',rot:'4deg'},{src:'A3.webp',rot:'-3deg'},
   {src:'A4.webp',rot:'7deg'},{src:'A5.webp',rot:'-5deg'},{src:'A6.jpg',rot:'3deg'},
@@ -106,6 +145,7 @@ const photos=[
   {src:'A32.webp',rot:'-3deg'},{src:'A33.webp',rot:'7deg'},{src:'A34.webp',rot:'-6deg'},
   {src:'A35.webp',rot:'5deg'}
 ];
+
 const reviews=[
   {text:'"When I saw Snackology I was surprised — after Biology, Zoology, Psychology... this name is really very nice. The taste of the products is amazing. I recommend everyone to give it a try."',name:'Tushar C.',color:'#B91F48'},
   {text:'"Love the multi grain snacks, so flavourful! Packaging looks great and convenient for use!"',name:'Ruchi S.',color:'#FFBF04'},
@@ -123,10 +163,12 @@ const reviews=[
 ];
 
 function photoCard(p){
-  return `<a class="card" href="${IG}" target="_blank" rel="noopener" style="--rot:${p.rot}">
+  return `<div class="card" data-ig="${IG}" style="--rot:${p.rot}">
     <img class="img" src="${base}${p.src}" alt="Snackology event" loading="lazy" />
-  </a>`;
+    <div class="ig-hint">📸 Tap again to open Instagram</div>
+  </div>`;
 }
+
 function reviewCard(r,i){
   const rot=((i%2===0?1:-1)*(1.2+i*.28)).toFixed(1);
   const initials=r.name.split(' ').map(w=>w[0]).join('').substring(0,2);
@@ -147,40 +189,75 @@ const rt=document.getElementById('reviewTrack');
 pt.innerHTML=photos.map(photoCard).join('')+photos.map(photoCard).join('');
 rt.innerHTML=reviews.map(reviewCard).join('')+reviews.map(reviewCard).join('');
 
-// --- Touch pause: controls BOTH tracks together, tap anywhere on section ---
-const tracks=[pt,rt];
+const allTracks=[pt,rt];
 const hint=document.getElementById('pauseHint');
 const section=document.getElementById('wallSection');
 let isPaused=false;
+let selectedCard=null;
 let touchStartY=0;
 let hintTimer=null;
 
-function setPaused(val){
-  isPaused=val;
-  tracks.forEach(t=>{
-    t.style.animationPlayState=isPaused?'paused':'running';
-  });
-  // Show hint
+function showHint(msg){
   clearTimeout(hintTimer);
-  hint.textContent=isPaused?'⏸ PAUSED — TAP TO RESUME':'▶ PLAYING';
+  hint.textContent=msg;
   hint.classList.add('show');
-  hintTimer=setTimeout(()=>hint.classList.remove('show'),1800);
+  hintTimer=setTimeout(()=>hint.classList.remove('show'),2000);
 }
 
+function pauseAll(){
+  isPaused=true;
+  allTracks.forEach(t=>t.style.animationPlayState='paused');
+}
+
+function resumeAll(){
+  isPaused=false;
+  allTracks.forEach(t=>t.style.animationPlayState='running');
+  if(selectedCard){
+    selectedCard.classList.remove('selected');
+    selectedCard=null;
+  }
+}
+
+// Touch logic
 section.addEventListener('touchstart',function(e){
   touchStartY=e.touches[0].clientY;
 },{passive:true});
 
 section.addEventListener('touchend',function(e){
-  // Only toggle if it was a tap (not a scroll)
-  const dy=Math.abs(e.changedTouches[0].clientY-touchStartY);
-  if(dy<10){
-    // Make sure it wasn't a link tap on a card
-    if(!e.target.closest('a')){
-      setPaused(!isPaused);
+  const dy=Math.abs(e.changedTouches[0].clientY - touchStartY);
+  if(dy>12) return; // was a scroll, ignore
+
+  const photoCard=e.target.closest('#photoTrack .card');
+  const reviewCard=e.target.closest('#reviewTrack .card');
+  const isCTA=e.target.closest('.cta');
+
+  if(isCTA) return; // let CTA button work normally
+
+  if(photoCard){
+    e.preventDefault();
+    if(selectedCard===photoCard){
+      // Second tap on same card — open Instagram
+      window.open(photoCard.dataset.ig,'_blank','noopener');
+      resumeAll();
+      showHint('▶ Playing');
+    } else {
+      // First tap on any photo card — pause + select
+      pauseAll();
+      if(selectedCard) selectedCard.classList.remove('selected');
+      selectedCard=photoCard;
+      photoCard.classList.add('selected');
+      showHint('📸 Tap again to open Instagram');
     }
+  } else if(reviewCard){
+    // Tap on review area — just toggle pause
+    if(isPaused){ resumeAll(); showHint('▶ Playing'); }
+    else { pauseAll(); showHint('⏸ Paused — tap to resume'); }
+  } else {
+    // Tap on empty section area
+    if(isPaused){ resumeAll(); showHint('▶ Playing'); }
+    else { pauseAll(); showHint('⏸ Paused — tap to resume'); }
   }
-},{passive:true});
+},{passive:false});
 </script>
 </body>
 </html>
