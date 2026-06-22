@@ -15,9 +15,9 @@
 .title{font-family:'Anton',sans-serif;font-size:clamp(36px,6vw,82px);line-height:.95;letter-spacing:.02em;text-transform:uppercase;color:#fff}
 .sub{opacity:.65;font-size:14px;margin-top:12px;color:#F498AD;font-weight:500}
 
-/* Bands — extra vertical room so cards don't clip */
 .band{
-  position:relative;height:290px;margin:12px 0 28px;overflow:visible;
+  position:relative;height:290px;margin:12px 0 28px;
+  overflow:visible;
   mask-image:linear-gradient(90deg,transparent 0,black 7%,black 93%,transparent 100%);
   -webkit-mask-image:linear-gradient(90deg,transparent 0,black 7%,black 93%,transparent 100%)}
 .band.rev{height:240px;overflow:hidden}
@@ -28,7 +28,6 @@
 .band.rev .track{animation-duration:90s;animation-direction:reverse}
 @keyframes scroll{from{transform:translate3d(0,-50%,0)}to{transform:translate3d(-50%,-50%,0)}}
 
-/* Photo cards */
 .card{
   flex:0 0 auto;width:220px;border-radius:28px;overflow:hidden;
   background:#1a0a2e;border:1.5px solid rgba(255,191,4,.15);
@@ -36,36 +35,36 @@
   transform:rotate(var(--rot));
   transition:transform .3s ease,box-shadow .3s ease;
   position:relative;margin-right:-28px;z-index:1;
-  -webkit-tap-highlight-color:transparent}
-/* Selected state — lifts card, shown on first tap */
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;user-select:none}
+
 .card.selected{
-  transform:translateY(-22px) scale(1.08) rotate(0deg) !important;
-  box-shadow:0 32px 56px rgba(185,31,72,.45);
+  transform:translateY(-22px) scale(1.09) rotate(0deg) !important;
+  box-shadow:0 32px 56px rgba(185,31,72,.5);
   z-index:30}
-/* Desktop hover */
+
 @media(hover:hover){
   .card:not(.selected):hover{
     transform:translateY(-16px) scale(1.07) rotate(0deg) !important;
     box-shadow:0 28px 52px rgba(185,31,72,.35);
     z-index:20}}
-.img{height:200px;width:100%;object-fit:cover;display:block}
 
-/* Instagram tap hint overlay on selected card */
-.card .ig-hint{
+.img{height:200px;width:100%;object-fit:cover;display:block;pointer-events:none}
+
+.ig-hint{
   position:absolute;bottom:0;left:0;right:0;
-  background:linear-gradient(transparent,rgba(13,0,32,.92));
+  background:linear-gradient(transparent,rgba(13,0,32,.93));
   color:#FFBF04;font-size:11px;font-weight:700;letter-spacing:.08em;
   text-transform:uppercase;text-align:center;
-  padding:18px 8px 10px;
-  opacity:0;transition:opacity .2s ease;
+  padding:22px 8px 10px;
+  opacity:0;transition:opacity .25s ease;
   pointer-events:none}
 .card.selected .ig-hint{opacity:1}
 
-/* Review cards */
 .band.rev .card{
   width:340px;border-radius:26px;margin-right:16px;
   transform:rotate(var(--rot));background:#160826;
-  border:1.5px solid rgba(255,191,4,.22);overflow:visible}
+  border:1.5px solid rgba(255,191,4,.22)}
 @media(hover:hover){
   .band.rev .card:hover{
     transform:translateY(-8px) scale(1.02) rotate(0deg) !important;
@@ -80,7 +79,6 @@
 .meta-name{opacity:.9}
 .source{font-size:11px;opacity:.45;margin-top:2px}
 
-/* Pause toast */
 .pause-hint{
   position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(60px);
   background:rgba(13,0,32,.9);border:1px solid rgba(255,191,4,.35);
@@ -95,7 +93,7 @@
   display:inline-block;padding:12px 32px;background:#B91F48;color:#fff;
   font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;
   letter-spacing:.06em;text-transform:uppercase;border-radius:100px;
-  text-decoration:none;transition:background .2s ease,transform .2s ease}
+  text-decoration:none;transition:background .2s,transform .2s}
 .cta:hover{background:#D35C74;transform:translateY(-2px)}
 
 @media(max-width:900px){
@@ -163,16 +161,17 @@ const reviews=[
 ];
 
 function photoCard(p){
-  return `<div class="card" data-ig="${IG}" style="--rot:${p.rot}">
-    <img class="img" src="${base}${p.src}" alt="Snackology event" loading="lazy" />
-    <div class="ig-hint">📸 Tap again to open Instagram</div>
+  // Pure div, no anchor — JS handles everything
+  return `<div class="card photo-card" style="--rot:${p.rot}">
+    <img class="img" src="${base}${p.src}" alt="Snackology event" loading="lazy" draggable="false" />
+    <div class="ig-hint">📸 Tap again for Instagram</div>
   </div>`;
 }
 
 function reviewCard(r,i){
   const rot=((i%2===0?1:-1)*(1.2+i*.28)).toFixed(1);
   const initials=r.name.split(' ').map(w=>w[0]).join('').substring(0,2);
-  return `<div class="card" style="--rot:${rot}deg">
+  return `<div class="card review-card" style="--rot:${rot}deg">
     <div class="body">
       <div class="stars">★★★★★</div>
       <div class="review-text">${r.text}</div>
@@ -184,80 +183,80 @@ function reviewCard(r,i){
   </div>`;
 }
 
-const pt=document.getElementById('photoTrack');
-const rt=document.getElementById('reviewTrack');
-pt.innerHTML=photos.map(photoCard).join('')+photos.map(photoCard).join('');
-rt.innerHTML=reviews.map(reviewCard).join('')+reviews.map(reviewCard).join('');
+const pt = document.getElementById('photoTrack');
+const rt = document.getElementById('reviewTrack');
+pt.innerHTML = photos.map(photoCard).join('') + photos.map(photoCard).join('');
+rt.innerHTML = reviews.map(reviewCard).join('') + reviews.map(reviewCard).join('');
 
-const allTracks=[pt,rt];
-const hint=document.getElementById('pauseHint');
-const section=document.getElementById('wallSection');
-let isPaused=false;
-let selectedCard=null;
-let touchStartY=0;
-let hintTimer=null;
+const allTracks = [pt, rt];
+const hint = document.getElementById('pauseHint');
+let isPaused = false;
+let selectedCard = null;
+let touchStartY = 0;
+let hintTimer = null;
 
 function showHint(msg){
   clearTimeout(hintTimer);
-  hint.textContent=msg;
+  hint.textContent = msg;
   hint.classList.add('show');
-  hintTimer=setTimeout(()=>hint.classList.remove('show'),2000);
+  hintTimer = setTimeout(() => hint.classList.remove('show'), 2200);
 }
 
 function pauseAll(){
-  isPaused=true;
-  allTracks.forEach(t=>t.style.animationPlayState='paused');
+  isPaused = true;
+  allTracks.forEach(t => t.style.animationPlayState = 'paused');
 }
 
 function resumeAll(){
-  isPaused=false;
-  allTracks.forEach(t=>t.style.animationPlayState='running');
+  isPaused = false;
+  allTracks.forEach(t => t.style.animationPlayState = 'running');
   if(selectedCard){
     selectedCard.classList.remove('selected');
-    selectedCard=null;
+    selectedCard = null;
   }
 }
 
-// Touch logic
-section.addEventListener('touchstart',function(e){
-  touchStartY=e.touches[0].clientY;
-},{passive:true});
+// Single unified touch handler on the whole section
+document.getElementById('wallSection').addEventListener('touchstart', e => {
+  touchStartY = e.touches[0].clientY;
+}, {passive: true});
 
-section.addEventListener('touchend',function(e){
-  const dy=Math.abs(e.changedTouches[0].clientY - touchStartY);
-  if(dy>12) return; // was a scroll, ignore
+document.getElementById('wallSection').addEventListener('touchend', e => {
+  const dy = Math.abs(e.changedTouches[0].clientY - touchStartY);
+  if(dy > 10) return; // scroll gesture, ignore
 
-  const photoCard=e.target.closest('#photoTrack .card');
-  const reviewCard=e.target.closest('#reviewTrack .card');
-  const isCTA=e.target.closest('.cta');
+  // Don't intercept the CTA button
+  if(e.target.closest('.cta')) return;
 
-  if(isCTA) return; // let CTA button work normally
+  e.preventDefault(); // prevent ghost click on everything inside section
 
-  if(photoCard){
-    e.preventDefault();
-    if(selectedCard===photoCard){
-      // Second tap on same card — open Instagram
-      window.open(photoCard.dataset.ig,'_blank','noopener');
+  const tappedPhotoCard = e.target.closest('.photo-card');
+
+  if(tappedPhotoCard){
+    if(selectedCard === tappedPhotoCard){
+      // Second tap on same card — go to Instagram
+      window.open(IG, '_blank', 'noopener');
       resumeAll();
       showHint('▶ Playing');
     } else {
-      // First tap on any photo card — pause + select
+      // First tap on a photo card — pause + select it
       pauseAll();
       if(selectedCard) selectedCard.classList.remove('selected');
-      selectedCard=photoCard;
-      photoCard.classList.add('selected');
+      selectedCard = tappedPhotoCard;
+      tappedPhotoCard.classList.add('selected');
       showHint('📸 Tap again to open Instagram');
     }
-  } else if(reviewCard){
-    // Tap on review area — just toggle pause
-    if(isPaused){ resumeAll(); showHint('▶ Playing'); }
-    else { pauseAll(); showHint('⏸ Paused — tap to resume'); }
   } else {
-    // Tap on empty section area
-    if(isPaused){ resumeAll(); showHint('▶ Playing'); }
-    else { pauseAll(); showHint('⏸ Paused — tap to resume'); }
+    // Tap anywhere else — toggle pause / deselect
+    if(isPaused){
+      resumeAll();
+      showHint('▶ Playing');
+    } else {
+      pauseAll();
+      showHint('⏸ Paused — tap to resume');
+    }
   }
-},{passive:false});
+}, {passive: false});
 </script>
 </body>
 </html>
