@@ -15,12 +15,19 @@
 .title{font-family:'Anton',sans-serif;font-size:clamp(36px,6vw,82px);line-height:.95;letter-spacing:.02em;text-transform:uppercase;color:#fff}
 .sub{opacity:.65;font-size:14px;margin-top:12px;color:#F498AD;font-weight:500}
 
+/* Photo band */
 .band{
   position:relative;height:290px;margin:12px 0 28px;
   overflow:visible;
   mask-image:linear-gradient(90deg,transparent 0,black 7%,black 93%,transparent 100%);
   -webkit-mask-image:linear-gradient(90deg,transparent 0,black 7%,black 93%,transparent 100%)}
-.band.rev{height:240px;overflow:hidden}
+
+/* Review band — tall enough to show full card with gentle peek */
+.band.rev{
+  height:320px;
+  overflow:hidden;
+  mask-image:linear-gradient(90deg,transparent 0,black 7%,black 93%,transparent 100%);
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,black 7%,black 93%,transparent 100%)}
 
 .track{
   display:flex;position:absolute;left:0;top:50%;
@@ -32,8 +39,8 @@
 .card{
   flex:0 0 auto;width:220px;border-radius:28px;overflow:hidden;
   background:#1a0a2e;
-  border:2px solid rgba(255,191,4,.45);
-  box-shadow:0 8px 24px rgba(0,0,0,.7), 0 0 0 1px rgba(255,191,4,.08);
+  border:2px solid rgba(255,191,4,.3);
+  box-shadow:0 8px 28px rgba(0,0,0,.75), 0 0 0 1px rgba(255,191,4,.06);
   transform:rotate(var(--rot));
   transition:transform .3s ease,box-shadow .3s ease;
   position:relative;margin-right:-28px;z-index:1;
@@ -42,13 +49,13 @@
 
 .card.selected{
   transform:translateY(-22px) scale(1.09) rotate(0deg) !important;
-  box-shadow:0 32px 56px rgba(185,31,72,.5), 0 0 0 2px rgba(255,191,4,.7);
+  box-shadow:0 32px 56px rgba(185,31,72,.5), 0 0 0 2px rgba(255,191,4,.6);
   z-index:30}
 
 @media(hover:hover){
   .card:not(.selected):hover{
     transform:translateY(-16px) scale(1.07) rotate(0deg) !important;
-    box-shadow:0 28px 52px rgba(185,31,72,.35), 0 0 0 2px rgba(255,191,4,.6);
+    box-shadow:0 28px 52px rgba(185,31,72,.35), 0 0 0 2px rgba(255,191,4,.5);
     z-index:20}}
 
 .img{height:200px;width:100%;object-fit:cover;display:block;pointer-events:none}
@@ -63,16 +70,17 @@
   pointer-events:none}
 .card.selected .ig-hint{opacity:1}
 
-/* Review cards */
+/* Review cards — minimal rotation so full content shows */
 .band.rev .card{
-  width:340px;border-radius:26px;margin-right:16px;
+  width:320px;border-radius:24px;margin-right:20px;
   transform:rotate(var(--rot));background:#160826;
-  border:2px solid rgba(255,191,4,.45);
-  box-shadow:0 8px 24px rgba(0,0,0,.7), 0 0 0 1px rgba(255,191,4,.1)}
+  border:2px solid rgba(255,191,4,.28);
+  box-shadow:0 8px 28px rgba(0,0,0,.75), 0 0 0 1px rgba(255,191,4,.06);
+  overflow:visible}
 @media(hover:hover){
   .band.rev .card:hover{
     transform:translateY(-8px) scale(1.02) rotate(0deg) !important;
-    box-shadow:0 24px 48px rgba(185,31,72,.3), 0 0 0 2px rgba(255,191,4,.6);
+    box-shadow:0 24px 48px rgba(185,31,72,.3), 0 0 0 2px rgba(255,191,4,.5);
     z-index:20}}
 .band.rev .img{display:none}
 .body{padding:16px 18px 18px}
@@ -102,14 +110,14 @@
 .cta:hover{background:#D35C74;transform:translateY(-2px)}
 
 @media(max-width:900px){
-  .band{height:250px}.band.rev{height:210px}
+  .band{height:250px}.band.rev{height:300px}
   .card{width:190px;margin-right:-22px}
-  .band.rev .card{width:290px;margin-right:14px}
+  .band.rev .card{width:280px;margin-right:16px}
   .img{height:170px}}
 @media(max-width:560px){
-  .band{height:220px}.band.rev{height:190px}
+  .band{height:220px}.band.rev{height:280px}
   .card{width:162px;border-radius:22px;margin-right:-18px}
-  .band.rev .card{width:260px;margin-right:12px}
+  .band.rev .card{width:255px;margin-right:14px}
   .img{height:144px}.review-text{font-size:12px}.body{padding:13px 14px 14px}}
 </style>
 </head>
@@ -173,7 +181,8 @@ function photoCard(p){
 }
 
 function reviewCard(r,i){
-  const rot=((i%2===0?1:-1)*(1.2+i*.28)).toFixed(1);
+  // Gentle rotation max 1.5deg so cards don't clip top/bottom
+  const rot=((i%2===0?1:-1)*(0.4+i*.12)).toFixed(1);
   const initials=r.name.split(' ').map(w=>w[0]).join('').substring(0,2);
   return `<div class="card review-card" style="--rot:${rot}deg">
     <div class="body">
