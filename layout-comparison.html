@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Snackology — Layout Comparison: Floating Cards vs Diagonal Cuts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --sn-page-bg-cards:  #1C0A1F;
+  --sn-page-bg-diag:   #3A1040;
+  --sn-plum:    #531C56;
+  --sn-crimson: #B91F48;
+  --sn-blue:    #145293;
+  --sn-amber:   #E79901;
+  --sn-pink:    #F498AD;
+  --sn-green:   #5BBA47;
+  --sn-dark:    #0D0020;
+  --sn-lime:    #D7DF28;
+  --sn-tan:     #F47642;
+  --sn-teal:    #1E3F4F;
+  --diag: 52px;
+  --card-gap-h: clamp(10px, 1.2vw, 16px);
+  --card-gap-v: 12px;
+  --card-radius: 20px;
+  --font-h: 'Anton', sans-serif;
+  --font-s: 'Oswald', sans-serif;
+  --font-b: 'Space Grotesk', sans-serif;
+}
+
+html { scroll-behavior: smooth; overflow-x: hidden; }
+body {
+  font-family: var(--font-b);
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ── COMPARISON SWITCHER UI ──────────────────────────────── */
+.switcher {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 9999;
+  background: rgba(13,0,32,0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(16px, 4vw, 48px);
+  height: 56px;
+  gap: 16px;
+}
+.switcher-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.40);
+  white-space: nowrap;
+}
+.switcher-tabs {
+  display: flex;
+  gap: 6px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 9999px;
+  padding: 4px;
+}
+.tab-btn {
+  font-family: var(--font-b);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  padding: 8px 20px;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  color: rgba(255,255,255,0.50);
+  background: transparent;
+  transition: all 0.22s cubic-bezier(0.16,1,0.3,1);
+}
+.tab-btn.active {
+  background: var(--sn-lime);
+  color: #0D0020;
+}
+.switcher-note {
+  font-size: 11px;
+  color: rgba(255,255,255,0.30);
+  white-space: nowrap;
+  display: none;
+}
+@media (min-width: 640px) { .switcher-note { display: block; } }
+
+/* ── PAGE WRAPPERS ──────────────────────────────────────── */
+.page-view {
+  display: none;
+  padding-top: 56px;
+}
+.page-view.active { display: block; }
+
+/* ── SHARED NAV ──────────────────────────────────────────── */
+.site-nav {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(16px, 4vw, 48px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.nav-logo {
+  font-family: var(--font-h);
+  font-size: 22px;
+  letter-spacing: 0.04em;
+  color: #fff;
+  text-decoration: none;
+}
+.nav-logo span { color: var(--sn-lime); }
+.nav-links { display: flex; gap: 28px; list-style: none; }
+.nav-links a {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+  text-decoration: none;
+}
+.nav-links a:hover { color: #fff; }
+.nav-cta {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 9px 20px;
+  border-radius: 9999px;
+  background: var(--sn-lime);
+  color: #0D0020;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+@media (max-width: 640px) { .nav-links { display: none; } }
+
+/* ── SHARED SECTION TYPOGRAPHY ───────────────────────────── */
+.section-overline {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.section-h2 {
+  font-family: var(--font-h);
+  font-size: clamp(28px, 4vw, 54px);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+}
+.inner-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 4vw, 60px);
+}
+
+/* ── HERO CONTENT ────────────────────────────────────────── */
+.hero-content {
+  min-height: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: clamp(48px,6vw,72px) clamp(20px,4vw,60px);
+  position: relative;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 22px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.45);
+  color: #fff;
+  margin-bottom: 24px;
+}
+.hero-heading {
+  font-family: var(--font-h);
+  font-size: clamp(38px, 6vw, 76px);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 0.92;
+  color: #fff;
+  max-width: 820px;
+  margin-bottom: 16px;
+}
+.hero-heading .hl { color: var(--sn-lime); }
+.hero-sub {
+  font-size: clamp(14px, 1.3vw, 16px);
+  color: rgba(255,255,255,0.72);
+  max-width: 440px;
+  margin-bottom: 32px;
+  line-height: 1.65;
+}
+.hero-btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 13px 26px; border-radius: 9999px;
+  background: var(--sn-lime); color: #0D0020;
+  font-family: var(--font-b); font-size: 13px; font-weight: 700;
+  letter-spacing: 0.04em; border: none; cursor: pointer; text-decoration: none;
+}
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 13px 26px; border-radius: 9999px;
+  background: transparent; color: #fff;
+  font-family: var(--font-b); font-size: 13px; font-weight: 500;
+  border: 1.5px solid rgba(255,255,255,0.55); cursor: pointer; text-decoration: none;
+}
+.hero-stats {
+  display: flex; gap: 24px; flex-wrap: wrap;
+  justify-content: center; margin-top: 36px;
+}
+.hero-stat { text-align: center; }
+.hero-stat-num {
+  font-family: var(--font-h);
+  font-size: clamp(24px, 3vw, 36px);
+  color: var(--sn-lime); line-height: 1;
+}
+.hero-stat-label {
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: rgba(255,255,255,0.45); margin-top: 4px;
+}
+
+/* ── MARQUEE ─────────────────────────────────────────────── */
+.marquee-band {
+  background: #0D0020;
+  border-top: 2px solid rgba(83,28,86,0.45);
+  border-bottom: 2px solid rgba(83,28,86,0.45);
+  overflow: hidden; width: 100%;
+}
+.marquee-band-2 { background: var(--sn-plum); border-color: rgba(185,31,72,0.40); }
+.marquee-track {
+  display: flex; white-space: nowrap;
+  animation: mScroll 20s linear infinite;
+  will-change: transform;
+}
+.marquee-track-r { animation-direction: reverse; animation-duration: 25s; }
+@keyframes mScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.marquee-item {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 12px 28px;
+  font-family: var(--font-h); font-size: clamp(13px,1.6vw,17px);
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: #fff; flex-shrink: 0;
+}
+.marquee-item .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--sn-lime); flex-shrink: 0;
+}
+.marquee-band-2 .dot { background: var(--sn-pink); }
+
+/* ── ABOUT / PRODUCTS / WHY (shared grid content) ────────── */
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+.about-card {
+  background: var(--sn-pink); border-radius: 14px;
+  padding: clamp(18px,2.5vw,28px); position: relative; overflow: hidden;
+}
+.about-card h3 {
+  font-family: var(--font-h); font-size: clamp(16px,1.8vw,20px);
+  color: var(--sn-plum); text-transform: uppercase;
+  letter-spacing: 0.02em; line-height: 1; margin-bottom: 10px;
+}
+.about-card-rule { width: 28px; height: 3px; border-radius: 2px; background: var(--sn-plum); opacity: 0.25; margin-bottom: 10px; }
+.about-card p { font-size: 13px; line-height: 1.60; color: rgba(83,28,86,0.72); max-width: 34ch; position: relative; z-index: 1; }
+.about-card-num {
+  position: absolute; bottom: -12px; right: 4px;
+  font-family: var(--font-h); font-size: clamp(60px,8vw,90px);
+  line-height: 1; color: rgba(83,28,86,0.06);
+  pointer-events: none; user-select: none;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 12px;
+}
+.product-card {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 14px; padding: 18px 16px; cursor: pointer;
+}
+.product-card:hover { background: rgba(255,255,255,0.12); }
+.product-emoji { font-size: 32px; display: block; margin-bottom: 10px; line-height: 1; }
+.product-card h3 {
+  font-family: var(--font-h); font-size: clamp(14px,1.5vw,17px);
+  color: #fff; text-transform: uppercase;
+  letter-spacing: 0.04em; margin-bottom: 6px;
+}
+.product-card p { font-size: 12px; color: rgba(255,255,255,0.55); line-height: 1.55; }
+.product-tag {
+  display: inline-block; margin-top: 10px; padding: 4px 10px;
+  border-radius: 9999px; background: rgba(244,118,66,0.18);
+  color: var(--sn-tan); font-size: 9px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+}
+
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+}
+.why-item { display: flex; gap: 12px; align-items: flex-start; }
+.why-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  background: rgba(165,198,62,0.14);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.why-item h3 {
+  font-family: var(--font-s); font-size: clamp(13px,1.2vw,15px);
+  font-weight: 700; color: #fff; text-transform: uppercase;
+  letter-spacing: 0.04em; margin-bottom: 4px;
+}
+.why-item p { font-size: 12px; color: rgba(255,255,255,0.58); line-height: 1.6; }
+
+.founder-quote {
+  font-family: var(--font-h);
+  font-size: clamp(22px,3.5vw,44px);
+  color: var(--sn-plum); text-transform: uppercase;
+  line-height: 1.02; letter-spacing: 0.02em;
+  max-width: 760px; margin: 0 auto 18px;
+  text-align: center;
+}
+.founder-quote .accent { color: var(--sn-crimson); }
+.founder-name {
+  font-size: 12px; font-weight: 600; text-align: center;
+  color: rgba(83,28,86,0.60); letter-spacing: 0.16em; text-transform: uppercase;
+}
+
+.insta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 7px;
+}
+.insta-tile { aspect-ratio: 1; border-radius: 9px; overflow: hidden; position: relative; cursor: pointer; }
+.insta-tile-inner {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: clamp(22px,3vw,32px);
+}
+
+/* ── FOOTER CONTENT ──────────────────────────────────────── */
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 36px; margin-bottom: 28px;
+}
+.footer-brand-name {
+  font-family: var(--font-h); font-size: 22px;
+  letter-spacing: 0.04em; color: #fff; margin-bottom: 8px;
+}
+.footer-brand-name span { color: var(--sn-lime); }
+.footer-tagline { font-size: 13px; color: rgba(255,255,255,0.52); line-height: 1.6; max-width: 260px; margin-bottom: 16px; }
+.footer-col h4 {
+  font-family: var(--font-s); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: rgba(255,255,255,0.32); margin-bottom: 12px;
+}
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.footer-col a { font-size: 13px; color: rgba(255,255,255,0.65); text-decoration: none; }
+.footer-col a:hover { color: #fff; }
+.footer-bottom {
+  padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+}
+.footer-bottom p { font-size: 11px; color: rgba(255,255,255,0.28); }
+@media (max-width: 640px) { .footer-grid { grid-template-columns: 1fr; gap: 20px; } }
+
+/* ═══════════════════════════════════════════════════════════
+   VERSION A — FLOATING CARDS
+   Background: #1C0A1F (very dark desaturated plum)
+   Each section is a card with margin-inline + border-radius
+   Marquees stay full-bleed (no card treatment)
+   ═══════════════════════════════════════════════════════════ */
+
+#view-cards {
+  background: var(--sn-page-bg-cards);
+  min-height: 100vh;
+}
+#view-cards .site-nav {
+  background: rgba(28, 10, 31, 0.96);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* Card wrapper — every section except marquees */
+.card-wrap {
+  margin: var(--card-gap-v) var(--card-gap-h) 0;
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  filter: drop-shadow(0 4px 20px rgba(0,0,0,0.45));
+}
+.card-wrap:first-of-type { margin-top: var(--card-gap-v); }
+
+/* Section padding inside cards */
+.card-section {
+  padding: clamp(36px, 5vw, 64px) 0;
+}
+
+/* Hero card */
+.card-hero { background: var(--sn-crimson); }
+/* About card */
+.card-about { background: var(--sn-plum); }
+.card-about .section-overline { color: var(--sn-pink); }
+/* Products card */
+.card-products { background: var(--sn-blue); }
+.card-products .section-overline { color: var(--sn-tan); }
+/* Why card */
+.card-why { background: var(--sn-teal); }
+.card-why .section-overline { color: #A5C63E; }
+/* Founder card */
+.card-founder { background: var(--sn-pink); padding: clamp(36px,5vw,64px) 0; }
+/* Instagram card */
+.card-instagram { background: var(--sn-green); }
+/* Footer card */
+.card-footer { background: var(--sn-plum); }
+
+/* Last card bottom gap */
+#view-cards .card-wrap:last-child { margin-bottom: var(--card-gap-v); }
+
+/* ═══════════════════════════════════════════════════════════
+   VERSION B — DIAGONAL CUTS
+   Background: #3A1040 (richer, warmer plum)
+   Each section uses alternating clip-path diagonals
+   Marquees stay full-bleed
+   ═══════════════════════════════════════════════════════════ */
+
+#view-diag {
+  background: var(--sn-page-bg-diag);
+  min-height: 100vh;
+}
+#view-diag .site-nav {
+  background: rgba(58, 16, 64, 0.96);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.diag-wrap {
+  margin: 0 var(--card-gap-h);
+  margin-top: var(--card-gap-v);
+  position: relative;
+  filter: drop-shadow(0 6px 24px rgba(0,0,0,0.52));
+}
+
+/* ODD sections: flat top, diagonal bottom (left high → right low) */
+.diag-wrap.odd .diag-inner {
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - var(--diag)),
+    0 100%
+  );
+  padding-bottom: calc(var(--diag) + 36px);
+}
+
+/* EVEN sections: diagonal top (left high → right low), flat bottom */
+.diag-wrap.even .diag-inner {
+  clip-path: polygon(
+    0 0,
+    100% var(--diag),
+    100% 100%,
+    0 100%
+  );
+  padding-top: calc(var(--diag) + 36px);
+}
+
+.diag-section {
+  padding: clamp(36px, 5vw, 64px) 0;
+}
+
+.diag-hero    { background: var(--sn-crimson); }
+.diag-about   { background: var(--sn-plum); }
+.diag-about .section-overline { color: var(--sn-pink); }
+.diag-products { background: var(--sn-blue); }
+.diag-products .section-overline { color: var(--sn-tan); }
+.diag-why     { background: var(--sn-teal); }
+.diag-why .section-overline { color: #A5C63E; }
+.diag-founder { background: var(--sn-pink); }
+.diag-instagram { background: var(--sn-green); }
+.diag-footer  { background: var(--sn-plum); }
+
+#view-diag .diag-wrap:last-child { margin-bottom: var(--card-gap-v); }
+
+@media (max-width: 767px) {
+  :root { --diag: 28px; }
+}
+
+/* ── MARQUEE SHARED (used in both views) ─────────────────── */
+.marquee-set { overflow: hidden; }
+
+/* ── PROTOTYPE BADGE ──────────────────────────────────────── */
+.proto-badge {
+  position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+  z-index: 9998;
+  background: rgba(215,223,40,0.96);
+  color: #0D0020;
+  font-family: var(--font-b); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 6px 16px; border-radius: 9999px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.30);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track, .marquee-track-r { animation: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── SWITCHER BAR ───────────────────────────────────────── -->
+<div class="switcher" role="navigation" aria-label="Layout comparison switcher">
+  <span class="switcher-label">Layout Comparison</span>
+  <div class="switcher-tabs" role="tablist">
+    <button class="tab-btn active" role="tab" aria-selected="true" data-target="view-cards" id="tab-cards">
+      A — Floating Cards
+    </button>
+    <button class="tab-btn" role="tab" aria-selected="false" data-target="view-diag" id="tab-diag">
+      B — Diagonal Cuts
+    </button>
+  </div>
+  <span class="switcher-note">Switch to compare — same content, different structure</span>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     VIEW A — FLOATING CARDS
+     ═══════════════════════════════════════════════════════ -->
+<div id="view-cards" class="page-view active" role="tabpanel" aria-labelledby="tab-cards">
+
+  <!-- Nav -->
+  <nav class="site-nav" aria-label="Main navigation">
+    <a href="#" class="nav-logo">SNACK<span>OLOGY</span></a>
+    <ul class="nav-links">
+      <li><a href="#">About</a></li>
+      <li><a href="#">Products</a></li>
+      <li><a href="#">Why Us</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+    <a href="#" class="nav-cta">Enquire Now</a>
+  </nav>
+
+  <!-- Hero card -->
+  <div class="card-wrap">
+    <div class="card-hero card-section">
+      <div class="hero-content">
+        <div class="hero-badge">✶ Clean snacks. No compromises.</div>
+        <h1 class="hero-heading">Your snack drawer<br><span class="hl">is bored.</span></h1>
+        <p class="hero-sub">Premium Indian-inspired snacks for the 3pm slump, the game night, and every craving in between.</p>
+        <div class="hero-btns">
+          <a href="#" class="btn-primary">I Need These In My Life →</a>
+          <a href="#" class="btn-secondary">Chat on WhatsApp</a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat"><div class="hero-stat-num">12+</div><div class="hero-stat-label">SKUs</div></div>
+          <div class="hero-stat"><div class="hero-stat-num">500+</div><div class="hero-stat-label">B2B Partners</div></div>
+          <div class="hero-stat"><div class="hero-stat-num">0</div><div class="hero-stat-label">Compromises</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Marquees full-bleed -->
+  <div class="marquee-set" aria-hidden="true">
+    <div class="marquee-band">
+      <div class="marquee-track">
+        <span class="marquee-item"><span class="dot"></span>Bold Flavours</span><span class="marquee-item"><span class="dot"></span>Clean Ingredients</span><span class="marquee-item"><span class="dot"></span>Premium Snacking</span><span class="marquee-item"><span class="dot"></span>Indian Heritage</span><span class="marquee-item"><span class="dot"></span>Zero Compromise</span><span class="marquee-item"><span class="dot"></span>Snack Different</span><span class="marquee-item"><span class="dot"></span>Bold Flavours</span><span class="marquee-item"><span class="dot"></span>Clean Ingredients</span><span class="marquee-item"><span class="dot"></span>Premium Snacking</span><span class="marquee-item"><span class="dot"></span>Indian Heritage</span><span class="marquee-item"><span class="dot"></span>Zero Compromise</span><span class="marquee-item"><span class="dot"></span>Snack Different</span>
+      </div>
+    </div>
+    <div class="marquee-band marquee-band-2">
+      <div class="marquee-track marquee-track-r">
+        <span class="marquee-item"><span class="dot"></span>Glow-up Snacks</span><span class="marquee-item"><span class="dot"></span>Traditional Roots</span><span class="marquee-item"><span class="dot"></span>Modern Taste</span><span class="marquee-item"><span class="dot"></span>Office Drawer Essential</span><span class="marquee-item"><span class="dot"></span>3PM Approved</span><span class="marquee-item"><span class="dot"></span>Midnight Craving Sorted</span><span class="marquee-item"><span class="dot"></span>Glow-up Snacks</span><span class="marquee-item"><span class="dot"></span>Traditional Roots</span><span class="marquee-item"><span class="dot"></span>Modern Taste</span><span class="marquee-item"><span class="dot"></span>Office Drawer Essential</span><span class="marquee-item"><span class="dot"></span>3PM Approved</span><span class="marquee-item"><span class="dot"></span>Midnight Craving Sorted</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- About card -->
+  <div class="card-wrap">
+    <div class="card-about card-section">
+      <div class="inner-wrap">
+        <p class="section-overline">Our People</p>
+        <h2 class="section-h2">Who We <span style="color:var(--sn-pink)">Made This For</span></h2>
+        <div class="about-grid">
+          <div class="about-card"><span class="about-card-num" aria-hidden="true">01</span><h3>Glow-up, not a sell-out.</h3><div class="about-card-rule"></div><p>We took your favourite Indian snacks, gave them a serious glow-up, and made sure they still hit the same way.</p></div>
+          <div class="about-card"><span class="about-card-num" aria-hidden="true">02</span><h3>Familiar but unforgettable.</h3><div class="about-card-rule"></div><p>Familiar enough to feel like home. Different enough to make you go 'wait, what is this?'</p></div>
+          <div class="about-card"><span class="about-card-num" aria-hidden="true">03</span><h3>Made for you. Yes, you.</h3><div class="about-card-rule"></div><p>For the 3pm desk muncher. The midnight fridge raider. The 'just one more' person.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Products card -->
+  <div class="card-wrap">
+    <div class="card-products card-section">
+      <div class="inner-wrap">
+        <p class="section-overline">Our Range</p>
+        <h2 class="section-h2">Snacks That <span style="color:var(--sn-tan)">Slap</span></h2>
+        <div class="product-grid">
+          <div class="product-card"><span class="product-emoji">🌶️</span><h3>Spice Trail Mix</h3><p>Nuts, seeds and dried fruit with a serious kick.</p><span class="product-tag">Bestseller</span></div>
+          <div class="product-card"><span class="product-emoji">🫘</span><h3>Masala Chana</h3><p>Roasted chickpeas coated in a bold masala blend.</p><span class="product-tag">New</span></div>
+          <div class="product-card"><span class="product-emoji">🥜</span><h3>Turmeric Peanuts</h3><p>Golden, earthy and addictive. You'll eat the whole bag.</p></div>
+          <div class="product-card"><span class="product-emoji">🌿</span><h3>Pudina Almonds</h3><p>Cool mint meets premium almonds. The office upgrade.</p><span class="product-tag">Fan Fave</span></div>
+          <div class="product-card"><span class="product-emoji">🫙</span><h3>Chaat Crackers</h3><p>All the chaos of chaat, packed into a crispy bite.</p><span class="product-tag">New</span></div>
+          <div class="product-card"><span class="product-emoji">✨</span><h3>Starter Box</h3><p>Can't choose? This curated box has everything.</p><span class="product-tag">Try It All</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Why card -->
+  <div class="card-wrap">
+    <div class="card-why card-section">
+      <div class="inner-wrap">
+        <p class="section-overline">Why Snackology</p>
+        <h2 class="section-h2">The <span style="color:#A5C63E">Difference</span></h2>
+        <div class="why-grid">
+          <div class="why-item"><div class="why-icon" aria-hidden="true">🌿</div><div><h3>Clean ingredients</h3><p>No artificial flavours, colours or preservatives.</p></div></div>
+          <div class="why-item"><div class="why-icon" aria-hidden="true">🏆</div><div><h3>Premium sourcing</h3><p>We source the best raw ingredients and work with producers who care.</p></div></div>
+          <div class="why-item"><div class="why-icon" aria-hidden="true">🚀</div><div><h3>Built for B2B</h3><p>Office pantries, hotel minibars, gifting — we scale with you.</p></div></div>
+          <div class="why-item"><div class="why-icon" aria-hidden="true">🎨</div><div><h3>Brand-ready packaging</h3><p>Looks as good as it tastes. Clients will keep the packaging.</p></div></div>
+          <div class="why-item"><div class="why-icon" aria-hidden="true">💬</div><div><h3>Human support</h3><p>Real people, real answers. WhatsApp us and we actually reply fast.</p></div></div>
+          <div class="why-item"><div class="why-icon" aria-hidden="true">📦</div><div><h3>Flexible MOQs</h3><p>Startup or enterprise — we have an option for your volume.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Founder card -->
+  <div class="card-wrap">
+    <div class="card-founder">
+      <div class="inner-wrap" style="padding-top:clamp(36px,5vw,64px);padding-bottom:clamp(36px,5vw,64px);">
+        <blockquote class="founder-quote">
+          "We didn't want to make <span class="accent">another snack brand.</span><br>
+          We wanted to make the snack brand<br>India deserved."
+        </blockquote>
+        <p class="founder-name">— The Snackology Team</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Instagram card -->
+  <div class="card-wrap">
+    <div class="card-instagram card-section">
+      <div class="inner-wrap">
+        <p class="section-overline" style="color:rgba(13,0,32,0.50)">@snackologyofficial</p>
+        <h2 class="section-h2">The Wall</h2>
+        <div class="insta-grid">
+          <div class="insta-tile" style="background:#B91F48"><div class="insta-tile-inner">🌶️</div></div>
+          <div class="insta-tile" style="background:#531C56"><div class="insta-tile-inner">🫘</div></div>
+          <div class="insta-tile" style="background:#145293"><div class="insta-tile-inner">📸</div></div>
+          <div class="insta-tile" style="background:#E79901"><div class="insta-tile-inner">🥜</div></div>
+          <div class="insta-tile" style="background:#D35C74"><div class="insta-tile-inner">✨</div></div>
+          <div class="insta-tile" style="background:#F498AD"><div class="insta-tile-inner">🌿</div></div>
+          <div class="insta-tile" style="background:#B91F48"><div class="insta-tile-inner">📦</div></div>
+          <div class="insta-tile" style="background:#1E3F4F"><div class="insta-tile-inner">🔥</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer card -->
+  <div class="card-wrap">
+    <div class="card-footer card-section">
+      <div class="inner-wrap">
+        <div class="footer-grid">
+          <div>
+            <div class="footer-brand-name">SNACK<span>OLOGY</span></div>
+            <p class="footer-tagline">Premium Indian-inspired snacks. Clean ingredients, bold flavours, no compromises.</p>
+          </div>
+          <div class="footer-col"><h4>Quick Links</h4><ul><li><a href="#">Home</a></li><li><a href="#">About</a></li><li><a href="#">Products</a></li><li><a href="#">Why Us</a></li></ul></div>
+          <div class="footer-col"><h4>Legal</h4><ul><li><a href="#">Privacy Policy</a></li><li><a href="#">Cookie Policy</a></li><li><a href="#">Terms of Use</a></li></ul></div>
+        </div>
+        <div class="footer-bottom"><p>© 2026 Snackology. All rights reserved.</p><p>Made with bold flavours ✶</p></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /view-cards -->
+
+<!-- ═══════════════════════════════════════════════════════
+     VIEW B — DIAGONAL CUTS
+     ═══════════════════════════════════════════════════════ -->
+<div id="view-diag" class="page-view" role="tabpanel" aria-labelledby="tab-diag">
+
+  <!-- Nav -->
+  <nav class="site-nav" aria-label="Main navigation">
+    <a href="#" class="nav-logo">SNACK<span>OLOGY</span></a>
+    <ul class="nav-links">
+      <li><a href="#">About</a></li>
+      <li><a href="#">Products</a></li>
+      <li><a href="#">Why Us</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+    <a href="#" class="nav-cta">Enquire Now</a>
+  </nav>
+
+  <!-- Hero — ODD -->
+  <div class="diag-wrap odd">
+    <div class="diag-inner diag-hero diag-section">
+      <div class="hero-content">
+        <div class="hero-badge">✶ Clean snacks. No compromises.</div>
+        <h1 class="hero-heading">Your snack drawer<br><span class="hl">is bored.</span></h1>
+        <p class="hero-sub">Premium Indian-inspired snacks for the 3pm slump, the game night, and every craving in between.</p>
+        <div class="hero-btns">
+          <a href="#" class="btn-primary">I Need These In My Life →</a>
+          <a href="#" class="btn-secondary">Chat on WhatsApp</a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat"><div class="hero-stat-num">12+</div><div class="hero-stat-label">SKUs</div></div>
+          <div class="hero-stat"><div class="hero-stat-num">500+</div><div class="hero-stat-label">B2B Partners</div></div>
+          <div class="hero-stat"><div class="hero-stat-num">0</div><div class="hero-stat-label">Compromises</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Marquees full-bleed -->
+  <div class="marquee-set" aria-hidden="true">
+    <div class="marquee-band">
+      <div class="marquee-track">
+        <span class="marquee-item"><span class="dot"></span>Bold Flavours</span><span class="marquee-item"><span class="dot"></span>Clean Ingredients</span><span class="marquee-item"><span class="dot"></span>Premium Snacking</span><span class="marquee-item"><span class="dot"></span>Indian Heritage</span><span class="marquee-item"><span class="dot"></span>Zero Compromise</span><span class="marquee-item"><span class="dot"></span>Snack Different</span><span class="marquee-item"><span class="dot"></span>Bold Flavours</span><span class="marquee-item"><span class="dot"></span>Clean Ingredients</span><span class="marquee-item"><span class="dot"></span>Premium Snacking</span><span class="marquee-item"><span class="dot"></span>Indian Heritage</span><span class="marquee-item"><span class="dot"></span>Zero Compromise</span><span class="marquee-item"><span class="dot"></span>Snack Different</span>
+      </div>
+    </div>
+    <div class="marquee-band marquee-band-2">
+      <div class="marquee-track marquee-track-r">
+        <span class="marquee-item"><span class="dot"></span>Glow-up Snacks</span><span class="marquee-item"><span class="dot"></span>Traditional Roots</span><span class="marquee-item"><span class="dot"></span>Modern Taste</span><span class="marquee-item"><span class="dot"></span>Office Drawer Essential</span><span class="marquee-item"><span class="dot"></span>3PM Approved</span><span class="marquee-item"><span class="dot"></span>Midnight Craving Sorted</span><span class="marquee-item"><span class="dot"></span>Glow-up Snacks</span><span class="marquee-item"><span class="dot"></span>Traditional Roots</span><span class="marquee-item"><span class="dot"></span>Modern Taste</span><span class="marquee-item"><span class="dot"></span>Office Drawer Essential</span><span class="marquee-item"><span class="dot"></span>3PM Approved</span><span class="marquee-item"><span class="dot"></span>Midnight Craving Sorted</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- About — EVEN -->
+  <div class="diag-wrap even">
+    <div class="diag-inner diag-about diag-section">
+      <div class="inner-wrap">
+        <p class="section-overline">Our People</p>
+        <h2 class="section-h2">Who We <span style="color:var(--sn-pink)">Made This For</span></h2>
+        <div class="about-grid">
+          <div class="about-card"><span class="about-card-num" aria-hidden="true">01</span><h3>Glow-up, not a sell-out.</h3><div class="about-card-rule"></div><p>We took your favourite Indian snacks, gave them a serious glow-up, and made sure they still hit the same way.</p></div>
+          <div class="about-card"><span class="about-card-num" aria-hidden="true">02</span><h3>Familiar but unforgettable.</h3><div class="about-card-rule"></div><p>Familiar enough to feel like home. Different enough to make you go 'wait, what is this?'</p></div>
+          <div class="about-card"><span class="about-card-num" aria-hidden="true">03</span><h3>Made for you. Yes, you.</h3><div class="about-card-rule"></div><p>For the 3pm desk muncher. The midnight fridge raider. The 'just one more' person.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Products — ODD -->
+  <div class="diag-wrap odd">
+    <div class="diag-inner diag-products diag-section">
+      <div class="inner-wrap">
+        <p class="section-overline">Our Range</p>
+        <h2 class="section-h2">Snacks That <span style="color:var(--sn-tan)">Slap</span></h2>
+        <div class="product-grid">
+          <div class="product-card"><span class="product-emoji">🌶️</span><h3>Spice Trail Mix</h3><p>Nuts, seeds and dried fruit with a serious kick.</p><span class="product-tag">Bestseller</span></div>
+          <div class="product-card"><span class="product-emoji">🫘</span><h3>Masala Chana</h3><p>Roasted chickpeas coated in a bold masala blend.</p><span class="product-tag">New</span></div>
+          <div class="product-card"><span class="product-emoji">🥜</span><h3>Turmeric Peanuts</h3><p>Golden, earthy and addictive. You'll eat the whole bag.</p></div>
+          <div class="product-card"><span class="product-emoji">🌿</span><h3>Pudina Almonds</h3><p>Cool mint meets premium almonds. The office upgrade.</p><span class="product-tag">Fan Fave</span></div>
+          <div class="product-card"><span class="product-emoji">🫙</span><h3>Chaat Crackers</h3><p>All the chaos of chaat, packed into a crispy bite.</p><span class="product-tag">New</span></div>
+          <div class="product-card"><span class="product-emoji">✨</span><h3>Starter Box</h3><p>Can't choose? This curated box has everything.</p><span class="product-tag">Try It All</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Why — EVEN -->
+  <div class="diag-wrap even">
+    <div class="diag-inner diag-why diag-section">
+      <div class="inner-wrap">
+        <p class="section-overline">Why Snackology</p>
+        <h2 class="section-h2">The <span style="color:#A5C63E">Difference</span></h2>
+        <div class="why-grid">
+          <div class="why-item"><div class="why-icon" aria-hidden="true">🌿</div><div><h3>Clean ingredients</h3><p>No artificial flavours, colours or preservatives.</p></div></div>
+          <div class="why-item"><div class="why-icon" aria-hidden="true">🏆</div><div><h3>Premium sourcing</h3><p>We source the best raw ingredients and work with producers who care.</p></div></div>
+          <div class="why-item"><div class="why-icon" aria-hidden="true">🚀</div><div><h3>Built for B2B</h3><p>Office pantries, hotel minibars, gifting — we scale with you.</p></div></div>
+          <div class="why-item"><div class="why-icon" aria-hidden="true">🎨</div><div><h3>Brand-ready packaging</h3><p>Looks as good as it tastes. Clients will keep the packaging.</p></div></div>
+          <div class="why-item"><div class="why-icon" aria-hidden="true">💬</div><div><h3>Human support</h3><p>Real people, real answers. WhatsApp us and we actually reply fast.</p></div></div>
+          <div class="why-item"><div class="why-icon" aria-hidden="true">📦</div><div><h3>Flexible MOQs</h3><p>Startup or enterprise — we have an option for your volume.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Founder — ODD -->
+  <div class="diag-wrap odd">
+    <div class="diag-inner diag-founder">
+      <div class="inner-wrap" style="padding-top:clamp(36px,5vw,64px);padding-bottom:clamp(36px,5vw,64px);">
+        <blockquote class="founder-quote">
+          "We didn't want to make <span class="accent">another snack brand.</span><br>
+          We wanted to make the snack brand<br>India deserved."
+        </blockquote>
+        <p class="founder-name">— The Snackology Team</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Instagram — EVEN -->
+  <div class="diag-wrap even">
+    <div class="diag-inner diag-instagram diag-section">
+      <div class="inner-wrap">
+        <p class="section-overline" style="color:rgba(13,0,32,0.50)">@snackologyofficial</p>
+        <h2 class="section-h2">The Wall</h2>
+        <div class="insta-grid">
+          <div class="insta-tile" style="background:#B91F48"><div class="insta-tile-inner">🌶️</div></div>
+          <div class="insta-tile" style="background:#531C56"><div class="insta-tile-inner">🫘</div></div>
+          <div class="insta-tile" style="background:#145293"><div class="insta-tile-inner">📸</div></div>
+          <div class="insta-tile" style="background:#E79901"><div class="insta-tile-inner">🥜</div></div>
+          <div class="insta-tile" style="background:#D35C74"><div class="insta-tile-inner">✨</div></div>
+          <div class="insta-tile" style="background:#F498AD"><div class="insta-tile-inner">🌿</div></div>
+          <div class="insta-tile" style="background:#B91F48"><div class="insta-tile-inner">📦</div></div>
+          <div class="insta-tile" style="background:#1E3F4F"><div class="insta-tile-inner">🔥</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer — ODD -->
+  <div class="diag-wrap odd">
+    <div class="diag-inner diag-footer diag-section">
+      <div class="inner-wrap">
+        <div class="footer-grid">
+          <div>
+            <div class="footer-brand-name">SNACK<span>OLOGY</span></div>
+            <p class="footer-tagline">Premium Indian-inspired snacks. Clean ingredients, bold flavours, no compromises.</p>
+          </div>
+          <div class="footer-col"><h4>Quick Links</h4><ul><li><a href="#">Home</a></li><li><a href="#">About</a></li><li><a href="#">Products</a></li><li><a href="#">Why Us</a></li></ul></div>
+          <div class="footer-col"><h4>Legal</h4><ul><li><a href="#">Privacy Policy</a></li><li><a href="#">Cookie Policy</a></li><li><a href="#">Terms of Use</a></li></ul></div>
+        </div>
+        <div class="footer-bottom"><p>© 2026 Snackology. All rights reserved.</p><p>Made with bold flavours ✶</p></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /view-diag -->
+
+<!-- ── PROTOTYPE BADGE ──────────────────────────────────────── -->
+<div class="proto-badge" aria-hidden="true" id="proto-label">A — Floating Cards</div>
+
+<script>
+(function(){
+  const tabs = document.querySelectorAll('.tab-btn');
+  const views = document.querySelectorAll('.page-view');
+  const label = document.getElementById('proto-label');
+  const labels = { 'view-cards': 'A — Floating Cards', 'view-diag': 'B — Diagonal Cuts' };
+
+  tabs.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.target;
+      tabs.forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
+      views.forEach(v => v.classList.remove('active'));
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected','true');
+      document.getElementById(target).classList.add('active');
+      label.textContent = labels[target];
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    });
+  });
+})();
+</script>
+</body>
+</html>
