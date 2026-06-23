@@ -9,9 +9,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
-   SNACKOLOGY — FLOATING CARDS LAYOUT PROTOTYPE v2
+   SNACKOLOGY — FLOATING CARDS LAYOUT PROTOTYPE v3
    Concept: Dark plum base (#2A0D2E — visible plum tint,
-   dark enough to not fight bold section cards), 8px gap system.
+   dark enough to not fight bold section cards).
+   Gap: clamp(12px, 1.2vw, 16px) — 12px mobile, 16px desktop.
    Two marquee bands stay full-bleed (exempt from card treatment).
    ============================================================ */
 
@@ -33,10 +34,10 @@
   --sn-tangerine:    #F47642;
   --sn-teal:         #1E3F4F;
 
-  /* Card system — 8px gap enforced */
+  /* Card system — 12px mobile → 16px desktop, fluid via clamp */
   --card-radius:   20px;
-  --card-gap-x:    8px;
-  --card-gap-y:    8px;
+  --card-gap-x:    clamp(12px, 1.2vw, 16px);
+  --card-gap-y:    clamp(12px, 1.2vw, 16px);
 
   /* Nav */
   --nav-height: 64px;
@@ -752,19 +753,8 @@ body {
 
 /* ── RESPONSIVE ───────────────────────────────────────────── */
 @media (max-width: 767px) {
-  :root {
-    --card-gap-x: 8px;
-    --card-gap-y: 8px;
-  }
   .nav-links { display: none; }
   .footer-grid { grid-template-columns: 1fr; gap: 24px; }
-}
-
-@media (max-width: 480px) {
-  :root {
-    --card-gap-x: 8px;
-    --card-gap-y: 8px;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1069,7 +1059,7 @@ body {
 </div>
 
 <!-- ── PROTOTYPE BADGE ─────────────────────────────────────── -->
-<div class="prototype-badge" aria-hidden="true">Prototype v2 — Floating Cards</div>
+<div class="prototype-badge" aria-hidden="true">Prototype v3 — 12px→16px Gap</div>
 
 <script>
 const observer = new IntersectionObserver(
