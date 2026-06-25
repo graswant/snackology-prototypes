@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Snackology — Floating Cards Layout v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ── RESET & BASE ─────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{
+  font-family:'Space Grotesk',sans-serif;
+  color:#fff;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  background:#1C0A1F;
+}
+
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:9998;
+  opacity:0.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat:repeat;
+  background-size:128px 128px;
+}
+
+/* ── COLORS ───────────────────────────────────────────────── */
+:root{
+  --bg:       #1C0A1F;
+  --crimson:  #B91F48;
+  --plum:     #531C56;
+  --blue:     #145293;
+  --dark-blue:#0D1B2E;
+  --gold:     #FFBF04;
+  --pink:     #F498AD;
+  --green:    #5BBA47;
+  --dark-green:#0D2B1A;
+  --dark:     #0D0020;
+  --lime:     #D7DF28;
+  --orange:   #F47642;
+  --tan:      #E79901;
+
+  --gap-h: clamp(10px,1.4vw,18px);
+  --gap-v: 12px;
+  --card-r: 20px;
+
+  --font-h:'Anton',sans-serif;
+  --font-s:'Oswald',sans-serif;
+  --font-b:'Space Grotesk',sans-serif;
+}
+
+/* ── NAV ─────────────────────────────────────────────────── */
+.nav{
+  position:fixed;
+  top:0;left:0;right:0;
+  z-index:999;
+  height:60px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 clamp(16px,4vw,48px);
+  background:rgba(28,10,31,0.92);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(255,255,255,0.07);
+}
+.nav-logo{
+  font-family:var(--font-h);
+  font-size:20px;
+  letter-spacing:0.05em;
+  color:#fff;
+  text-decoration:none;
+}
+.nav-logo span{color:var(--lime)}
+.nav-links{display:flex;gap:24px;list-style:none}
+.nav-links a{
+  font-size:11px;font-weight:700;
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:rgba(255,255,255,0.50);text-decoration:none;
+  transition:color 0.18s;
+}
+.nav-links a:hover{color:#fff}
+.nav-cta{
+  font-size:11px;font-weight:700;letter-spacing:0.08em;
+  padding:8px 18px;border-radius:9999px;
+  background:var(--lime);color:#0D0020;
+  border:none;cursor:pointer;text-decoration:none;
+  transition:opacity 0.18s;
+}
+.nav-cta:hover{opacity:0.85}
+@media(max-width:640px){.nav-links{display:none}}
+
+/* ── FLOATING CARD SYSTEM ─────────────────────────────────── */
+.card{
+  margin-inline:var(--gap-h);
+  margin-bottom:var(--gap-v);
+  border-radius:var(--card-r);
+  overflow:hidden;
+  position:relative;
+}
+.card:first-of-type{margin-top:calc(60px + var(--gap-v))}
+
+.full-bleed{margin:0;border-radius:0;overflow:hidden}
+
+/* ── INNER WRAP ───────────────────────────────────────────── */
+.overline{
+  font-size:11px;font-weight:700;letter-spacing:0.26em;
+  text-transform:uppercase;margin-bottom:10px;
+  opacity:0.70;
+}
+.section-h2{
+  font-family:var(--font-h);
+  font-size:clamp(28px,4vw,52px);
+  line-height:0.95;letter-spacing:0.03em;
+  text-transform:uppercase;
+  margin-bottom:clamp(24px,3vw,40px);
+}
+
+/* ── HERO ─────────────────────────────────────────────────── */
+.hero-card{background:var(--crimson)}
+.hero-inner{
+  min-height:540px;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;
+  padding:clamp(56px,7vw,88px) clamp(24px,5vw,64px) clamp(48px,6vw,72px);
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:7px 20px;border-radius:9999px;
+  font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;
+  background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.40);
+  color:#fff;margin-bottom:20px;
+}
+.hero-h1{
+  font-family:var(--font-h);
+  font-size:clamp(40px,7vw,82px);
+  line-height:0.90;letter-spacing:0.01em;
+  text-transform:uppercase;
+  color:#fff;max-width:800px;margin-bottom:14px;
+}
+.hero-h1 .hl{color:var(--lime)}
+.hero-sub{
+  font-size:clamp(14px,1.2vw,16px);
+  color:rgba(255,255,255,0.72);
+  max-width:420px;margin-bottom:28px;line-height:1.65;
+}
+.hero-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.btn-lime{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:12px 24px;border-radius:9999px;
+  background:var(--lime);color:#0D0020;
+  font-family:var(--font-b);font-size:13px;font-weight:700;
+  border:none;cursor:pointer;text-decoration:none;
+  transition:opacity 0.18s;
+}
+.btn-lime:hover{opacity:0.88}
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:12px 24px;border-radius:9999px;
+  background:rgba(255,255,255,0.10);color:#fff;
+  font-family:var(--font-b);font-size:13px;font-weight:600;
+  border:1px solid rgba(255,255,255,0.30);
+  cursor:pointer;text-decoration:none;
+  transition:background 0.18s;
+}
+.btn-ghost:hover{background:rgba(255,255,255,0.18)}
+
+/* ── MARQUEE ─────────────────────────────────────────────── */
+.marquee-wrap{
+  overflow:hidden;
+  padding-block:14px;
+  border-top:1px solid rgba(255,255,255,0.08);
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+.marquee-track{
+  display:flex;gap:0;
+  animation:marquee-scroll 28s linear infinite;
+  width:max-content;
+}
+.marquee-wrap.reverse .marquee-track{animation-direction:reverse}
+@keyframes marquee-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.marquee-item{
+  font-family:var(--font-s);
+  font-size:clamp(13px,1.4vw,15px);
+  font-weight:700;letter-spacing:0.14em;text-transform:uppercase;
+  white-space:nowrap;padding-inline:clamp(16px,2vw,28px);
+  display:flex;align-items:center;gap:clamp(16px,2vw,28px);
+}
+.marquee-item .dot{
+  width:6px;height:6px;border-radius:50%;
+  background:currentColor;opacity:0.50;flex-shrink:0;
+}
+.mq1{background:var(--dark-blue);color:var(--lime)}
+.mq2{background:var(--crimson);color:#fff}
+
+/* ── WHO WE MADE THIS FOR ─────────────────────────────────── */
+.for-section{padding-block:clamp(48px,5vw,72px)}
+.for-inner{
+  max-width:1100px;margin:0 auto;
+  padding-inline:clamp(24px,4vw,56px);
+}
+.for-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:16px;margin-top:28px;
+}
+.persona-card{
+  background:var(--pink);
+  border-radius:16px;
+  padding:clamp(24px,3vw,36px);
+}
+.persona-num{
+  font-family:var(--font-h);
+  font-size:clamp(40px,5vw,64px);
+  line-height:1;color:var(--plum);opacity:0.25;
+  margin-bottom:4px;
+}
+.persona-title{
+  font-family:var(--font-s);
+  font-size:clamp(16px,1.8vw,20px);
+  font-weight:700;letter-spacing:0.04em;text-transform:uppercase;
+  color:var(--plum);margin-bottom:10px;
+}
+.persona-desc{
+  font-size:14px;line-height:1.60;
+  color:rgba(83,28,86,0.78);
+}
+.persona-tag{
+  display:inline-block;margin-top:14px;
+  padding:5px 14px;border-radius:9999px;
+  font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;
+  background:rgba(83,28,86,0.12);color:var(--plum);
+}
+
+/* ── FULL RANGE ───────────────────────────────────────────── */
+.range-card{background:var(--dark-green)}
+.range-inner{padding:clamp(40px,5vw,64px) clamp(24px,4vw,56px)}
+.range-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(min(200px,100%),1fr));
+  gap:12px;margin-top:28px;
+}
+.cat-card{
+  border-radius:14px;padding:24px 20px 20px;
+  cursor:pointer;transition:transform 0.22s cubic-bezier(0.16,1,0.3,1),box-shadow 0.22s;
+  position:relative;overflow:hidden;
+}
+.cat-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,0.35)}
+.cat-icon{font-size:28px;margin-bottom:10px}
+.cat-name{
+  font-family:var(--font-s);
+  font-size:clamp(14px,1.5vw,17px);
+  font-weight:700;letter-spacing:0.06em;text-transform:uppercase;
+  margin-bottom:6px;
+}
+.cat-desc{font-size:12px;line-height:1.55;opacity:0.78}
+.cat-badge{
+  position:absolute;top:12px;right:12px;
+  padding:3px 10px;border-radius:9999px;
+  font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;
+  background:rgba(255,255,255,0.15);color:#fff;
+  box-shadow:0 2px 8px rgba(0,0,0,0.25);
+  border:1.5px solid rgba(255,255,255,0.35);
+}
+.cat-crimson{background:var(--crimson)}
+.cat-plum{background:var(--plum)}
+.cat-gold{background:var(--tan)}
+.cat-pink{background:#C2185B}
+.cat-blue{background:var(--blue)}
+.cat-orange{background:var(--orange)}
+.cat-teal{background:#1E3F4F}
+
+/* ── WE ACTUALLY GIVE A DAMN ──────────────────────────────── */
+.damn-card{background:var(--tan)}
+.damn-inner{padding:clamp(40px,5vw,64px) clamp(24px,4vw,56px)}
+.damn-bento{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr 1fr;
+  grid-template-rows:auto auto;
+  gap:12px;margin-top:32px;
+}
+@media(max-width:900px){.damn-bento{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.damn-bento{grid-template-columns:1fr}}
+.bento-big{
+  grid-column:1/3;grid-row:1/3;
+  background:var(--dark);border-radius:14px;
+  padding:clamp(24px,3vw,36px);
+  display:flex;flex-direction:column;justify-content:flex-end;
+  min-height:260px;
+  position:relative;overflow:hidden;
+}
+@media(max-width:900px){.bento-big{grid-column:1/3;grid-row:auto}}
+.bento-big-label{
+  font-family:var(--font-h);
+  font-size:clamp(20px,2.5vw,30px);
+  color:var(--lime);line-height:1;
+  text-transform:uppercase;margin-bottom:8px;
+}
+.bento-big-sub{font-size:14px;color:rgba(255,255,255,0.65);line-height:1.55;max-width:34ch}
+.bento-small{
+  background:rgba(0,0,0,0.18);border-radius:14px;
+  padding:clamp(18px,2.5vw,28px);
+  display:flex;flex-direction:column;justify-content:space-between;
+  min-height:120px;
+}
+.bento-small-num{
+  font-family:var(--font-h);
+  font-size:clamp(28px,3.5vw,42px);
+  color:#0D0020;line-height:1;
+}
+.bento-small-label{
+  font-size:12px;font-weight:700;letter-spacing:0.10em;
+  text-transform:uppercase;color:rgba(13,0,32,0.70);
+  margin-top:6px;
+}
+.damn-values{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;}
+.val-chip{
+  padding:8px 16px;border-radius:9999px;
+  font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;
+  background:rgba(0,0,0,0.15);color:#0D0020;
+  border:1.5px solid rgba(255,255,255,0.40);
+  box-shadow:0 2px 6px rgba(0,0,0,0.15);
+}
+
+/* ── FROM THE FOUNDER ─────────────────────────────────────── */
+.founder-bare{
+  padding:clamp(56px,7vw,96px) clamp(24px,5vw,64px);
+  max-width:860px;margin:0 auto;
+}
+.founder-quote-mark{
+  font-family:var(--font-h);
+  font-size:clamp(80px,12vw,160px);
+  line-height:0.8;color:var(--plum);
+  opacity:0.35;display:block;margin-bottom:-20px;
+}
+.founder-text{
+  font-family:var(--font-s);
+  font-size:clamp(18px,2.2vw,26px);
+  font-weight:500;line-height:1.55;
+  color:rgba(255,255,255,0.88);
+  margin-bottom:28px;
+}
+.founder-text strong{color:var(--lime);font-weight:700}
+.founder-sig{display:flex;align-items:center;gap:14px;}
+.founder-avatar{
+  width:44px;height:44px;border-radius:50%;
+  background:var(--plum);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-h);font-size:18px;color:rgba(255,255,255,0.70);
+  flex-shrink:0;
+}
+.founder-name{font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase}
+.founder-role{font-size:11px;color:rgba(255,255,255,0.45);margin-top:2px;letter-spacing:0.06em}
+
+/* ── COMMUNITY WALL ───────────────────────────────────────── */
+.wall-card{background:var(--dark-blue)}
+.wall-inner{padding:clamp(40px,5vw,64px) clamp(24px,4vw,56px)}
+.wall-h2{color:var(--orange)}
+.wall-photos{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;margin-top:28px;
+}
+@media(max-width:700px){.wall-photos{grid-template-columns:repeat(2,1fr)}}
+.wall-photo{
+  aspect-ratio:1;border-radius:12px;
+  border:1.5px solid var(--orange);
+  background:rgba(244,118,66,0.10);
+  overflow:hidden;position:relative;
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;color:rgba(244,118,66,0.35);
+  transition:border-color 0.18s,transform 0.22s cubic-bezier(0.16,1,0.3,1);
+}
+.wall-photo:hover{border-color:var(--orange);transform:scale(1.03)}
+.wall-photo-label{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:8px 10px;
+  background:linear-gradient(to top,rgba(13,27,46,0.85),transparent);
+  font-size:10px;font-weight:700;letter-spacing:0.10em;text-transform:uppercase;
+  color:rgba(255,255,255,0.70);
+}
+.reviews-row{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(min(240px,100%),1fr));
+  gap:10px;
+}
+.review-card{
+  background:rgba(255,255,255,0.05);
+  border:1.5px solid rgba(244,118,66,0.30);
+  border-radius:12px;padding:18px 16px;
+  transition:border-color 0.18s;
+}
+.review-card:hover{border-color:var(--orange)}
+.review-stars{color:var(--orange);font-size:13px;margin-bottom:8px;letter-spacing:2px}
+.review-text{font-size:13px;line-height:1.60;color:rgba(255,255,255,0.75);margin-bottom:10px}
+.review-author{font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:rgba(244,118,66,0.70)}
+.wall-cta-row{display:flex;align-items:center;justify-content:center;margin-top:24px;gap:12px}
+.btn-orange{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 24px;border-radius:9999px;
+  background:var(--orange);color:#fff;
+  font-family:var(--font-b);font-size:13px;font-weight:700;
+  border:none;cursor:pointer;text-decoration:none;
+  transition:opacity 0.18s;
+}
+.btn-orange:hover{opacity:0.88}
+
+/* ── FOOTER ───────────────────────────────────────────────── */
+.footer{
+  background:var(--dark);
+  padding:clamp(40px,5vw,64px) clamp(24px,4vw,56px) clamp(24px,3vw,36px);
+}
+.footer-inner{max-width:1100px;margin:0 auto}
+.footer-top{
+  display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;
+  gap:32px;padding-bottom:40px;
+  border-bottom:1px solid rgba(255,255,255,0.07);
+}
+@media(max-width:768px){.footer-top{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.footer-top{grid-template-columns:1fr}}
+.footer-brand-name{
+  font-family:var(--font-h);font-size:22px;letter-spacing:0.05em;
+  color:#fff;margin-bottom:10px;
+}
+.footer-brand-name span{color:var(--lime)}
+.footer-tagline{font-size:13px;color:rgba(255,255,255,0.45);line-height:1.60;max-width:24ch;margin-bottom:16px}
+.footer-col-title{
+  font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;
+  color:rgba(255,255,255,0.35);margin-bottom:14px;
+}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:8px}
+.footer-links a{
+  font-size:13px;color:rgba(255,255,255,0.55);text-decoration:none;
+  transition:color 0.18s;
+}
+.footer-links a:hover{color:#fff}
+.footer-bottom{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-top:24px;flex-wrap:wrap;gap:12px;
+}
+.footer-copy{font-size:12px;color:rgba(255,255,255,0.28);letter-spacing:0.04em}
+.footer-badges{display:flex;gap:8px;flex-wrap:wrap}
+.footer-badge{
+  padding:4px 12px;border-radius:9999px;
+  font-size:10px;font-weight:700;letter-spacing:0.10em;text-transform:uppercase;
+  border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.35);
+}
+
+/* ── SCROLL REVEAL ────────────────────────────────────────── */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity 0.55s cubic-bezier(0.16,1,0.3,1),transform 0.55s cubic-bezier(0.16,1,0.3,1)}
+.reveal.visible{opacity:1;transform:none}
+.reveal-d1{transition-delay:0.05s}
+.reveal-d2{transition-delay:0.12s}
+.reveal-d3{transition-delay:0.19s}
+.reveal-d4{transition-delay:0.26s}
+.reveal-d5{transition-delay:0.33s}
+.reveal-d6{transition-delay:0.40s}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="#" class="nav-logo">SNACKO<span>LOGY</span></a>
+  <ul class="nav-links">
+    <li><a href="#products">Products</a></li>
+    <li><a href="#why">Why Us</a></li>
+    <li><a href="#founder">Founder</a></li>
+    <li><a href="#wall">Community</a></li>
+  </ul>
+  <a href="#enquire" class="nav-cta">Enquire Now</a>
+</nav>
+
+<!-- HERO — crimson floating card -->
+<section class="card hero-card reveal" id="hero">
+  <div class="hero-inner">
+    <div class="hero-badge reveal reveal-d1"><span>⚡</span> The Science of Snacking Right</div>
+    <h1 class="hero-h1 reveal reveal-d2">Made for the<br><span class="hl">Chai Break.</span><br>Built to Repeat.</h1>
+    <p class="hero-sub reveal reveal-d3">Bold Indian flavours. Honest ingredients. Zero artificial nonsense. Snacks that taste like India actually does.</p>
+    <div class="hero-btns reveal reveal-d4">
+      <a href="#products" class="btn-lime">Explore Range ↓</a>
+      <a href="#enquire" class="btn-ghost">B2B Enquiry</a>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE 1 — full bleed -->
+<div class="full-bleed">
+  <div class="marquee-wrap mq1">
+    <div class="marquee-track">
+      <span class="marquee-item">Gym Tomorrow<span class="dot"></span></span>
+      <span class="marquee-item">Snacks Today<span class="dot"></span></span>
+      <span class="marquee-item">0 Artificial Flavours<span class="dot"></span></span>
+      <span class="marquee-item">Born Bold<span class="dot"></span></span>
+      <span class="marquee-item">Stays Crunchy<span class="dot"></span></span>
+      <span class="marquee-item">Real Indian Taste<span class="dot"></span></span>
+      <span class="marquee-item">Gym Tomorrow<span class="dot"></span></span>
+      <span class="marquee-item">Snacks Today<span class="dot"></span></span>
+      <span class="marquee-item">0 Artificial Flavours<span class="dot"></span></span>
+      <span class="marquee-item">Born Bold<span class="dot"></span></span>
+      <span class="marquee-item">Stays Crunchy<span class="dot"></span></span>
+      <span class="marquee-item">Real Indian Taste<span class="dot"></span></span>
+    </div>
+  </div>
+</div>
+
+<!-- MARQUEE 2 — full bleed -->
+<div class="full-bleed">
+  <div class="marquee-wrap mq2 reverse">
+    <div class="marquee-track">
+      <span class="marquee-item">∞ Repeat Cravings<span class="dot"></span></span>
+      <span class="marquee-item">Masala Sing<span class="dot"></span></span>
+      <span class="marquee-item">Broccoli Pudina<span class="dot"></span></span>
+      <span class="marquee-item">Millet Crunch<span class="dot"></span></span>
+      <span class="marquee-item">Guilt-Lite<span class="dot"></span></span>
+      <span class="marquee-item">Maggie Puff<span class="dot"></span></span>
+      <span class="marquee-item">∞ Repeat Cravings<span class="dot"></span></span>
+      <span class="marquee-item">Masala Sing<span class="dot"></span></span>
+      <span class="marquee-item">Broccoli Pudina<span class="dot"></span></span>
+      <span class="marquee-item">Millet Crunch<span class="dot"></span></span>
+      <span class="marquee-item">Guilt-Lite<span class="dot"></span></span>
+      <span class="marquee-item">Maggie Puff<span class="dot"></span></span>
+    </div>
+  </div>
+</div>
+
+<!-- WHO WE MADE THIS FOR — bare on page bg -->
+<section class="for-section" id="for">
+  <div class="for-inner">
+    <p class="overline reveal">Who We Made This For</p>
+    <h2 class="section-h2 reveal reveal-d1">Your Snack<br>Personality.</h2>
+    <div class="for-grid">
+      <div class="persona-card reveal reveal-d2">
+        <div class="persona-num">01</div>
+        <div class="persona-title">The Conscious Muncher</div>
+        <p class="persona-desc">Wants snacks without the guilt hangover. Reads labels. Prefers "less bad" over full indulgence. You're who we made Broccoli Pudina for.</p>
+        <span class="persona-tag">Age 25–45</span>
+      </div>
+      <div class="persona-card reveal reveal-d3">
+        <div class="persona-num">02</div>
+        <div class="persona-title">The Curious Explorer</div>
+        <p class="persona-desc">Discovers brands on Instagram. Shares snack unboxings. Our organic growth engine. Needs packaging that photographs perfectly.</p>
+        <span class="persona-tag">Age 18–28</span>
+      </div>
+      <div class="persona-card reveal reveal-d4">
+        <div class="persona-num">03</div>
+        <div class="persona-title">The Traditional Loyalist</div>
+        <p class="persona-desc">Grew up on namkeen and bhujia. Open to a cleaner, more modern version of those flavours. Masala Sing speaks directly to you.</p>
+        <span class="persona-tag">Age 35–55</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FULL RANGE — dark green floating card -->
+<section class="card range-card reveal" id="products">
+  <div class="range-inner">
+    <p class="overline reveal">The Full Range</p>
+    <h2 class="section-h2 reveal reveal-d1">7 Reasons to<br>Skip Boring.</h2>
+    <div class="range-grid">
+      <div class="cat-card cat-crimson reveal reveal-d1"><span class="cat-badge">Fan Fave</span><div class="cat-icon">🧄</div><div class="cat-name">Garlic Cheese</div><p class="cat-desc">Punchy garlic. Melty cheese dust. Impossible to eat just one.</p></div>
+      <div class="cat-card cat-plum reveal reveal-d2"><span class="cat-badge">Bold</span><div class="cat-icon">🌶️</div><div class="cat-name">Maggie Puff</div><p class="cat-desc">Bold, spicy, and dangerously addictive. Our early waitlist winner.</p></div>
+      <div class="cat-card cat-gold reveal reveal-d3"><span class="cat-badge">Light</span><div class="cat-icon">💨</div><div class="cat-name">Masala Puff</div><p class="cat-desc">Light and airy. Masala-kissed. Disappears before you realise.</p></div>
+      <div class="cat-card cat-pink reveal reveal-d4"><span class="cat-badge">Fresh</span><div class="cat-icon">🥦</div><div class="cat-name">Broccoli Pudina</div><p class="cat-desc">Fresh and green. For when you want to feel good about snacking.</p></div>
+      <div class="cat-card cat-blue reveal reveal-d5"><span class="cat-badge">Roots</span><div class="cat-icon">🥜</div><div class="cat-name">Masala Sing</div><p class="cat-desc">Traditional. Honest. The snack India grew up on, done right.</p></div>
+      <div class="cat-card cat-orange reveal reveal-d6"><span class="cat-badge">Ancient</span><div class="cat-icon">🌾</div><div class="cat-name">Millet Crunch</div><p class="cat-desc">Ancient grains. Modern crunch. Nutrient-dense and genuinely good.</p></div>
+      <div class="cat-card cat-teal reveal reveal-d1"><span class="cat-badge">Premium</span><div class="cat-icon">🥗</div><div class="cat-name">Quinoa Salad</div><p class="cat-desc">Our premium play. Clean protein, complex flavour, no compromise.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- WE ACTUALLY GIVE A DAMN — amber floating card -->
+<section class="card damn-card reveal" id="why">
+  <div class="damn-inner">
+    <p class="overline" style="color:rgba(13,0,32,0.55)">Why Snackology</p>
+    <h2 class="section-h2 reveal reveal-d1" style="color:#0D0020">We Actually<br>Give a Damn.</h2>
+    <div class="damn-bento">
+      <div class="bento-big reveal reveal-d2">
+        <div class="bento-big-label">0 Artificial<br>Flavours. Ever.</div>
+        <p class="bento-big-sub">Every ingredient is named. Every claim is backed. We won't put anything on our label we can't justify in front of a FSSAI inspector.</p>
+      </div>
+      <div class="bento-small reveal reveal-d3"><div class="bento-small-num">7</div><div class="bento-small-label">SKUs launching</div></div>
+      <div class="bento-small reveal reveal-d4"><div class="bento-small-num">₹90</div><div class="bento-small-label">Entry price point</div></div>
+      <div class="bento-small reveal reveal-d5"><div class="bento-small-num">10%</div><div class="bento-small-label">Market CAGR</div></div>
+      <div class="bento-small reveal reveal-d6"><div class="bento-small-num">2026</div><div class="bento-small-label">Designed for now</div></div>
+    </div>
+    <div class="damn-values reveal reveal-d2">
+      <span class="val-chip">Bold</span><span class="val-chip">Honest</span><span class="val-chip">Playful</span>
+      <span class="val-chip">Rooted</span><span class="val-chip">Modern</span><span class="val-chip">Guilt-Lite</span>
+      <span class="val-chip">Discovery</span><span class="val-chip">Repeat-Worthy</span><span class="val-chip">Accessible</span>
+    </div>
+  </div>
+</section>
+
+<!-- FROM THE FOUNDER — bare on page bg -->
+<section id="founder">
+  <div class="founder-bare">
+    <span class="founder-quote-mark reveal">&ldquo;</span>
+    <p class="founder-text reveal reveal-d1">The Indian snack market makes you choose between <strong>taste and transparency</strong>. Mass-market junk or cardboard health food with a premium guilt-removal price tag.<br><br>Snackology doesn't make you choose. <strong>Bold flavour. Honest ingredients. Designed for 2026.</strong> That's it. That's the whole brief.</p>
+    <div class="founder-sig reveal reveal-d2">
+      <div class="founder-avatar">G</div>
+      <div>
+        <div class="founder-name">GR — Founder, Snackology</div>
+        <div class="founder-role">The science of snacking right</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STACKING USE IS ENCOURAGED — dark blue card -->
+<section class="card wall-card reveal" id="wall">
+  <div class="wall-inner">
+    <p class="overline" style="color:rgba(244,118,66,0.60)">Community</p>
+    <h2 class="section-h2 wall-h2 reveal reveal-d1">Stacking Use<br>Is Encouraged.</h2>
+    <div class="wall-photos">
+      <div class="wall-photo reveal reveal-d1">📸<div class="wall-photo-label">Exhibition — Mumbai</div></div>
+      <div class="wall-photo reveal reveal-d2">📸<div class="wall-photo-label">Snack Haul</div></div>
+      <div class="wall-photo reveal reveal-d3">📸<div class="wall-photo-label">Chai + Snacks</div></div>
+      <div class="wall-photo reveal reveal-d4">📸<div class="wall-photo-label">Office Stash</div></div>
+    </div>
+    <div class="reviews-row" style="margin-top:20px">
+      <div class="review-card reveal reveal-d2"><div class="review-stars">★★★★★</div><p class="review-text">"Finally a snack brand that doesn't treat me like an idiot. The Masala Sing is unreal."</p><div class="review-author">Priya M. — Mumbai</div></div>
+      <div class="review-card reveal reveal-d3"><div class="review-stars">★★★★★</div><p class="review-text">"Bought it at an exhibition, finished the bag on the ride home. Ordered online the same night."</p><div class="review-author">Karan S. — Bengaluru</div></div>
+      <div class="review-card reveal reveal-d4"><div class="review-stars">★★★★★</div><p class="review-text">"The Broccoli Pudina sounds wrong, tastes incredibly right. My office is obsessed."</p><div class="review-author">Ananya R. — Delhi</div></div>
+      <div class="review-card reveal reveal-d5"><div class="review-stars">★★★★★</div><p class="review-text">"Honest ingredients, actually bold flavour. This is what we've been waiting for."</p><div class="review-author">Dev K. — Hyderabad</div></div>
+    </div>
+    <div class="wall-cta-row reveal reveal-d3">
+      <a href="#" class="btn-orange">Follow on Instagram ↗</a>
+      <a href="#" class="btn-ghost">Join the Community</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer" id="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand-name">SNACKO<span>LOGY</span></div>
+        <p class="footer-tagline">The science of snacking right. Bold. Honest. Indian.</p>
+        <a href="#enquire" class="btn-lime" style="font-size:12px;padding:9px 18px">B2B Enquiry →</a>
+      </div>
+      <div>
+        <div class="footer-col-title">Products</div>
+        <ul class="footer-links">
+          <li><a href="#">Garlic Cheese</a></li><li><a href="#">Maggie Puff</a></li>
+          <li><a href="#">Masala Puff</a></li><li><a href="#">Broccoli Pudina</a></li>
+          <li><a href="#">Masala Sing</a></li><li><a href="#">Millet Crunch</a></li>
+          <li><a href="#">Quinoa Salad</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Company</div>
+        <ul class="footer-links">
+          <li><a href="#">Our Story</a></li><li><a href="#">Ingredients</a></li>
+          <li><a href="#">Sustainability</a></li><li><a href="#">Press</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Connect</div>
+        <ul class="footer-links">
+          <li><a href="#">Instagram</a></li><li><a href="#">WhatsApp</a></li>
+          <li><a href="#">Wholesale</a></li><li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 Snackology. All rights reserved.</span>
+      <div class="footer-badges">
+        <span class="footer-badge">FSSAI Licensed</span>
+        <span class="footer-badge">0 Artificial Flavours</span>
+        <span class="footer-badge">Made in India</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);} });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+document.querySelectorAll('.for-grid, .range-grid, .reviews-row').forEach(grid => {
+  [...grid.children].forEach((child,i) => { child.style.transitionDelay = (i * 0.07)+'s'; });
+});
+</script>
+</body>
+</html>
