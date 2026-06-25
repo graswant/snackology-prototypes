@@ -10,7 +10,7 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;overflow-x:hidden}
-body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:antialiased;overflow-x:hidden;background:#3D1440;}
+body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:antialiased;overflow-x:hidden;background:#2A0E2E;}
 :root{
   --sn-crimson:#B91F48;--sn-plum:#531C56;--sn-deep-blue:#145293;
   --sn-forest:#1A4A2E;--sn-soft-pink:#F498AD;--sn-lime:#D7DF28;
@@ -19,7 +19,7 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
   --font-h:'Anton',sans-serif;--font-s:'Oswald',sans-serif;--font-b:'Space Grotesk',sans-serif;
 }
 /* ── NAV ── */
-.nav{position:fixed;top:0;left:0;right:0;z-index:999;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,4vw,48px);background:rgba(61,20,64,0.96);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.10);}
+.nav{position:fixed;top:0;left:0;right:0;z-index:999;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,4vw,48px);background:rgba(42,14,46,0.96);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.10);}
 .nav-logo{font-family:var(--font-h);font-size:20px;letter-spacing:0.05em;color:#fff;text-decoration:none;}
 .nav-logo span{color:var(--sn-lime)}
 .nav-links{display:flex;gap:24px;list-style:none}
@@ -27,15 +27,11 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
 .nav-cta{font-size:11px;font-weight:700;padding:8px 18px;border-radius:9999px;background:var(--sn-lime);color:#0D0020;border:none;cursor:pointer;text-decoration:none;}
 @media(max-width:640px){.nav-links{display:none}}
 
-/* ══ FLOATING CARD SLOT SYSTEM ══
-   .slot = the visible padding wrapper (background shows through)
-   .card = the coloured card inside the slot
-   On mobile the slot has large horizontal padding so background bleeds on both sides
-*/
+/* ══ FLOATING CARD SLOT SYSTEM ══ */
 .slot{padding-inline:clamp(12px,1.6vw,22px);padding-bottom:14px;}
 .slot-first{padding-top:calc(64px + 14px);}
-@media(max-width:768px){.slot{padding-inline:44px;padding-bottom:12px;}}
-@media(max-width:480px){.slot{padding-inline:22px;padding-bottom:10px;}}
+@media(max-width:768px){.slot{padding-inline:20px;padding-bottom:12px;}}
+@media(max-width:480px){.slot{padding-inline:16px;padding-bottom:10px;}}
 .card{border-radius:var(--card-r);overflow:hidden;position:relative;width:100%;}
 
 .full-bleed{margin:0;overflow:hidden}
@@ -66,8 +62,8 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
 
 /* WHO WE MADE FOR — no card, floats on bg */
 .for-section{padding:clamp(48px,6vw,80px) clamp(12px,1.6vw,22px) clamp(40px,5vw,64px);}
-@media(max-width:768px){.for-section{padding-inline:44px;}}
-@media(max-width:480px){.for-section{padding-inline:22px;}}
+@media(max-width:768px){.for-section{padding-inline:20px;}}
+@media(max-width:480px){.for-section{padding-inline:16px;}}
 .for-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px;}
 @media(max-width:760px){.for-grid{grid-template-columns:1fr;}}
 .persona-card{border-radius:var(--card-r);padding:clamp(24px,3vw,40px);background:var(--sn-soft-pink);}
@@ -116,9 +112,9 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
   .dp-open{min-width:unset;}
 }
 
-/* FOUNDER — flat on bg, no card */
-.founder-bare{padding:clamp(56px,7vw,96px) clamp(44px,5vw,64px);max-width:860px;margin:0 auto;}
-@media(max-width:480px){.founder-bare{padding-inline:22px;}}
+/* FOUNDER — flat on bg */
+.founder-bare{padding:clamp(56px,7vw,96px) clamp(20px,5vw,64px);max-width:860px;margin:0 auto;}
+@media(max-width:480px){.founder-bare{padding-inline:16px;}}
 .founder-q{font-family:var(--font-h);font-size:clamp(80px,12vw,160px);line-height:0.8;color:rgba(244,152,173,0.30);display:block;margin-bottom:-20px;}
 .founder-text{font-family:var(--font-s);font-size:clamp(18px,2.2vw,26px);font-weight:500;line-height:1.55;color:rgba(255,255,255,0.88);margin-bottom:28px;}
 .founder-text strong{color:var(--sn-lime);font-weight:700}
@@ -154,7 +150,7 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
 .rev-source{font-size:11px;opacity:0.5;margin-top:2px;}
 .wall-cta{text-align:center;margin-top:10px;padding-inline:clamp(24px,4vw,56px);}
 
-/* FOOTER — flat on background, no card wrapper */
+/* FOOTER — inherits body bg #2A0E2E, no card */
 .footer{padding:clamp(40px,5vw,64px) clamp(24px,4vw,56px) clamp(24px,3vw,36px);margin-top:8px;}
 .footer-inner{max-width:1100px;margin:0 auto}
 .footer-top{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px;padding-bottom:40px;border-bottom:1px solid rgba(255,255,255,0.10);}
@@ -208,7 +204,7 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
 <div class="full-bleed"><div class="marquee-wrap mq-dark"><div class="marquee-track"><span class="mitem">Gym Tomorrow<span class="dot"></span></span><span class="mitem">Snacks Today<span class="dot"></span></span><span class="mitem">Dadi Approved<span class="dot"></span></span><span class="mitem">Dietitian Confused<span class="dot"></span></span><span class="mitem">0 Artificial Flavours<span class="dot"></span></span><span class="mitem">Born Bold<span class="dot"></span></span><span class="mitem">One Bag. No Survivors.<span class="dot"></span></span><span class="mitem">Gym Tomorrow<span class="dot"></span></span><span class="mitem">Snacks Today<span class="dot"></span></span><span class="mitem">Dadi Approved<span class="dot"></span></span><span class="mitem">Dietitian Confused<span class="dot"></span></span><span class="mitem">0 Artificial Flavours<span class="dot"></span></span><span class="mitem">Born Bold<span class="dot"></span></span><span class="mitem">One Bag. No Survivors.<span class="dot"></span></span></div></div></div>
 <div class="full-bleed"><div class="marquee-wrap mq-red rev"><div class="marquee-track"><span class="mitem">&#8734; Repeat Cravings<span class="dot"></span></span><span class="mitem">Chatpata Isn&#8217;t a Flavour &#8212; It&#8217;s a Feeling<span class="dot"></span></span><span class="mitem">Guilt Left. Crunch Stayed.<span class="dot"></span></span><span class="mitem">For People Who Refuse to Snack Sad<span class="dot"></span></span><span class="mitem">&#8734; Repeat Cravings<span class="dot"></span></span><span class="mitem">Chatpata Isn&#8217;t a Flavour &#8212; It&#8217;s a Feeling<span class="dot"></span></span><span class="mitem">Guilt Left. Crunch Stayed.<span class="dot"></span></span><span class="mitem">For People Who Refuse to Snack Sad<span class="dot"></span></span></div></div></div>
 
-<!-- WHO WE MADE FOR — no card, pink cards float directly on bg -->
+<!-- WHO WE MADE FOR -->
 <section id="for" class="for-section reveal">
   <p class="overline reveal" style="color:rgba(244,152,173,0.75)">Our People</p>
   <h2 class="section-h2 reveal d1">Who We Made<br>This For.</h2>
@@ -267,7 +263,7 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
   </section>
 </div>
 
-<!-- FOUNDER — flat on bg -->
+<!-- FOUNDER -->
 <section id="founder">
   <div class="founder-bare">
     <span class="founder-q reveal">&ldquo;</span>
@@ -333,7 +329,7 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
   </section>
 </div>
 
-<!-- FOOTER — flat on #3D1440 background, no card -->
+<!-- FOOTER — sits flat on body bg #2A0E2E -->
 <footer class="footer">
   <div class="footer-inner">
     <div class="footer-top">
