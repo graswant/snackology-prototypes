@@ -15,9 +15,10 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
   --sn-crimson:#B91F48;--sn-plum:#531C56;--sn-deep-blue:#145293;
   --sn-forest:#1A4A2E;--sn-soft-pink:#F498AD;--sn-lime:#D7DF28;
   --sn-amber:#FFBF04;--sn-green:#167100;--sn-dark:#0D0020;
-  --gap-h:clamp(12px,1.6vw,22px);--gap-v:14px;--card-r:24px;
+  --card-r:22px;
   --font-h:'Anton',sans-serif;--font-s:'Oswald',sans-serif;--font-b:'Space Grotesk',sans-serif;
 }
+/* ── NAV ── */
 .nav{position:fixed;top:0;left:0;right:0;z-index:999;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,4vw,48px);background:rgba(61,20,64,0.96);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.10);}
 .nav-logo{font-family:var(--font-h);font-size:20px;letter-spacing:0.05em;color:#fff;text-decoration:none;}
 .nav-logo span{color:var(--sn-lime)}
@@ -26,27 +27,33 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
 .nav-cta{font-size:11px;font-weight:700;padding:8px 18px;border-radius:9999px;background:var(--sn-lime);color:#0D0020;border:none;cursor:pointer;text-decoration:none;}
 @media(max-width:640px){.nav-links{display:none}}
 
-/* ── CARD FLOATING SYSTEM ── */
-.card{margin-inline:var(--gap-h);margin-bottom:var(--gap-v);border-radius:var(--card-r);overflow:hidden;position:relative;}
-.card-first{margin-top:calc(64px + var(--gap-v))}
-/* Large side margins on mobile — plum background must be clearly visible */
-@media(max-width:768px){.card{margin-inline:48px;margin-bottom:14px;border-radius:20px;}}
-@media(max-width:480px){.card{margin-inline:40px;margin-bottom:12px;border-radius:18px;}}
+/* ══ FLOATING CARD SLOT SYSTEM ══
+   .slot = the visible padding wrapper (background shows through)
+   .card = the coloured card inside the slot
+   On mobile the slot has large horizontal padding so background bleeds on both sides
+*/
+.slot{padding-inline:clamp(12px,1.6vw,22px);padding-bottom:14px;}
+.slot-first{padding-top:calc(64px + 14px);}
+@media(max-width:768px){.slot{padding-inline:44px;padding-bottom:12px;}}
+@media(max-width:480px){.slot{padding-inline:22px;padding-bottom:10px;}}
+.card{border-radius:var(--card-r);overflow:hidden;position:relative;width:100%;}
 
-.full-bleed{margin:0;border-radius:0;overflow:hidden}
+.full-bleed{margin:0;overflow:hidden}
 .overline{font-size:11px;font-weight:700;letter-spacing:0.26em;text-transform:uppercase;margin-bottom:10px;}
 .section-h2{font-family:var(--font-h);font-size:clamp(32px,4.5vw,62px);line-height:0.95;letter-spacing:0.03em;text-transform:uppercase;margin-bottom:clamp(24px,3vw,40px);}
 .btn-lime{display:inline-flex;align-items:center;gap:7px;padding:12px 24px;border-radius:9999px;background:var(--sn-lime);color:#0D0020;font-family:var(--font-b);font-size:13px;font-weight:700;border:none;cursor:pointer;text-decoration:none;}
 .btn-ghost{display:inline-flex;align-items:center;gap:7px;padding:12px 24px;border-radius:9999px;background:rgba(255,255,255,0.10);color:#fff;font-family:var(--font-b);font-size:13px;font-weight:600;border:1px solid rgba(255,255,255,0.30);cursor:pointer;text-decoration:none;}
 .btn-red{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border-radius:9999px;background:var(--sn-crimson);color:#fff;font-family:var(--font-b);font-size:14px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;border:none;cursor:pointer;text-decoration:none;}
+
 /* HERO */
 .hero-card{background:var(--sn-crimson)}
-.hero-inner{min-height:560px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:clamp(60px,7vw,96px) clamp(24px,5vw,64px);}
+.hero-inner{min-height:520px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:clamp(60px,7vw,96px) clamp(24px,5vw,64px);}
 .hero-badge{display:inline-flex;align-items:center;gap:8px;padding:7px 20px;border-radius:9999px;font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.35);color:#fff;margin-bottom:20px;}
-.hero-h1{font-family:var(--font-h);font-size:clamp(44px,7.5vw,88px);line-height:0.90;text-transform:uppercase;color:#fff;max-width:820px;margin-bottom:16px;}
+.hero-h1{font-family:var(--font-h);font-size:clamp(40px,7.5vw,88px);line-height:0.90;text-transform:uppercase;color:#fff;max-width:820px;margin-bottom:16px;}
 .hero-h1 .hl{color:var(--sn-lime)}
 .hero-sub{font-size:clamp(14px,1.2vw,16px);color:rgba(255,255,255,0.72);max-width:420px;margin-bottom:32px;line-height:1.65;}
 .hero-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+
 /* MARQUEE */
 .marquee-wrap{overflow:hidden;padding-block:13px;}
 .marquee-track{display:flex;animation:mscroll 26s linear infinite;width:max-content;}
@@ -56,15 +63,19 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
 .mitem .dot{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:0.5;flex-shrink:0;}
 .mq-dark{background:#0D1B2E;color:var(--sn-lime)}
 .mq-red{background:var(--sn-crimson);color:#fff}
-/* WHO WE MADE FOR */
-.for-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap-v);margin-top:28px;padding-inline:var(--gap-h);}
-@media(max-width:760px){.for-grid{grid-template-columns:1fr;padding-inline:48px;}}
-@media(max-width:480px){.for-grid{padding-inline:40px;}}
-.persona-card{border-radius:var(--card-r);padding:clamp(28px,3vw,40px);background:var(--sn-soft-pink);}
+
+/* WHO WE MADE FOR — no card, floats on bg */
+.for-section{padding:clamp(48px,6vw,80px) clamp(12px,1.6vw,22px) clamp(40px,5vw,64px);}
+@media(max-width:768px){.for-section{padding-inline:44px;}}
+@media(max-width:480px){.for-section{padding-inline:22px;}}
+.for-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px;}
+@media(max-width:760px){.for-grid{grid-template-columns:1fr;}}
+.persona-card{border-radius:var(--card-r);padding:clamp(24px,3vw,40px);background:var(--sn-soft-pink);}
 .persona-num{font-family:var(--font-h);font-size:clamp(44px,5vw,68px);line-height:1;color:var(--sn-plum);opacity:0.20;margin-bottom:4px;}
 .persona-title{font-family:var(--font-s);font-size:clamp(16px,1.8vw,20px);font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:var(--sn-plum);margin-bottom:10px;}
 .persona-desc{font-size:14px;line-height:1.62;color:rgba(83,28,86,0.80);}
 .persona-tag{display:inline-block;margin-top:16px;padding:5px 14px;border-radius:9999px;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;background:rgba(83,28,86,0.12);color:var(--sn-plum);}
+
 /* FULL RANGE */
 .range-card{background:var(--sn-forest)}
 .range-inner{padding:clamp(40px,5vw,64px) clamp(24px,4vw,56px)}
@@ -76,7 +87,8 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
 .cat-desc{font-size:12px;line-height:1.55;opacity:0.80}
 .cat-badge{position:absolute;top:10px;right:10px;padding:3px 10px;border-radius:9999px;font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;background:rgba(255,255,255,0.14);color:#fff;border:1.5px solid rgba(255,255,255,0.30);}
 .cc-crimson{background:#B91F48}.cc-orange{background:#C85A00}.cc-plum{background:#531C56}.cc-teal{background:#0F5768}.cc-brown{background:#7A3B10}.cc-amber{background:#C47A00}.cc-purple{background:#5A2E91}.cc-lime-dark{background:#6B7A00}
-/* ══ GIVE A DAMN ══ */
+
+/* GIVE A DAMN */
 .damn-card{background:var(--sn-amber)}
 .damn-inner{padding:clamp(40px,5vw,64px) clamp(24px,4vw,56px)}
 .damn-h2{color:var(--sn-green)}
@@ -103,8 +115,10 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
   .dp-lbl{writing-mode:horizontal-tb;transform:none;}
   .dp-open{min-width:unset;}
 }
-/* FOUNDER */
-.founder-bare{padding:clamp(56px,7vw,96px) clamp(24px,5vw,64px);max-width:860px;margin:0 auto;}
+
+/* FOUNDER — flat on bg, no card */
+.founder-bare{padding:clamp(56px,7vw,96px) clamp(44px,5vw,64px);max-width:860px;margin:0 auto;}
+@media(max-width:480px){.founder-bare{padding-inline:22px;}}
 .founder-q{font-family:var(--font-h);font-size:clamp(80px,12vw,160px);line-height:0.8;color:rgba(244,152,173,0.30);display:block;margin-bottom:-20px;}
 .founder-text{font-family:var(--font-s);font-size:clamp(18px,2.2vw,26px);font-weight:500;line-height:1.55;color:rgba(255,255,255,0.88);margin-bottom:28px;}
 .founder-text strong{color:var(--sn-lime);font-weight:700}
@@ -112,7 +126,8 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
 .founder-av{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-family:var(--font-h);font-size:18px;color:rgba(255,255,255,0.70);flex-shrink:0;border:1.5px solid rgba(255,255,255,0.20);}
 .founder-name{font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase}
 .founder-role{font-size:11px;color:rgba(255,255,255,0.45);margin-top:2px;letter-spacing:0.06em}
-/* ══ SNACK WALL ══ */
+
+/* SNACK WALL */
 .wall-card{background:#0D0020}
 .wall-inner{padding:clamp(40px,5vw,64px) 0;}
 .wall-head{padding-inline:clamp(24px,4vw,56px);margin-bottom:28px;text-align:center;}
@@ -124,10 +139,9 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
 .photo-track{display:flex;align-items:center;position:absolute;left:0;top:0;height:100%;animation:scrollX 70s linear infinite;width:max-content;}
 @keyframes scrollX{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 .photo-card{flex:0 0 auto;width:220px;border-radius:28px;overflow:hidden;background:#1a0a2e;border:2px solid rgba(255,191,4,0.3);box-shadow:0 8px 28px rgba(0,0,0,0.75);transform:var(--rot,rotate(0deg));margin-right:-28px;position:relative;cursor:pointer;}
-.photo-card-img{height:200px;width:100%;display:block;background:var(--pc-bg,#1a0a2e);}
+.photo-card-img{height:200px;width:100%;display:block;}
 .photo-card-hint{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(13,0,32,0.93));color:#FFBF04;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;text-align:center;padding:22px 8px 10px;}
-.pc-1{--pc-bg:linear-gradient(135deg,#B91F48,#7A0020)}.pc-2{--pc-bg:linear-gradient(135deg,#531C56,#4C1763)}.pc-3{--pc-bg:linear-gradient(135deg,#145293,#0a2a5a)}.pc-4{--pc-bg:linear-gradient(135deg,#E79901,#C85A00)}.pc-5{--pc-bg:linear-gradient(135deg,#F498AD,#D35C74)}.pc-6{--pc-bg:linear-gradient(135deg,#1A4A2E,#0d2619)}.pc-7{--pc-bg:linear-gradient(135deg,#D7DF28,#8A9A1A)}.pc-8{--pc-bg:linear-gradient(135deg,#F47642,#B91F48)}
-.photo-card .photo-card-img{background:var(--pc-bg)}
+.pc-1{background:linear-gradient(135deg,#B91F48,#7A0020)}.pc-2{background:linear-gradient(135deg,#531C56,#4C1763)}.pc-3{background:linear-gradient(135deg,#145293,#0a2a5a)}.pc-4{background:linear-gradient(135deg,#E79901,#C85A00)}.pc-5{background:linear-gradient(135deg,#F498AD,#D35C74)}.pc-6{background:linear-gradient(135deg,#1A4A2E,#0d2619)}.pc-7{background:linear-gradient(135deg,#D7DF28,#8A9A1A)}.pc-8{background:linear-gradient(135deg,#F47642,#B91F48)}
 .rev-band{height:300px;margin:0 0 20px;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent 0,black 5%,black 95%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,black 5%,black 95%,transparent 100%);position:relative;}
 .rev-track{display:flex;align-items:center;position:absolute;left:0;top:0;height:100%;animation:scrollX 90s linear infinite reverse;width:max-content;}
 .rev-card{flex:0 0 auto;width:300px;height:220px;border-radius:24px;margin-right:16px;border:2px solid rgba(255,255,255,0.12);box-shadow:0 8px 28px rgba(0,0,0,0.65);overflow:hidden;display:flex;flex-direction:column;}
@@ -139,8 +153,9 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
 .rev-meta{font-size:13px;line-height:1.3;color:rgba(255,255,255,0.90);}
 .rev-source{font-size:11px;opacity:0.5;margin-top:2px;}
 .wall-cta{text-align:center;margin-top:10px;padding-inline:clamp(24px,4vw,56px);}
-/* FOOTER */
-.footer{background:#2A0E2E;padding:clamp(40px,5vw,64px) clamp(24px,4vw,56px) clamp(24px,3vw,36px);}
+
+/* FOOTER — flat on background, no card wrapper */
+.footer{padding:clamp(40px,5vw,64px) clamp(24px,4vw,56px) clamp(24px,3vw,36px);margin-top:8px;}
 .footer-inner{max-width:1100px;margin:0 auto}
 .footer-top{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px;padding-bottom:40px;border-bottom:1px solid rgba(255,255,255,0.10);}
 @media(max-width:768px){.footer-top{grid-template-columns:1fr 1fr}}
@@ -155,6 +170,7 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
 .footer-copy{font-size:12px;color:rgba(255,255,255,0.28);}
 .footer-badges{display:flex;gap:8px;flex-wrap:wrap}
 .footer-badge{padding:4px 12px;border-radius:9999px;font-size:10px;font-weight:700;letter-spacing:0.10em;text-transform:uppercase;border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.38);}
+
 /* REVEAL */
 .reveal{opacity:0;transform:translateY(18px);transition:opacity 0.52s cubic-bezier(0.16,1,0.3,1),transform 0.52s cubic-bezier(0.16,1,0.3,1)}
 .reveal.vis{opacity:1;transform:none}
@@ -175,27 +191,27 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
 </nav>
 
 <!-- HERO -->
-<section class="card card-first hero-card reveal" id="hero">
-  <div class="hero-inner">
-    <div class="hero-badge reveal d1">&#9889; The Science of Snacking Right</div>
-    <h1 class="hero-h1 reveal d2">Your snack drawer<br><span class="hl">is bored.</span></h1>
-    <p class="hero-sub reveal d3">Bold Indian flavours. Honest ingredients. Zero artificial nonsense.</p>
-    <div class="hero-btns reveal d4">
-      <a href="#products" class="btn-lime">Explore Range &#8595;</a>
-      <a href="#" class="btn-ghost">B2B Enquiry</a>
+<div class="slot slot-first reveal">
+  <section class="card hero-card" id="hero">
+    <div class="hero-inner">
+      <div class="hero-badge reveal d1">&#9889; The Science of Snacking Right</div>
+      <h1 class="hero-h1 reveal d2">Your snack drawer<br><span class="hl">is bored.</span></h1>
+      <p class="hero-sub reveal d3">Bold Indian flavours. Honest ingredients. Zero artificial nonsense.</p>
+      <div class="hero-btns reveal d4">
+        <a href="#products" class="btn-lime">Explore Range &#8595;</a>
+        <a href="#" class="btn-ghost">B2B Enquiry</a>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+</div>
 
 <div class="full-bleed"><div class="marquee-wrap mq-dark"><div class="marquee-track"><span class="mitem">Gym Tomorrow<span class="dot"></span></span><span class="mitem">Snacks Today<span class="dot"></span></span><span class="mitem">Dadi Approved<span class="dot"></span></span><span class="mitem">Dietitian Confused<span class="dot"></span></span><span class="mitem">0 Artificial Flavours<span class="dot"></span></span><span class="mitem">Born Bold<span class="dot"></span></span><span class="mitem">One Bag. No Survivors.<span class="dot"></span></span><span class="mitem">Gym Tomorrow<span class="dot"></span></span><span class="mitem">Snacks Today<span class="dot"></span></span><span class="mitem">Dadi Approved<span class="dot"></span></span><span class="mitem">Dietitian Confused<span class="dot"></span></span><span class="mitem">0 Artificial Flavours<span class="dot"></span></span><span class="mitem">Born Bold<span class="dot"></span></span><span class="mitem">One Bag. No Survivors.<span class="dot"></span></span></div></div></div>
 <div class="full-bleed"><div class="marquee-wrap mq-red rev"><div class="marquee-track"><span class="mitem">&#8734; Repeat Cravings<span class="dot"></span></span><span class="mitem">Chatpata Isn&#8217;t a Flavour &#8212; It&#8217;s a Feeling<span class="dot"></span></span><span class="mitem">Guilt Left. Crunch Stayed.<span class="dot"></span></span><span class="mitem">For People Who Refuse to Snack Sad<span class="dot"></span></span><span class="mitem">&#8734; Repeat Cravings<span class="dot"></span></span><span class="mitem">Chatpata Isn&#8217;t a Flavour &#8212; It&#8217;s a Feeling<span class="dot"></span></span><span class="mitem">Guilt Left. Crunch Stayed.<span class="dot"></span></span><span class="mitem">For People Who Refuse to Snack Sad<span class="dot"></span></span></div></div></div>
 
-<!-- WHO WE MADE FOR -->
-<section id="for" class="reveal" style="padding:clamp(48px,6vw,80px) 0 clamp(40px,5vw,64px);">
-  <div style="padding-inline:var(--gap-h);">
-    <p class="overline reveal" style="color:rgba(244,152,173,0.75)">Our People</p>
-    <h2 class="section-h2 reveal d1">Who We Made<br>This For.</h2>
-  </div>
+<!-- WHO WE MADE FOR — no card, pink cards float directly on bg -->
+<section id="for" class="for-section reveal">
+  <p class="overline reveal" style="color:rgba(244,152,173,0.75)">Our People</p>
+  <h2 class="section-h2 reveal d1">Who We Made<br>This For.</h2>
   <div class="for-grid">
     <div class="persona-card reveal d2"><div class="persona-num">01</div><div class="persona-title">Glow-up, not a sell-out</div><p class="persona-desc">Traditional flavours. Premium attitude. We took your favourite Indian snacks and gave them a serious glow-up.</p><span class="persona-tag">The Conscious Muncher</span></div>
     <div class="persona-card reveal d3"><div class="persona-num">02</div><div class="persona-title">Familiar but unforgettable</div><p class="persona-desc">Familiar enough to feel like home. Different enough to make you go &ldquo;wait, what is this?&rdquo; &mdash; in the best way.</p><span class="persona-tag">The Curious Explorer</span></div>
@@ -204,50 +220,54 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
 </section>
 
 <!-- FULL RANGE -->
-<section class="card range-card reveal" id="products">
-  <div class="range-inner">
-    <p class="overline reveal" style="color:var(--sn-lime)">The Full Range</p>
-    <h2 class="section-h2 reveal d1" style="color:#fff">Scroll. Drool.<br>Repeat.</h2>
-    <div class="range-grid">
-      <div class="cat-card cc-crimson reveal d1"><span class="cat-badge">Fan Fave</span><div class="cat-icon">&#129388;</div><div class="cat-name">Roasted Chips</div><p class="cat-desc">Broccoli Pudina, Zucchini, Rajma, Ragi &amp; more.</p></div>
-      <div class="cat-card cc-orange reveal d2"><span class="cat-badge">Bold</span><div class="cat-icon">&#129384;</div><div class="cat-name">Sticks &amp; Twists</div><p class="cat-desc">FlaxSeed, Soya, Ragi sticks.</p></div>
-      <div class="cat-card cc-plum reveal d3"><span class="cat-badge">Roots</span><div class="cat-icon">&#129395;</div><div class="cat-name">Bhakhri</div><p class="cat-desc">Methi, Masala, Garlic, Jeera.</p></div>
-      <div class="cat-card cc-teal reveal d4"><span class="cat-badge">Light</span><div class="cat-icon">&#127871;</div><div class="cat-name">Puffed Snacks</div><p class="cat-desc">Corn Shell, Corn Tower, Jowar Balls.</p></div>
-      <div class="cat-card cc-brown reveal d5"><span class="cat-badge">Crispy</span><div class="cat-icon">&#129369;</div><div class="cat-name">Khakhra</div><p class="cat-desc">Thin, crispy, roasted. A Gujarati classic.</p></div>
-      <div class="cat-card cc-amber reveal d1"><span class="cat-badge">Premium</span><div class="cat-icon">&#10024;</div><div class="cat-name">Roasted Makhana</div><p class="cat-desc">Fox nuts with real seasoning.</p></div>
-      <div class="cat-card cc-purple reveal d2"><span class="cat-badge">Ancient</span><div class="cat-icon">&#127803;</div><div class="cat-name">Premium Seeds</div><p class="cat-desc">Nutrient-dense seeds roasted to crunch.</p></div>
-      <div class="cat-card cc-lime-dark reveal d3"><span class="cat-badge">Indulge</span><div class="cat-icon">&#127855;</div><div class="cat-name">Sweet Tooth</div><p class="cat-desc">Because sometimes you need something sweet.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- WE ACTUALLY GIVE A DAMN -->
-<section class="card damn-card reveal" id="why">
-  <div class="damn-inner">
-    <p class="overline reveal" style="color:rgba(22,113,0,0.70)">Why Snackology</p>
-    <h2 class="section-h2 damn-h2 reveal d1">We Actually <span>Give a Damn.</span></h2>
-    <div class="damn-panels" id="damnPanels">
-      <div class="dp open" style="background:#167100" data-idx="0">
-        <div class="dp-collapsed"><span class="dp-num">01</span><span class="dp-lbl">3pm Slump</span></div>
-        <div class="dp-open"><div><span class="dp-big-num">01</span><span class="dp-tag">3pm Slump</span></div><div><h3 class="dp-heading">Your 3pm slump just met its match.</h3><div class="dp-rule"></div><p class="dp-body">Packed with protein, real ingredients, and flavour loud enough to wake you back up. The vending machine never stood a chance.</p></div></div>
-      </div>
-      <div class="dp" style="background:#B91F48" data-idx="1">
-        <div class="dp-collapsed"><span class="dp-num">02</span><span class="dp-lbl">Chatpata</span></div>
-        <div class="dp-open"><div><span class="dp-big-num">02</span><span class="dp-tag">Chatpata</span></div><div><h3 class="dp-heading">Chatpata isn&#8217;t a flavour. It&#8217;s a feeling.</h3><div class="dp-rule"></div><p class="dp-body">We didn&#8217;t discover bold flavour &mdash; we grew up on it. Every pack is proof and your tongue knows it the second you open one.</p></div></div>
-      </div>
-      <div class="dp" style="background:#531C56" data-idx="2">
-        <div class="dp-collapsed"><span class="dp-num">03</span><span class="dp-lbl">No Maths</span></div>
-        <div class="dp-open"><div><span class="dp-big-num">03</span><span class="dp-tag">No Maths</span></div><div><h3 class="dp-heading">Snacking that doesn&#8217;t make you do the maths.</h3><div class="dp-rule"></div><p class="dp-body">No guilt spiral, no label detective work. Real ingredients, real flavour, eaten shamelessly.</p></div></div>
-      </div>
-      <div class="dp" style="background:#145293" data-idx="3">
-        <div class="dp-collapsed"><span class="dp-num">04</span><span class="dp-lbl">Snack Sad</span></div>
-        <div class="dp-open"><div><span class="dp-big-num">04</span><span class="dp-tag">Snack Sad</span></div><div><h3 class="dp-heading">For people who refuse to snack sad.</h3><div class="dp-rule"></div><p class="dp-body">Life&#8217;s too short for flavourless protein bars. You know what good tastes like &mdash; so do we.</p></div></div>
+<div class="slot reveal" id="products">
+  <section class="card range-card">
+    <div class="range-inner">
+      <p class="overline reveal" style="color:var(--sn-lime)">The Full Range</p>
+      <h2 class="section-h2 reveal d1" style="color:#fff">Scroll. Drool.<br>Repeat.</h2>
+      <div class="range-grid">
+        <div class="cat-card cc-crimson reveal d1"><span class="cat-badge">Fan Fave</span><div class="cat-icon">&#129388;</div><div class="cat-name">Roasted Chips</div><p class="cat-desc">Broccoli Pudina, Zucchini, Rajma, Ragi &amp; more.</p></div>
+        <div class="cat-card cc-orange reveal d2"><span class="cat-badge">Bold</span><div class="cat-icon">&#129384;</div><div class="cat-name">Sticks &amp; Twists</div><p class="cat-desc">FlaxSeed, Soya, Ragi sticks.</p></div>
+        <div class="cat-card cc-plum reveal d3"><span class="cat-badge">Roots</span><div class="cat-icon">&#129395;</div><div class="cat-name">Bhakhri</div><p class="cat-desc">Methi, Masala, Garlic, Jeera.</p></div>
+        <div class="cat-card cc-teal reveal d4"><span class="cat-badge">Light</span><div class="cat-icon">&#127871;</div><div class="cat-name">Puffed Snacks</div><p class="cat-desc">Corn Shell, Corn Tower, Jowar Balls.</p></div>
+        <div class="cat-card cc-brown reveal d5"><span class="cat-badge">Crispy</span><div class="cat-icon">&#129369;</div><div class="cat-name">Khakhra</div><p class="cat-desc">Thin, crispy, roasted. A Gujarati classic.</p></div>
+        <div class="cat-card cc-amber reveal d1"><span class="cat-badge">Premium</span><div class="cat-icon">&#10024;</div><div class="cat-name">Roasted Makhana</div><p class="cat-desc">Fox nuts with real seasoning.</p></div>
+        <div class="cat-card cc-purple reveal d2"><span class="cat-badge">Ancient</span><div class="cat-icon">&#127803;</div><div class="cat-name">Premium Seeds</div><p class="cat-desc">Nutrient-dense seeds roasted to crunch.</p></div>
+        <div class="cat-card cc-lime-dark reveal d3"><span class="cat-badge">Indulge</span><div class="cat-icon">&#127855;</div><div class="cat-name">Sweet Tooth</div><p class="cat-desc">Because sometimes you need something sweet.</p></div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+</div>
 
-<!-- FOUNDER -->
+<!-- GIVE A DAMN -->
+<div class="slot reveal" id="why">
+  <section class="card damn-card">
+    <div class="damn-inner">
+      <p class="overline reveal" style="color:rgba(22,113,0,0.70)">Why Snackology</p>
+      <h2 class="section-h2 damn-h2 reveal d1">We Actually <span>Give a Damn.</span></h2>
+      <div class="damn-panels" id="damnPanels">
+        <div class="dp open" style="background:#167100" data-idx="0">
+          <div class="dp-collapsed"><span class="dp-num">01</span><span class="dp-lbl">3pm Slump</span></div>
+          <div class="dp-open"><div><span class="dp-big-num">01</span><span class="dp-tag">3pm Slump</span></div><div><h3 class="dp-heading">Your 3pm slump just met its match.</h3><div class="dp-rule"></div><p class="dp-body">Packed with protein, real ingredients, and flavour loud enough to wake you back up.</p></div></div>
+        </div>
+        <div class="dp" style="background:#B91F48" data-idx="1">
+          <div class="dp-collapsed"><span class="dp-num">02</span><span class="dp-lbl">Chatpata</span></div>
+          <div class="dp-open"><div><span class="dp-big-num">02</span><span class="dp-tag">Chatpata</span></div><div><h3 class="dp-heading">Chatpata isn&#8217;t a flavour. It&#8217;s a feeling.</h3><div class="dp-rule"></div><p class="dp-body">We didn&#8217;t discover bold flavour &mdash; we grew up on it. Every pack is proof.</p></div></div>
+        </div>
+        <div class="dp" style="background:#531C56" data-idx="2">
+          <div class="dp-collapsed"><span class="dp-num">03</span><span class="dp-lbl">No Maths</span></div>
+          <div class="dp-open"><div><span class="dp-big-num">03</span><span class="dp-tag">No Maths</span></div><div><h3 class="dp-heading">Snacking without the maths.</h3><div class="dp-rule"></div><p class="dp-body">No guilt spiral, no label detective work. Real ingredients, eaten shamelessly.</p></div></div>
+        </div>
+        <div class="dp" style="background:#145293" data-idx="3">
+          <div class="dp-collapsed"><span class="dp-num">04</span><span class="dp-lbl">Snack Sad</span></div>
+          <div class="dp-open"><div><span class="dp-big-num">04</span><span class="dp-tag">Snack Sad</span></div><div><h3 class="dp-heading">For people who refuse to snack sad.</h3><div class="dp-rule"></div><p class="dp-body">Life&#8217;s too short for flavourless protein bars. You know what good tastes like.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- FOUNDER — flat on bg -->
 <section id="founder">
   <div class="founder-bare">
     <span class="founder-q reveal">&ldquo;</span>
@@ -260,57 +280,60 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
 </section>
 
 <!-- SNACK WALL -->
-<section class="card wall-card reveal" id="wall">
-  <div class="wall-inner">
-    <div class="wall-head">
-      <span class="wall-kicker">Snack Wall</span>
-      <h2 class="section-h2"><span class="wall-h2-white">Stalking Us<br></span><span class="wall-h2-accent">Is Encouraged &#128064;</span></h2>
-      <p class="wall-sub">The snacks are real. The chaos is documented.</p>
-    </div>
-    <div class="photo-band">
-      <div class="photo-track">
-        <div class="photo-card pc-1" style="--rot:rotate(-2deg)"><div class="photo-card-img"></div><div class="photo-card-hint">Exhibition &mdash; Mumbai</div></div>
-        <div class="photo-card pc-2" style="--rot:rotate(1.5deg)"><div class="photo-card-img"></div><div class="photo-card-hint">Snack Haul</div></div>
-        <div class="photo-card pc-3" style="--rot:rotate(-1deg)"><div class="photo-card-img"></div><div class="photo-card-hint">Office Stash</div></div>
-        <div class="photo-card pc-4" style="--rot:rotate(2deg)"><div class="photo-card-img"></div><div class="photo-card-hint">Chai Break</div></div>
-        <div class="photo-card pc-5" style="--rot:rotate(-1.5deg)"><div class="photo-card-img"></div><div class="photo-card-hint">Unboxing</div></div>
-        <div class="photo-card pc-6" style="--rot:rotate(1deg)"><div class="photo-card-img"></div><div class="photo-card-hint">B2B Partner</div></div>
-        <div class="photo-card pc-7" style="--rot:rotate(-2.5deg)"><div class="photo-card-img"></div><div class="photo-card-hint">Flavour Drop</div></div>
-        <div class="photo-card pc-8" style="--rot:rotate(1.5deg)"><div class="photo-card-img"></div><div class="photo-card-hint">Event Pop-up</div></div>
-        <div class="photo-card pc-1" style="--rot:rotate(-2deg)"><div class="photo-card-img"></div><div class="photo-card-hint">Exhibition &mdash; Mumbai</div></div>
-        <div class="photo-card pc-2" style="--rot:rotate(1.5deg)"><div class="photo-card-img"></div><div class="photo-card-hint">Snack Haul</div></div>
-        <div class="photo-card pc-3" style="--rot:rotate(-1deg)"><div class="photo-card-img"></div><div class="photo-card-hint">Office Stash</div></div>
-        <div class="photo-card pc-4" style="--rot:rotate(2deg)"><div class="photo-card-img"></div><div class="photo-card-hint">Chai Break</div></div>
-        <div class="photo-card pc-5" style="--rot:rotate(-1.5deg)"><div class="photo-card-img"></div><div class="photo-card-hint">Unboxing</div></div>
-        <div class="photo-card pc-6" style="--rot:rotate(1deg)"><div class="photo-card-img"></div><div class="photo-card-hint">B2B Partner</div></div>
-        <div class="photo-card pc-7" style="--rot:rotate(-2.5deg)"><div class="photo-card-img"></div><div class="photo-card-hint">Flavour Drop</div></div>
-        <div class="photo-card pc-8" style="--rot:rotate(1.5deg)"><div class="photo-card-img"></div><div class="photo-card-hint">Event Pop-up</div></div>
+<div class="slot reveal" id="wall">
+  <section class="card wall-card">
+    <div class="wall-inner">
+      <div class="wall-head">
+        <span class="wall-kicker">Snack Wall</span>
+        <h2 class="section-h2"><span class="wall-h2-white">Stalking Us<br></span><span class="wall-h2-accent">Is Encouraged &#128064;</span></h2>
+        <p class="wall-sub">The snacks are real. The chaos is documented.</p>
       </div>
-    </div>
-    <div class="rev-band">
-      <div class="rev-track">
-        <div class="rev-card" style="background:#B91F48"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;Finally a snack brand that doesn&rsquo;t treat me like an idiot. The Masala Sing is unreal.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">P</div><div class="rev-meta"><div>Priya M.</div><div class="rev-source">&#9733; Google &mdash; Mumbai</div></div></div></div></div>
-        <div class="rev-card" style="background:#531C56"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;Bought it at an exhibition, finished the bag on the ride home. Ordered online same night.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">K</div><div class="rev-meta"><div>Karan S.</div><div class="rev-source">&#9733; Google &mdash; Bengaluru</div></div></div></div></div>
-        <div class="rev-card" style="background:#167100"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;Broccoli Pudina sounds wrong, tastes incredibly right. My whole office is obsessed.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">A</div><div class="rev-meta"><div>Ananya R.</div><div class="rev-source">&#9733; Google &mdash; Delhi</div></div></div></div></div>
-        <div class="rev-card" style="background:#145293"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;Honest ingredients, actually bold flavour. This is what we&rsquo;ve been waiting for.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">D</div><div class="rev-meta"><div>Dev K.</div><div class="rev-source">&#9733; Google &mdash; Hyderabad</div></div></div></div></div>
-        <div class="rev-card" style="background:#C85A00"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;The packaging is gorgeous and the snacks back it up. Bhakhri is my new everyday.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">S</div><div class="rev-meta"><div>Shreya T.</div><div class="rev-source">&#9733; Google &mdash; Pune</div></div></div></div></div>
-        <div class="rev-card" style="background:#1A4A2E"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;Ordered for the office snack bar. Entire stock gone in two days. Reordering weekly now.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">R</div><div class="rev-meta"><div>Rohan M.</div><div class="rev-source">&#9733; Google &mdash; Gurugram</div></div></div></div></div>
-        <div class="rev-card" style="background:#7A3B10"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;The makhana is insane. Never thought I&rsquo;d say that about a healthy snack. Addicted.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">M</div><div class="rev-meta"><div>Meera V.</div><div class="rev-source">&#9733; Google &mdash; Chennai</div></div></div></div></div>
-        <div class="rev-card" style="background:#5A2E91"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;The stocking team at my caf&eacute; is obsessed. Customers keep asking where to buy more.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">T</div><div class="rev-meta"><div>Tanvir H.</div><div class="rev-source">&#9733; Google &mdash; Ahmedabad</div></div></div></div></div>
-        <div class="rev-card" style="background:#B91F48"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;Finally a snack brand that doesn&rsquo;t treat me like an idiot. The Masala Sing is unreal.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">P</div><div class="rev-meta"><div>Priya M.</div><div class="rev-source">&#9733; Google &mdash; Mumbai</div></div></div></div></div>
-        <div class="rev-card" style="background:#531C56"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;Bought it at an exhibition, finished the bag on the ride home. Ordered online same night.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">K</div><div class="rev-meta"><div>Karan S.</div><div class="rev-source">&#9733; Google &mdash; Bengaluru</div></div></div></div></div>
-        <div class="rev-card" style="background:#167100"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;Broccoli Pudina sounds wrong, tastes incredibly right. My whole office is obsessed.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">A</div><div class="rev-meta"><div>Ananya R.</div><div class="rev-source">&#9733; Google &mdash; Delhi</div></div></div></div></div>
-        <div class="rev-card" style="background:#145293"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;Honest ingredients, actually bold flavour. This is what we&rsquo;ve been waiting for.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">D</div><div class="rev-meta"><div>Dev K.</div><div class="rev-source">&#9733; Google &mdash; Hyderabad</div></div></div></div></div>
-        <div class="rev-card" style="background:#C85A00"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;The packaging is gorgeous and the snacks back it up. Bhakhri is my new everyday.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">S</div><div class="rev-meta"><div>Shreya T.</div><div class="rev-source">&#9733; Google &mdash; Pune</div></div></div></div></div>
-        <div class="rev-card" style="background:#1A4A2E"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;Ordered for the office snack bar. Entire stock gone in two days. Reordering weekly now.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">R</div><div class="rev-meta"><div>Rohan M.</div><div class="rev-source">&#9733; Google &mdash; Gurugram</div></div></div></div></div>
-        <div class="rev-card" style="background:#7A3B10"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;The makhana is insane. Never thought I&rsquo;d say that about a healthy snack. Addicted.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">M</div><div class="rev-meta"><div>Meera V.</div><div class="rev-source">&#9733; Google &mdash; Chennai</div></div></div></div></div>
-        <div class="rev-card" style="background:#5A2E91"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;The stocking team at my caf&eacute; is obsessed. Customers keep asking where to buy more.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">T</div><div class="rev-meta"><div>Tanvir H.</div><div class="rev-source">&#9733; Google &mdash; Ahmedabad</div></div></div></div></div>
+      <div class="photo-band">
+        <div class="photo-track">
+          <div class="photo-card" style="--rot:rotate(-2deg)"><div class="photo-card-img pc-1"></div><div class="photo-card-hint">Exhibition &mdash; Mumbai</div></div>
+          <div class="photo-card" style="--rot:rotate(1.5deg)"><div class="photo-card-img pc-2"></div><div class="photo-card-hint">Snack Haul</div></div>
+          <div class="photo-card" style="--rot:rotate(-1deg)"><div class="photo-card-img pc-3"></div><div class="photo-card-hint">Office Stash</div></div>
+          <div class="photo-card" style="--rot:rotate(2deg)"><div class="photo-card-img pc-4"></div><div class="photo-card-hint">Chai Break</div></div>
+          <div class="photo-card" style="--rot:rotate(-1.5deg)"><div class="photo-card-img pc-5"></div><div class="photo-card-hint">Unboxing</div></div>
+          <div class="photo-card" style="--rot:rotate(1deg)"><div class="photo-card-img pc-6"></div><div class="photo-card-hint">B2B Partner</div></div>
+          <div class="photo-card" style="--rot:rotate(-2.5deg)"><div class="photo-card-img pc-7"></div><div class="photo-card-hint">Flavour Drop</div></div>
+          <div class="photo-card" style="--rot:rotate(1.5deg)"><div class="photo-card-img pc-8"></div><div class="photo-card-hint">Event Pop-up</div></div>
+          <div class="photo-card" style="--rot:rotate(-2deg)"><div class="photo-card-img pc-1"></div><div class="photo-card-hint">Exhibition &mdash; Mumbai</div></div>
+          <div class="photo-card" style="--rot:rotate(1.5deg)"><div class="photo-card-img pc-2"></div><div class="photo-card-hint">Snack Haul</div></div>
+          <div class="photo-card" style="--rot:rotate(-1deg)"><div class="photo-card-img pc-3"></div><div class="photo-card-hint">Office Stash</div></div>
+          <div class="photo-card" style="--rot:rotate(2deg)"><div class="photo-card-img pc-4"></div><div class="photo-card-hint">Chai Break</div></div>
+          <div class="photo-card" style="--rot:rotate(-1.5deg)"><div class="photo-card-img pc-5"></div><div class="photo-card-hint">Unboxing</div></div>
+          <div class="photo-card" style="--rot:rotate(1deg)"><div class="photo-card-img pc-6"></div><div class="photo-card-hint">B2B Partner</div></div>
+          <div class="photo-card" style="--rot:rotate(-2.5deg)"><div class="photo-card-img pc-7"></div><div class="photo-card-hint">Flavour Drop</div></div>
+          <div class="photo-card" style="--rot:rotate(1.5deg)"><div class="photo-card-img pc-8"></div><div class="photo-card-hint">Event Pop-up</div></div>
+        </div>
       </div>
+      <div class="rev-band">
+        <div class="rev-track">
+          <div class="rev-card" style="background:#B91F48"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;Finally a snack brand that doesn&rsquo;t treat me like an idiot. The Masala Sing is unreal.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">P</div><div class="rev-meta"><div>Priya M.</div><div class="rev-source">&#9733; Google &mdash; Mumbai</div></div></div></div></div>
+          <div class="rev-card" style="background:#531C56"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;Bought it at an exhibition, finished the bag on the ride home. Ordered online same night.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">K</div><div class="rev-meta"><div>Karan S.</div><div class="rev-source">&#9733; Google &mdash; Bengaluru</div></div></div></div></div>
+          <div class="rev-card" style="background:#167100"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;Broccoli Pudina sounds wrong, tastes incredibly right. My whole office is obsessed.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">A</div><div class="rev-meta"><div>Ananya R.</div><div class="rev-source">&#9733; Google &mdash; Delhi</div></div></div></div></div>
+          <div class="rev-card" style="background:#145293"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;Honest ingredients, actually bold flavour. This is what we&rsquo;ve been waiting for.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">D</div><div class="rev-meta"><div>Dev K.</div><div class="rev-source">&#9733; Google &mdash; Hyderabad</div></div></div></div></div>
+          <div class="rev-card" style="background:#C85A00"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;The packaging is gorgeous and the snacks back it up. Bhakhri is my new everyday.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">S</div><div class="rev-meta"><div>Shreya T.</div><div class="rev-source">&#9733; Google &mdash; Pune</div></div></div></div></div>
+          <div class="rev-card" style="background:#1A4A2E"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;Ordered for the office snack bar. Entire stock gone in two days. Reordering weekly now.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">R</div><div class="rev-meta"><div>Rohan M.</div><div class="rev-source">&#9733; Google &mdash; Gurugram</div></div></div></div></div>
+          <div class="rev-card" style="background:#7A3B10"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;The makhana is insane. Never thought I&rsquo;d say that about a healthy snack. Addicted.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">M</div><div class="rev-meta"><div>Meera V.</div><div class="rev-source">&#9733; Google &mdash; Chennai</div></div></div></div></div>
+          <div class="rev-card" style="background:#5A2E91"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;The stocking team at my caf&eacute; is obsessed. Customers keep asking where to buy more.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">T</div><div class="rev-meta"><div>Tanvir H.</div><div class="rev-source">&#9733; Google &mdash; Ahmedabad</div></div></div></div></div>
+          <div class="rev-card" style="background:#B91F48"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;Finally a snack brand that doesn&rsquo;t treat me like an idiot. The Masala Sing is unreal.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">P</div><div class="rev-meta"><div>Priya M.</div><div class="rev-source">&#9733; Google &mdash; Mumbai</div></div></div></div></div>
+          <div class="rev-card" style="background:#531C56"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;Bought it at an exhibition, finished the bag on the ride home. Ordered online same night.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">K</div><div class="rev-meta"><div>Karan S.</div><div class="rev-source">&#9733; Google &mdash; Bengaluru</div></div></div></div></div>
+          <div class="rev-card" style="background:#167100"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;Broccoli Pudina sounds wrong, tastes incredibly right. My whole office is obsessed.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">A</div><div class="rev-meta"><div>Ananya R.</div><div class="rev-source">&#9733; Google &mdash; Delhi</div></div></div></div></div>
+          <div class="rev-card" style="background:#145293"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;Honest ingredients, actually bold flavour. This is what we&rsquo;ve been waiting for.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">D</div><div class="rev-meta"><div>Dev K.</div><div class="rev-source">&#9733; Google &mdash; Hyderabad</div></div></div></div></div>
+          <div class="rev-card" style="background:#C85A00"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;The packaging is gorgeous and the snacks back it up. Bhakhri is my new everyday.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">S</div><div class="rev-meta"><div>Shreya T.</div><div class="rev-source">&#9733; Google &mdash; Pune</div></div></div></div></div>
+          <div class="rev-card" style="background:#1A4A2E"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;Ordered for the office snack bar. Entire stock gone in two days. Reordering weekly now.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">R</div><div class="rev-meta"><div>Rohan M.</div><div class="rev-source">&#9733; Google &mdash; Gurugram</div></div></div></div></div>
+          <div class="rev-card" style="background:#7A3B10"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;The makhana is insane. Never thought I&rsquo;d say that about a healthy snack. Addicted.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">M</div><div class="rev-meta"><div>Meera V.</div><div class="rev-source">&#9733; Google &mdash; Chennai</div></div></div></div></div>
+          <div class="rev-card" style="background:#5A2E91"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;The stocking team at my caf&eacute; is obsessed. Customers keep asking where to buy more.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">T</div><div class="rev-meta"><div>Tanvir H.</div><div class="rev-source">&#9733; Google &mdash; Ahmedabad</div></div></div></div></div>
+        </div>
+      </div>
+      <div class="wall-cta"><a href="#" class="btn-red">Follow @snackology.in &#8599;</a></div>
     </div>
-    <div class="wall-cta"><a href="#" class="btn-red">Follow @snackology.in &#8599;</a></div>
-  </div>
-</section>
+  </section>
+</div>
 
+<!-- FOOTER — flat on #3D1440 background, no card -->
 <footer class="footer">
   <div class="footer-inner">
     <div class="footer-top">
