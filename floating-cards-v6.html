@@ -25,8 +25,14 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
 .nav-links a{font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.55);text-decoration:none;}
 .nav-cta{font-size:11px;font-weight:700;padding:8px 18px;border-radius:9999px;background:var(--sn-lime);color:#0D0020;border:none;cursor:pointer;text-decoration:none;}
 @media(max-width:640px){.nav-links{display:none}}
+
+/* ── CARD FLOATING SYSTEM ── */
 .card{margin-inline:var(--gap-h);margin-bottom:var(--gap-v);border-radius:var(--card-r);overflow:hidden;position:relative;}
 .card-first{margin-top:calc(64px + var(--gap-v))}
+/* More side gap on mobile so plum background is clearly visible */
+@media(max-width:768px){.card{margin-inline:20px;margin-bottom:12px;}}
+@media(max-width:480px){.card{margin-inline:14px;margin-bottom:10px;}}
+
 .full-bleed{margin:0;border-radius:0;overflow:hidden}
 .overline{font-size:11px;font-weight:700;letter-spacing:0.26em;text-transform:uppercase;margin-bottom:10px;}
 .section-h2{font-family:var(--font-h);font-size:clamp(32px,4.5vw,62px);line-height:0.95;letter-spacing:0.03em;text-transform:uppercase;margin-bottom:clamp(24px,3vw,40px);}
@@ -52,7 +58,8 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
 .mq-red{background:var(--sn-crimson);color:#fff}
 /* WHO WE MADE FOR */
 .for-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap-v);margin-top:28px;padding-inline:var(--gap-h);}
-@media(max-width:760px){.for-grid{grid-template-columns:1fr}}
+@media(max-width:760px){.for-grid{grid-template-columns:1fr;padding-inline:20px;}}
+@media(max-width:480px){.for-grid{padding-inline:14px;}}
 .persona-card{border-radius:var(--card-r);padding:clamp(28px,3vw,40px);background:var(--sn-soft-pink);}
 .persona-num{font-family:var(--font-h);font-size:clamp(44px,5vw,68px);line-height:1;color:var(--sn-plum);opacity:0.20;margin-bottom:4px;}
 .persona-title{font-family:var(--font-s);font-size:clamp(16px,1.8vw,20px);font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:var(--sn-plum);margin-bottom:10px;}
@@ -69,7 +76,7 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
 .cat-desc{font-size:12px;line-height:1.55;opacity:0.80}
 .cat-badge{position:absolute;top:10px;right:10px;padding:3px 10px;border-radius:9999px;font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;background:rgba(255,255,255,0.14);color:#fff;border:1.5px solid rgba(255,255,255,0.30);}
 .cc-crimson{background:#B91F48}.cc-orange{background:#C85A00}.cc-plum{background:#531C56}.cc-teal{background:#0F5768}.cc-brown{background:#7A3B10}.cc-amber{background:#C47A00}.cc-purple{background:#5A2E91}.cc-lime-dark{background:#6B7A00}
-/* ══ GIVE A DAMN — prod exact: bg #FFBF04, heading #167100 ══ */
+/* ══ GIVE A DAMN ══ */
 .damn-card{background:var(--sn-amber)}
 .damn-inner{padding:clamp(40px,5vw,64px) clamp(24px,4vw,56px)}
 .damn-h2{color:var(--sn-green)}
@@ -105,7 +112,7 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
 .founder-av{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-family:var(--font-h);font-size:18px;color:rgba(255,255,255,0.70);flex-shrink:0;border:1.5px solid rgba(255,255,255,0.20);}
 .founder-name{font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase}
 .founder-role{font-size:11px;color:rgba(255,255,255,0.45);margin-top:2px;letter-spacing:0.06em}
-/* ══ SNACK WALL — prod exact: bg #0D0020, kicker #5BBA47, amber accent ══ */
+/* ══ SNACK WALL ══ */
 .wall-card{background:#0D0020}
 .wall-inner{padding:clamp(40px,5vw,64px) 0;}
 .wall-head{padding-inline:clamp(24px,4vw,56px);margin-bottom:28px;text-align:center;}
@@ -113,7 +120,6 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
 .wall-h2-white{color:#fff;}
 .wall-h2-accent{color:var(--sn-amber);}
 .wall-sub{font-size:14px;margin-top:12px;color:var(--sn-amber);opacity:0.8;font-weight:500;}
-/* photo band */
 .photo-band{position:relative;height:290px;margin:12px 0 24px;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent 0,black 5%,black 95%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,black 5%,black 95%,transparent 100%);}
 .photo-track{display:flex;align-items:center;position:absolute;left:0;top:0;height:100%;animation:scrollX 70s linear infinite;width:max-content;}
 @keyframes scrollX{from{transform:translateX(0)}to{transform:translateX(-50%)}}
@@ -122,10 +128,8 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
 .photo-card-hint{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(13,0,32,0.93));color:#FFBF04;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;text-align:center;padding:22px 8px 10px;}
 .pc-1{--pc-bg:linear-gradient(135deg,#B91F48,#7A0020)}.pc-2{--pc-bg:linear-gradient(135deg,#531C56,#4C1763)}.pc-3{--pc-bg:linear-gradient(135deg,#145293,#0a2a5a)}.pc-4{--pc-bg:linear-gradient(135deg,#E79901,#C85A00)}.pc-5{--pc-bg:linear-gradient(135deg,#F498AD,#D35C74)}.pc-6{--pc-bg:linear-gradient(135deg,#1A4A2E,#0d2619)}.pc-7{--pc-bg:linear-gradient(135deg,#D7DF28,#8A9A1A)}.pc-8{--pc-bg:linear-gradient(135deg,#F47642,#B91F48)}
 .photo-card .photo-card-img{background:var(--pc-bg)}
-/* review band — REVERSED */
 .rev-band{height:300px;margin:0 0 20px;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent 0,black 5%,black 95%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,black 5%,black 95%,transparent 100%);position:relative;}
 .rev-track{display:flex;align-items:center;position:absolute;left:0;top:0;height:100%;animation:scrollX 90s linear infinite reverse;width:max-content;}
-/* review cards — distinct brand-palette bg, subtle white border */
 .rev-card{flex:0 0 auto;width:300px;height:220px;border-radius:24px;margin-right:16px;border:2px solid rgba(255,255,255,0.12);box-shadow:0 8px 28px rgba(0,0,0,0.65);overflow:hidden;display:flex;flex-direction:column;}
 .rev-body{padding:16px 18px;display:flex;flex-direction:column;flex:1;}
 .rev-stars{color:#FFBF04;font-size:15px;letter-spacing:2px;margin-bottom:8px;}
@@ -217,7 +221,7 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
   </div>
 </section>
 
-<!-- WE ACTUALLY GIVE A DAMN — bg #FFBF04 amber, heading #167100 green, 4 hover panels -->
+<!-- WE ACTUALLY GIVE A DAMN -->
 <section class="card damn-card reveal" id="why">
   <div class="damn-inner">
     <p class="overline reveal" style="color:rgba(22,113,0,0.70)">Why Snackology</p>
@@ -255,7 +259,7 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
   </div>
 </section>
 
-<!-- SNACK WALL — bg #0D0020, photo scrolls right, reviews scroll left -->
+<!-- SNACK WALL -->
 <section class="card wall-card reveal" id="wall">
   <div class="wall-inner">
     <div class="wall-head">
@@ -263,7 +267,6 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
       <h2 class="section-h2"><span class="wall-h2-white">Stalking Us<br></span><span class="wall-h2-accent">Is Encouraged &#128064;</span></h2>
       <p class="wall-sub">The snacks are real. The chaos is documented.</p>
     </div>
-    <!-- Photo marquee scrolls RIGHT -->
     <div class="photo-band">
       <div class="photo-track">
         <div class="photo-card pc-1" style="--rot:rotate(-2deg)"><div class="photo-card-img"></div><div class="photo-card-hint">Exhibition &mdash; Mumbai</div></div>
@@ -284,7 +287,6 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
         <div class="photo-card pc-8" style="--rot:rotate(1.5deg)"><div class="photo-card-img"></div><div class="photo-card-hint">Event Pop-up</div></div>
       </div>
     </div>
-    <!-- Review marquee scrolls LEFT (reverse) — each card distinct brand colour -->
     <div class="rev-band">
       <div class="rev-track">
         <div class="rev-card" style="background:#B91F48"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;Finally a snack brand that doesn&rsquo;t treat me like an idiot. The Masala Sing is unreal.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">P</div><div class="rev-meta"><div>Priya M.</div><div class="rev-source">&#9733; Google &mdash; Mumbai</div></div></div></div></div>
@@ -295,7 +297,6 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
         <div class="rev-card" style="background:#1A4A2E"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;Ordered for the office snack bar. Entire stock gone in two days. Reordering weekly now.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">R</div><div class="rev-meta"><div>Rohan M.</div><div class="rev-source">&#9733; Google &mdash; Gurugram</div></div></div></div></div>
         <div class="rev-card" style="background:#7A3B10"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;The makhana is insane. Never thought I&rsquo;d say that about a healthy snack. Addicted.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">M</div><div class="rev-meta"><div>Meera V.</div><div class="rev-source">&#9733; Google &mdash; Chennai</div></div></div></div></div>
         <div class="rev-card" style="background:#5A2E91"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;The stocking team at my caf&eacute; is obsessed. Customers keep asking where to buy more.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">T</div><div class="rev-meta"><div>Tanvir H.</div><div class="rev-source">&#9733; Google &mdash; Ahmedabad</div></div></div></div></div>
-        <!-- duplicate for seamless loop -->
         <div class="rev-card" style="background:#B91F48"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;Finally a snack brand that doesn&rsquo;t treat me like an idiot. The Masala Sing is unreal.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">P</div><div class="rev-meta"><div>Priya M.</div><div class="rev-source">&#9733; Google &mdash; Mumbai</div></div></div></div></div>
         <div class="rev-card" style="background:#531C56"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;Bought it at an exhibition, finished the bag on the ride home. Ordered online same night.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">K</div><div class="rev-meta"><div>Karan S.</div><div class="rev-source">&#9733; Google &mdash; Bengaluru</div></div></div></div></div>
         <div class="rev-card" style="background:#167100"><div class="rev-body"><div class="rev-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rev-text">&ldquo;Broccoli Pudina sounds wrong, tastes incredibly right. My whole office is obsessed.&rdquo;</p><div class="rev-author-row"><div class="rev-avatar">A</div><div class="rev-meta"><div>Ananya R.</div><div class="rev-source">&#9733; Google &mdash; Delhi</div></div></div></div></div>
@@ -327,24 +328,13 @@ const obs = new IntersectionObserver(entries => {
   entries.forEach(e => { if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target);} });
 }, { threshold:0.07, rootMargin:'0px 0px -36px 0px' });
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-
 const panels = document.querySelectorAll('#damnPanels .dp');
 const container = document.getElementById('damnPanels');
 panels.forEach((p) => {
-  p.addEventListener('mouseenter', () => {
-    panels.forEach(x => x.classList.remove('open'));
-    p.classList.add('open');
-  });
-  p.addEventListener('click', () => {
-    const isOpen = p.classList.contains('open');
-    panels.forEach(x => x.classList.remove('open'));
-    if (!isOpen) p.classList.add('open');
-  });
+  p.addEventListener('mouseenter', () => { panels.forEach(x => x.classList.remove('open')); p.classList.add('open'); });
+  p.addEventListener('click', () => { const isOpen = p.classList.contains('open'); panels.forEach(x => x.classList.remove('open')); if (!isOpen) p.classList.add('open'); });
 });
-container.addEventListener('mouseleave', () => {
-  panels.forEach(x => x.classList.remove('open'));
-  panels[0].classList.add('open');
-});
+container.addEventListener('mouseleave', () => { panels.forEach(x => x.classList.remove('open')); panels[0].classList.add('open'); });
 </script>
 </body>
 </html>
