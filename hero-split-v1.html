@@ -9,28 +9,26 @@
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;overflow-x:hidden}
-body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:antialiased;overflow-x:hidden;background:#1a0008;}
+html,body{height:100%;overflow-x:hidden}
+body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:antialiased;background:#160005;}
 
 :root{
   --sn-crimson:#DC143C;
-  --sn-crimson-dark:#8B0000;
   --sn-lime:#D7DF28;
   --sn-amber:#FFBF04;
   --sn-dark:#0D0008;
-  --card-r:28px;
   --font-h:'Anton',sans-serif;
   --font-s:'Oswald',sans-serif;
   --font-b:'Space Grotesk',sans-serif;
 }
 
-/* ── NAV ── */
+/* NAV */
 .nav{
   position:fixed;top:0;left:0;right:0;z-index:999;height:64px;
   display:flex;align-items:center;justify-content:space-between;
   padding:0 clamp(20px,4vw,52px);
-  background:rgba(10,0,4,0.80);backdrop-filter:blur(20px);
-  border-bottom:1px solid rgba(255,255,255,0.08);
+  background:rgba(10,0,4,0.75);backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(255,255,255,0.07);
 }
 .nav-logo{font-family:var(--font-h);font-size:20px;letter-spacing:0.06em;color:#fff;text-decoration:none;}
 .nav-logo span{color:var(--sn-lime)}
@@ -42,116 +40,86 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
 
 /* ══ HERO ══ */
 .hero{
-  position:relative;
-  min-height:100svh;
-  padding-top:64px;
-  background: radial-gradient(ellipse 80% 60% at 60% 50%, #6B0020 0%, #3A0010 40%, #1a0008 100%);
-  overflow:hidden;
-  display:flex;align-items:stretch;
-}
-
-/* faint scattered chip particles — pure CSS, no images */
-.hero::before{
-  content:'';position:absolute;inset:0;
-  background-image:
-    radial-gradient(circle 2px at 12% 28%,rgba(255,191,4,0.35) 0%,transparent 100%),
-    radial-gradient(circle 3px at 85% 18%,rgba(220,20,60,0.45) 0%,transparent 100%),
-    radial-gradient(circle 2px at 72% 72%,rgba(255,191,4,0.30) 0%,transparent 100%),
-    radial-gradient(circle 4px at 8% 68%,rgba(220,20,60,0.30) 0%,transparent 100%),
-    radial-gradient(circle 2px at 55% 90%,rgba(255,255,255,0.18) 0%,transparent 100%),
-    radial-gradient(circle 3px at 93% 55%,rgba(255,191,4,0.25) 0%,transparent 100%);
-  pointer-events:none;z-index:0;
-}
-
-.hero-inner{
-  position:relative;z-index:1;
-  width:100%;max-width:1280px;margin:0 auto;
-  padding:0 clamp(20px,4vw,56px);
   display:grid;
   grid-template-columns:48% 52%;
-  align-items:center;
-  gap:0;
-  min-height:calc(100svh - 64px);
+  min-height:100svh;
+  padding-top:64px;
+  position:relative;
+  overflow:hidden;
+  background:#160005;
 }
 
-/* ── LEFT: TEXT COLUMN ── */
+/* ── LEFT: TEXT PANEL ── */
 .hero-left{
-  display:flex;flex-direction:column;align-items:flex-start;
-  padding:clamp(40px,6vh,80px) 0;
-  gap:0;
+  position:relative;
+  display:flex;flex-direction:column;justify-content:center;align-items:flex-start;
+  padding:clamp(48px,7vh,96px) clamp(24px,4vw,64px) clamp(48px,7vh,96px) clamp(24px,5vw,72px);
+  background:linear-gradient(135deg, #1e0008 0%, #2a000e 60%, #160005 100%);
+  z-index:2;
+}
+/* subtle left-panel glow */
+.hero-left::after{
+  content:'';position:absolute;top:20%;right:-80px;
+  width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle, rgba(220,20,60,0.18) 0%, transparent 70%);
+  pointer-events:none;
 }
 
 .hero-badge{
   display:inline-flex;align-items:center;gap:8px;
   padding:7px 18px;border-radius:9999px;
   font-size:11px;font-weight:700;letter-spacing:0.20em;text-transform:uppercase;
-  background:rgba(220,20,60,0.18);border:1px solid rgba(220,20,60,0.55);
-  color:rgba(255,255,255,0.90);margin-bottom:22px;
+  background:rgba(220,20,60,0.15);border:1px solid rgba(220,20,60,0.50);
+  color:rgba(255,255,255,0.88);margin-bottom:24px;
   animation:fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) both;
 }
-.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--sn-crimson);animation:pulse 2s infinite;}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)}}
+.hero-badge .pulse{width:6px;height:6px;border-radius:50%;background:var(--sn-crimson);animation:pulseDot 2s infinite;}
+@keyframes pulseDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.7)}}
 
 .hero-h1{
   font-family:var(--font-h);
-  font-size:clamp(44px,6.5vw,84px);
+  font-size:clamp(46px,5.8vw,82px);
   line-height:0.88;
   text-transform:uppercase;
   color:#fff;
-  margin-bottom:20px;
+  margin-bottom:22px;
   letter-spacing:0.02em;
-  animation:fadeUp 0.6s 0.1s cubic-bezier(0.16,1,0.3,1) both;
+  animation:fadeUp 0.6s 0.08s cubic-bezier(0.16,1,0.3,1) both;
 }
-.hero-h1 .line-swap{
-  display:block;
-  color:var(--sn-lime);
-  position:relative;
-  overflow:hidden;
-}
-/* kinetic word swap */
+.hero-h1 .accent{color:var(--sn-lime);display:block;}
+
+/* kinetic word */
+.kinetic-wrap{overflow:hidden;display:inline-block;vertical-align:bottom;}
 .kinetic{
   display:inline-block;
-  animation:wordSwap 4s steps(1) infinite;
-}
-@keyframes wordSwap{
-  0%,24%{opacity:1;transform:translateY(0)}
-  25%{opacity:0;transform:translateY(-100%)}
-  26%{opacity:0;transform:translateY(100%)}
-  27%,49%{opacity:1;transform:translateY(0)}
-  50%{opacity:0;transform:translateY(-100%)}
-  51%{opacity:0;transform:translateY(100%)}
-  52%,74%{opacity:1;transform:translateY(0)}
-  75%{opacity:0;transform:translateY(-100%)}
-  76%{opacity:0;transform:translateY(100%)}
-  77%,99%{opacity:1;transform:translateY(0)}
+  transition:opacity 0.3s ease, transform 0.35s cubic-bezier(0.16,1,0.3,1);
 }
 
 .hero-sub{
   font-size:clamp(14px,1.1vw,16px);
-  color:rgba(255,255,255,0.62);
-  line-height:1.70;
-  max-width:38ch;
+  color:rgba(255,255,255,0.58);
+  line-height:1.72;
+  max-width:36ch;
   margin-bottom:32px;
-  animation:fadeUp 0.6s 0.2s cubic-bezier(0.16,1,0.3,1) both;
+  animation:fadeUp 0.6s 0.16s cubic-bezier(0.16,1,0.3,1) both;
 }
 
-/* dot nav */
 .hero-dots{
-  display:flex;align-items:center;gap:10px;
-  margin-bottom:36px;
-  animation:fadeUp 0.6s 0.25s cubic-bezier(0.16,1,0.3,1) both;
+  display:flex;align-items:center;gap:8px;
+  margin-bottom:32px;
+  animation:fadeUp 0.6s 0.22s cubic-bezier(0.16,1,0.3,1) both;
 }
 .hero-dot{
   width:8px;height:8px;border-radius:50%;
-  background:rgba(255,255,255,0.25);cursor:pointer;
+  background:rgba(255,255,255,0.22);cursor:pointer;
   transition:all 0.3s ease;border:none;padding:0;
 }
 .hero-dot.active{width:28px;border-radius:4px;background:var(--sn-crimson);}
-.hero-dot:hover:not(.active){background:rgba(255,255,255,0.50);}
+.hero-dot:hover:not(.active){background:rgba(255,255,255,0.45);}
 
 .hero-btns{
   display:flex;gap:12px;flex-wrap:wrap;
-  animation:fadeUp 0.6s 0.30s cubic-bezier(0.16,1,0.3,1) both;
+  animation:fadeUp 0.6s 0.28s cubic-bezier(0.16,1,0.3,1) both;
 }
 .btn-crimson{
   display:inline-flex;align-items:center;gap:8px;
@@ -161,145 +129,159 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
   letter-spacing:0.08em;text-transform:uppercase;
   border:none;cursor:pointer;text-decoration:none;
   transition:transform 0.2s,box-shadow 0.2s;
-  box-shadow:0 4px 24px rgba(220,20,60,0.45);
+  box-shadow:0 4px 28px rgba(220,20,60,0.50);
 }
-.btn-crimson:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(220,20,60,0.60);}
+.btn-crimson:hover{transform:translateY(-2px);box-shadow:0 8px 36px rgba(220,20,60,0.65);}
 .btn-ghost{
   display:inline-flex;align-items:center;gap:8px;
   padding:14px 28px;border-radius:9999px;
-  background:rgba(255,255,255,0.08);color:#fff;
+  background:rgba(255,255,255,0.07);color:#fff;
   font-family:var(--font-b);font-size:13px;font-weight:600;
-  border:1px solid rgba(255,255,255,0.22);cursor:pointer;text-decoration:none;
-  transition:background 0.2s,border-color 0.2s;
+  border:1px solid rgba(255,255,255,0.20);cursor:pointer;text-decoration:none;
+  transition:background 0.2s;
 }
-.btn-ghost:hover{background:rgba(255,255,255,0.14);border-color:rgba(255,255,255,0.40);}
+.btn-ghost:hover{background:rgba(255,255,255,0.13);}
 
-/* scroll indicator */
 .hero-scroll{
   margin-top:clamp(28px,4vh,48px);
   display:flex;align-items:center;gap:10px;
-  font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;
-  color:rgba(255,255,255,0.30);
-  animation:fadeUp 0.6s 0.38s cubic-bezier(0.16,1,0.3,1) both;
+  font-size:10px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;
+  color:rgba(255,255,255,0.25);
+  animation:fadeUp 0.6s 0.36s cubic-bezier(0.16,1,0.3,1) both;
 }
-.scroll-line{width:36px;height:1px;background:rgba(255,255,255,0.20);}
+.scroll-line{width:32px;height:1px;background:rgba(255,255,255,0.18);}
 
-/* ── RIGHT: GLASS CARD ASSEMBLY ── */
+/* ── RIGHT: GLASS CARD HALF ── */
 .hero-right{
   position:relative;
+  overflow:hidden;
   display:flex;align-items:center;justify-content:center;
-  height:100%;
-  padding:clamp(40px,6vh,80px) 0 clamp(40px,6vh,80px) clamp(20px,3vw,40px);
-  animation:fadeUp 0.7s 0.15s cubic-bezier(0.16,1,0.3,1) both;
+  /* full height panel */
+  min-height:calc(100svh - 64px);
 }
 
-/* Layer 1: background bowl image — blurred, muted, full bleed of right column */
-.hero-bg-bowl{
-  position:absolute;
-  inset:-20px;
-  background:url('images/heroimg-chipsbowl1.png') center/cover no-repeat;
-  filter:blur(18px) brightness(0.30) saturate(0.60);
-  transform:scale(1.08);
-  border-radius:0;
+/* deep bg for right panel */
+.hero-right-bg{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse 90% 80% at 60% 45%, #5a0018 0%, #2e0010 50%, #0e0005 100%);
   z-index:0;
 }
 
-/* Layer 2: glassmorphism card */
+/* glassmorphism card — fills most of the right panel */
 .glass-card{
   position:relative;z-index:2;
-  width:min(360px,90%);
-  min-height:420px;
-  border-radius:var(--card-r);
-  background:rgba(139,0,0,0.18);
-  backdrop-filter:blur(24px) saturate(1.4);
-  -webkit-backdrop-filter:blur(24px) saturate(1.4);
-  border:1px solid rgba(255,255,255,0.18);
+  width:clamp(300px, 78%, 540px);
+  /* height driven by content + overflow */
+  border-radius:32px;
+  background:rgba(100,0,20,0.22);
+  backdrop-filter:blur(32px) saturate(1.5);
+  -webkit-backdrop-filter:blur(32px) saturate(1.5);
+  border:1px solid rgba(255,255,255,0.16);
   box-shadow:
-    0 0 0 1px rgba(220,20,60,0.25),
-    0 24px 64px rgba(0,0,0,0.55),
-    inset 0 1px 0 rgba(255,255,255,0.12);
-  display:flex;align-items:center;justify-content:center;
-  overflow:visible;/* IMPORTANT: allows bowl to overflow */
+    0 0 0 1px rgba(220,20,60,0.20),
+    0 32px 80px rgba(0,0,0,0.60),
+    inset 0 1px 0 rgba(255,255,255,0.10);
+  /* overflow visible so bowl bleeds above/below */
+  overflow:visible;
+  /* give it a fixed height so the bowl has something to overflow from */
+  height:clamp(380px,58vh,560px);
+  animation:fadeUp 0.7s 0.12s cubic-bezier(0.16,1,0.3,1) both;
 }
 
-/* subtle inner glow on card */
+/* card inner glow */
 .glass-card::before{
-  content:'';position:absolute;inset:0;border-radius:var(--card-r);
-  background:radial-gradient(ellipse 70% 50% at 50% 100%, rgba(220,20,60,0.15) 0%, transparent 70%);
-  pointer-events:none;
+  content:'';position:absolute;inset:0;border-radius:32px;
+  background:radial-gradient(ellipse 60% 40% at 50% 110%, rgba(220,20,60,0.20) 0%, transparent 70%);
+  pointer-events:none;z-index:0;
 }
 
-/* card inner label — optional bottom strip */
-.glass-card-label{
+/* card bottom label */
+.card-label{
   position:absolute;bottom:24px;left:50%;transform:translateX(-50%);
+  white-space:nowrap;
   display:inline-flex;align-items:center;gap:6px;
-  padding:6px 16px;border-radius:9999px;
+  padding:6px 18px;border-radius:9999px;
   font-size:10px;font-weight:700;letter-spacing:0.20em;text-transform:uppercase;
-  background:rgba(0,0,0,0.40);border:1px solid rgba(255,255,255,0.18);
-  color:rgba(255,255,255,0.65);white-space:nowrap;
+  background:rgba(0,0,0,0.45);border:1px solid rgba(255,255,255,0.16);
+  color:rgba(255,255,255,0.60);z-index:3;
 }
 
-/* Layer 3: the bowl PNG — overflows above and below card */
-.hero-bowl-img{
+/* THE BOWL — overflows above and below the card */
+.bowl-img{
   position:absolute;
   z-index:10;
-  /* sits centered on the card, overflows top by ~28% and bottom by ~10% */
-  top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  width:min(440px,115%);
+  /* centered on the card, bleeds ~30% above and 10% below */
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -48%);
+  width:115%;
+  max-width:620px;
   height:auto;
   object-fit:contain;
-  /* drop shadow to separate from card */
-  filter:drop-shadow(0 24px 48px rgba(0,0,0,0.70)) drop-shadow(0 4px 12px rgba(220,20,60,0.30));
+  filter:
+    drop-shadow(0 28px 56px rgba(0,0,0,0.75))
+    drop-shadow(0 4px 16px rgba(220,20,60,0.28));
   pointer-events:none;
+  animation:floatBowl 5s ease-in-out infinite;
+}
+@keyframes floatBowl{
+  0%,100%{transform:translate(-50%,-48%) translateY(0)}
+  50%{transform:translate(-50%,-48%) translateY(-10px)}
 }
 
-/* ── MARQUEE STRIP ── */
+/* card stat chips */
+.card-stats{
+  position:absolute;
+  z-index:4;
+  display:flex;flex-direction:column;gap:10px;
+  right:-20px;top:50%;transform:translateY(-50%);
+}
+.stat-chip{
+  background:rgba(255,255,255,0.10);
+  border:1px solid rgba(255,255,255,0.18);
+  backdrop-filter:blur(10px);
+  border-radius:14px;
+  padding:10px 14px;
+  min-width:110px;
+  text-align:center;
+}
+.stat-chip .num{font-family:var(--font-h);font-size:22px;color:#fff;display:block;}
+.stat-chip .lbl{font-size:9px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.50);display:block;margin-top:2px;}
+
+/* ── MARQUEE ── */
 .marquee-wrap{overflow:hidden;padding-block:13px;background:#0D0008;}
 .marquee-track{display:flex;animation:mscroll 26s linear infinite;width:max-content;}
 .marquee-wrap.rev .marquee-track{animation-direction:reverse}
 @keyframes mscroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-.mitem{
-  font-family:var(--font-s);font-size:clamp(11px,1.2vw,13px);font-weight:700;
-  letter-spacing:0.16em;text-transform:uppercase;white-space:nowrap;
-  padding-inline:clamp(14px,2vw,24px);display:flex;align-items:center;gap:clamp(14px,2vw,24px);
-}
+.mitem{font-family:var(--font-s);font-size:clamp(11px,1.2vw,13px);font-weight:700;letter-spacing:0.16em;text-transform:uppercase;white-space:nowrap;padding-inline:clamp(14px,2vw,24px);display:flex;align-items:center;gap:clamp(14px,2vw,24px);}
 .mitem .dot{width:4px;height:4px;border-radius:50%;background:currentColor;opacity:0.45;flex-shrink:0;}
 .mq-dark{background:#0D0008;color:var(--sn-lime)}
 .mq-red{background:var(--sn-crimson);color:#fff}
 
-/* ── ANIMATIONS ── */
 @keyframes fadeUp{
-  from{opacity:0;transform:translateY(22px)}
+  from{opacity:0;transform:translateY(24px)}
   to{opacity:1;transform:translateY(0)}
 }
 
 /* ── MOBILE ── */
 @media(max-width:860px){
-  .hero-inner{
+  .hero{
     grid-template-columns:1fr;
     grid-template-rows:auto auto;
-    align-items:start;
   }
   .hero-left{
-    padding:clamp(32px,5vh,56px) 0 24px;
     align-items:center;text-align:center;
+    padding:clamp(36px,5vh,56px) clamp(20px,5vw,40px);
   }
-  .hero-sub{text-align:center;max-width:48ch;}
+  .hero-sub{text-align:center;max-width:46ch;}
   .hero-btns{justify-content:center;}
   .hero-dots{justify-content:center;}
   .hero-right{
-    height:360px;width:100%;
-    padding:0;
-    margin-bottom:clamp(32px,5vh,56px);
+    min-height:480px;
   }
-  .hero-bowl-img{width:min(300px,85%);}
-  .glass-card{width:min(280px,82%);min-height:320px;}
-}
-@media(max-width:480px){
-  .hero-right{height:300px;}
-  .hero-bowl-img{width:min(260px,90%);}
-  .glass-card{min-height:260px;}
+  .card-stats{display:none;}
+  .bowl-img{width:90%;}
+  .glass-card{width:min(280px,80%);height:clamp(300px,42vw,400px);}
 }
 </style>
 </head>
@@ -316,136 +298,141 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
   <a href="#" class="nav-cta">Enquire Now</a>
 </nav>
 
-<!-- ══ HERO ══ -->
 <section class="hero" id="hero">
-  <div class="hero-inner">
 
-    <!-- LEFT: TEXT -->
-    <div class="hero-left">
+  <!-- LEFT 48% -->
+  <div class="hero-left">
 
-      <div class="hero-badge">
-        <span class="dot"></span>
-        The Science of Snacking Right
-      </div>
-
-      <h1 class="hero-h1">
-        Snacks<br>
-        <span class="line-swap">
-          For the&nbsp;<span class="kinetic" id="kineticWord">Bold.</span>
-        </span>
-      </h1>
-
-      <p class="hero-sub">
-        Bold Indian flavours. Honest ingredients. Zero artificial nonsense. Made for people who refuse to snack sad.
-      </p>
-
-      <div class="hero-dots">
-        <button class="hero-dot active" aria-label="Slide 1"></button>
-        <button class="hero-dot" aria-label="Slide 2"></button>
-        <button class="hero-dot" aria-label="Slide 3"></button>
-        <button class="hero-dot" aria-label="Slide 4"></button>
-      </div>
-
-      <div class="hero-btns">
-        <a href="#products" class="btn-crimson">Explore Range ↓</a>
-        <a href="#" class="btn-ghost">B2B Enquiry</a>
-      </div>
-
-      <div class="hero-scroll">
-        <span class="scroll-line"></span>
-        Scroll
-      </div>
-
+    <div class="hero-badge">
+      <span class="pulse"></span>
+      The Science of Snacking Right
     </div>
 
-    <!-- RIGHT: GLASS CARD + BOWL IMAGE -->
-    <div class="hero-right">
-      <!-- Layer 1: blurred bg -->
-      <div class="hero-bg-bowl" aria-hidden="true"></div>
+    <h1 class="hero-h1">
+      Your Snack<br>
+      Drawer is<br>
+      <span class="accent">
+        <span class="kinetic-wrap"><span class="kinetic" id="kineticWord">Bored.</span></span>
+      </span>
+    </h1>
 
-      <!-- Layer 2: glass card -->
-      <div class="glass-card">
-        <div class="glass-card-label">&#9889; Indian Snacks. Reimagined.</div>
+    <p class="hero-sub">
+      Bold Indian flavours. Honest ingredients. Zero artificial nonsense. Made for people who refuse to snack sad.
+    </p>
 
-        <!-- Layer 3: bowl image overflows card -->
-        <img
-          class="hero-bowl-img"
-          src="images/heroimg-chipsbowl1.png"
-          alt="Stacked bowls of premium Indian snacks"
-          loading="eager"
-        />
+    <div class="hero-dots">
+      <button class="hero-dot active" aria-label="1"></button>
+      <button class="hero-dot" aria-label="2"></button>
+      <button class="hero-dot" aria-label="3"></button>
+      <button class="hero-dot" aria-label="4"></button>
+    </div>
+
+    <div class="hero-btns">
+      <a href="#products" class="btn-crimson">Explore Range &darr;</a>
+      <a href="#" class="btn-ghost">B2B Enquiry</a>
+    </div>
+
+    <div class="hero-scroll">
+      <span class="scroll-line"></span>
+      Scroll to explore
+    </div>
+
+  </div>
+
+  <!-- RIGHT 52% -->
+  <div class="hero-right">
+    <div class="hero-right-bg" aria-hidden="true"></div>
+
+    <!-- glass card -->
+    <div class="glass-card">
+      <div class="card-label">&#9889; Indian Snacks. Reimagined.</div>
+
+      <!-- bowl overflows above + below -->
+      <img
+        class="bowl-img"
+        src="images/Heroimg-chipsbowl1.png"
+        alt="Premium Indian snack bowl"
+        loading="eager"
+      />
+    </div>
+
+    <!-- floating stat chips on right edge -->
+    <div class="card-stats">
+      <div class="stat-chip">
+        <span class="num">50+</span>
+        <span class="lbl">Flavours</span>
+      </div>
+      <div class="stat-chip">
+        <span class="num">0</span>
+        <span class="lbl">Artificial</span>
+      </div>
+      <div class="stat-chip">
+        <span class="num">&#9733;4.9</span>
+        <span class="lbl">Rated</span>
       </div>
     </div>
 
   </div>
+
 </section>
 
 <!-- MARQUEE -->
-<div class="full-bleed">
-  <div class="marquee-wrap mq-dark">
-    <div class="marquee-track">
-      <span class="mitem">Gym Tomorrow<span class="dot"></span></span>
-      <span class="mitem">Snacks Today<span class="dot"></span></span>
-      <span class="mitem">Dadi Approved<span class="dot"></span></span>
-      <span class="mitem">Dietitian Confused<span class="dot"></span></span>
-      <span class="mitem">0 Artificial Flavours<span class="dot"></span></span>
-      <span class="mitem">Born Bold<span class="dot"></span></span>
-      <span class="mitem">One Bag. No Survivors.<span class="dot"></span></span>
-      <span class="mitem">Gym Tomorrow<span class="dot"></span></span>
-      <span class="mitem">Snacks Today<span class="dot"></span></span>
-      <span class="mitem">Dadi Approved<span class="dot"></span></span>
-      <span class="mitem">Dietitian Confused<span class="dot"></span></span>
-      <span class="mitem">0 Artificial Flavours<span class="dot"></span></span>
-      <span class="mitem">Born Bold<span class="dot"></span></span>
-      <span class="mitem">One Bag. No Survivors.<span class="dot"></span></span>
-    </div>
+<div class="marquee-wrap mq-dark">
+  <div class="marquee-track">
+    <span class="mitem">Gym Tomorrow<span class="dot"></span></span>
+    <span class="mitem">Snacks Today<span class="dot"></span></span>
+    <span class="mitem">Dadi Approved<span class="dot"></span></span>
+    <span class="mitem">Dietitian Confused<span class="dot"></span></span>
+    <span class="mitem">0 Artificial Flavours<span class="dot"></span></span>
+    <span class="mitem">Born Bold<span class="dot"></span></span>
+    <span class="mitem">One Bag. No Survivors.<span class="dot"></span></span>
+    <span class="mitem">Gym Tomorrow<span class="dot"></span></span>
+    <span class="mitem">Snacks Today<span class="dot"></span></span>
+    <span class="mitem">Dadi Approved<span class="dot"></span></span>
+    <span class="mitem">Dietitian Confused<span class="dot"></span></span>
+    <span class="mitem">0 Artificial Flavours<span class="dot"></span></span>
+    <span class="mitem">Born Bold<span class="dot"></span></span>
+    <span class="mitem">One Bag. No Survivors.<span class="dot"></span></span>
   </div>
 </div>
-<div class="full-bleed">
-  <div class="marquee-wrap mq-red rev">
-    <div class="marquee-track">
-      <span class="mitem">&#8734; Repeat Cravings<span class="dot"></span></span>
-      <span class="mitem">Chatpata Isn&#8217;t a Flavour &#8212; It&#8217;s a Feeling<span class="dot"></span></span>
-      <span class="mitem">Guilt Left. Crunch Stayed.<span class="dot"></span></span>
-      <span class="mitem">For People Who Refuse to Snack Sad<span class="dot"></span></span>
-      <span class="mitem">&#8734; Repeat Cravings<span class="dot"></span></span>
-      <span class="mitem">Chatpata Isn&#8217;t a Flavour &#8212; It&#8217;s a Feeling<span class="dot"></span></span>
-      <span class="mitem">Guilt Left. Crunch Stayed.<span class="dot"></span></span>
-      <span class="mitem">For People Who Refuse to Snack Sad<span class="dot"></span></span>
-    </div>
+<div class="marquee-wrap mq-red rev">
+  <div class="marquee-track">
+    <span class="mitem">&infin; Repeat Cravings<span class="dot"></span></span>
+    <span class="mitem">Chatpata Isn&rsquo;t a Flavour &mdash; It&rsquo;s a Feeling<span class="dot"></span></span>
+    <span class="mitem">Guilt Left. Crunch Stayed.<span class="dot"></span></span>
+    <span class="mitem">For People Who Refuse to Snack Sad<span class="dot"></span></span>
+    <span class="mitem">&infin; Repeat Cravings<span class="dot"></span></span>
+    <span class="mitem">Chatpata Isn&rsquo;t a Flavour &mdash; It&rsquo;s a Feeling<span class="dot"></span></span>
+    <span class="mitem">Guilt Left. Crunch Stayed.<span class="dot"></span></span>
+    <span class="mitem">For People Who Refuse to Snack Sad<span class="dot"></span></span>
   </div>
 </div>
 
-<!-- placeholder for rest of page sections -->
-<div style="min-height:200px;display:flex;align-items:center;justify-content:center;background:#0D0008;color:rgba(255,255,255,0.25);font-size:13px;letter-spacing:0.14em;font-family:'Space Grotesk',sans-serif;text-transform:uppercase;">
-  ↓ Rest of page sections continue here
+<div style="min-height:160px;display:flex;align-items:center;justify-content:center;background:#0D0008;color:rgba(255,255,255,0.22);font-size:12px;letter-spacing:0.16em;font-family:'Space Grotesk',sans-serif;text-transform:uppercase;">
+  &darr; Rest of page sections continue here
 </div>
 
 <script>
-// Kinetic word swap
-const words = ['Bold.', 'Curious.', 'Daring.', 'Real.'];
+const words = ['Bored.','Confused.','Craving.','Alive.'];
 let wi = 0;
 const el = document.getElementById('kineticWord');
 setInterval(() => {
-  wi = (wi + 1) % words.length;
   el.style.opacity = '0';
   el.style.transform = 'translateY(-100%)';
   setTimeout(() => {
+    wi = (wi + 1) % words.length;
     el.textContent = words[wi];
     el.style.transition = 'none';
-    el.style.transform = 'translateY(100%)';
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        el.style.transition = 'opacity 0.4s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1)';
-        el.style.opacity = '1';
-        el.style.transform = 'translateY(0)';
-      });
-    });
-  }, 300);
-}, 3000);
+    el.style.transform = 'translateY(80%)';
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      el.style.transition = 'opacity 0.38s ease, transform 0.42s cubic-bezier(0.16,1,0.3,1)';
+      el.style.opacity = '1';
+      el.style.transform = 'translateY(0)';
+    }));
+  }, 280);
+}, 3200);
 
-// Dot nav active state
-document.querySelectorAll('.hero-dot').forEach((dot, i) => {
+document.querySelectorAll('.hero-dot').forEach(dot => {
   dot.addEventListener('click', () => {
     document.querySelectorAll('.hero-dot').forEach(d => d.classList.remove('active'));
     dot.classList.add('active');
