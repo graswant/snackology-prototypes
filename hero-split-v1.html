@@ -57,7 +57,6 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
   background:linear-gradient(135deg, #1e0008 0%, #2a000e 60%, #160005 100%);
   z-index:2;
 }
-/* subtle left-panel glow */
 .hero-left::after{
   content:'';position:absolute;top:20%;right:-80px;
   width:200px;height:200px;border-radius:50%;
@@ -88,7 +87,6 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
 }
 .hero-h1 .accent{color:var(--sn-lime);display:block;}
 
-/* kinetic word */
 .kinetic-wrap{overflow:hidden;display:inline-block;vertical-align:bottom;}
 .kinetic{
   display:inline-block;
@@ -151,105 +149,100 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
 }
 .scroll-line{width:32px;height:1px;background:rgba(255,255,255,0.18);}
 
-/* ── RIGHT: GLASS CARD HALF ── */
+/* ── RIGHT: FULL PANEL ── */
 .hero-right{
   position:relative;
   overflow:hidden;
   display:flex;align-items:center;justify-content:center;
-  /* full height panel */
   min-height:calc(100svh - 64px);
+  /* rich deep crimson radial — matches brand, complements transparent PNG */
+  background:
+    radial-gradient(ellipse 100% 90% at 55% 40%, #4a0018 0%, #220008 55%, #0e0003 100%);
 }
 
-/* deep bg for right panel */
-.hero-right-bg{
-  position:absolute;inset:0;
-  background:radial-gradient(ellipse 90% 80% at 60% 45%, #5a0018 0%, #2e0010 50%, #0e0005 100%);
-  z-index:0;
+/* soft vignette edge on right panel */
+.hero-right::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 80% at 50% 50%, transparent 40%, rgba(10,0,3,0.55) 100%);
+  pointer-events:none;z-index:1;
 }
 
-/* glassmorphism card — fills most of the right panel */
+/* glassmorphism card */
 .glass-card{
   position:relative;z-index:2;
-  width:clamp(300px, 78%, 540px);
-  /* height driven by content + overflow */
-  border-radius:32px;
-  background:rgba(100,0,20,0.22);
-  backdrop-filter:blur(32px) saturate(1.5);
-  -webkit-backdrop-filter:blur(32px) saturate(1.5);
-  border:1px solid rgba(255,255,255,0.16);
-  box-shadow:
-    0 0 0 1px rgba(220,20,60,0.20),
-    0 32px 80px rgba(0,0,0,0.60),
-    inset 0 1px 0 rgba(255,255,255,0.10);
-  /* overflow visible so bowl bleeds above/below */
-  overflow:visible;
-  /* give it a fixed height so the bowl has something to overflow from */
+  width:clamp(300px, 78%, 520px);
   height:clamp(380px,58vh,560px);
+  border-radius:32px;
+  background:rgba(80,0,15,0.25);
+  backdrop-filter:blur(28px) saturate(1.6);
+  -webkit-backdrop-filter:blur(28px) saturate(1.6);
+  border:1px solid rgba(255,255,255,0.14);
+  box-shadow:
+    0 0 0 1px rgba(220,20,60,0.18),
+    0 32px 80px rgba(0,0,0,0.55),
+    inset 0 1px 0 rgba(255,255,255,0.10);
+  overflow:visible;
   animation:fadeUp 0.7s 0.12s cubic-bezier(0.16,1,0.3,1) both;
 }
 
-/* card inner glow */
+/* inner card glow at base — gives bowl a "resting light" feel */
 .glass-card::before{
   content:'';position:absolute;inset:0;border-radius:32px;
-  background:radial-gradient(ellipse 60% 40% at 50% 110%, rgba(220,20,60,0.20) 0%, transparent 70%);
+  background:radial-gradient(ellipse 65% 35% at 50% 105%, rgba(220,20,60,0.22) 0%, transparent 65%);
   pointer-events:none;z-index:0;
 }
 
-/* card bottom label */
+/* bottom label */
 .card-label{
-  position:absolute;bottom:24px;left:50%;transform:translateX(-50%);
-  white-space:nowrap;
+  position:absolute;bottom:22px;left:50%;transform:translateX(-50%);
+  white-space:nowrap;z-index:3;
   display:inline-flex;align-items:center;gap:6px;
   padding:6px 18px;border-radius:9999px;
   font-size:10px;font-weight:700;letter-spacing:0.20em;text-transform:uppercase;
-  background:rgba(0,0,0,0.45);border:1px solid rgba(255,255,255,0.16);
-  color:rgba(255,255,255,0.60);z-index:3;
+  background:rgba(0,0,0,0.40);border:1px solid rgba(255,255,255,0.15);
+  color:rgba(255,255,255,0.55);
 }
 
-/* THE BOWL — overflows above and below the card */
+/* THE BOWL — transparent PNG, overflows above + below card */
 .bowl-img{
   position:absolute;
   z-index:10;
-  /* centered on the card, bleeds ~30% above and 10% below */
   top:50%;
   left:50%;
-  transform:translate(-50%, -48%);
-  width:115%;
-  max-width:620px;
+  transform:translate(-50%, -50%);
+  width:118%;
+  max-width:640px;
   height:auto;
   object-fit:contain;
   filter:
-    drop-shadow(0 28px 56px rgba(0,0,0,0.75))
-    drop-shadow(0 4px 16px rgba(220,20,60,0.28));
+    drop-shadow(0 32px 64px rgba(0,0,0,0.80))
+    drop-shadow(0 6px 20px rgba(180,10,30,0.35));
   pointer-events:none;
-  animation:floatBowl 5s ease-in-out infinite;
+  animation:floatBowl 5.5s ease-in-out infinite;
 }
 @keyframes floatBowl{
-  0%,100%{transform:translate(-50%,-48%) translateY(0)}
-  50%{transform:translate(-50%,-48%) translateY(-10px)}
+  0%,100%{transform:translate(-50%,-50%) translateY(0)}
+  50%{transform:translate(-50%,-50%) translateY(-12px)}
 }
 
-/* card stat chips */
+/* floating stat chips */
 .card-stats{
-  position:absolute;
-  z-index:4;
+  position:absolute;z-index:4;
   display:flex;flex-direction:column;gap:10px;
-  right:-20px;top:50%;transform:translateY(-50%);
+  right:-18px;top:50%;transform:translateY(-50%);
 }
 .stat-chip{
-  background:rgba(255,255,255,0.10);
-  border:1px solid rgba(255,255,255,0.18);
-  backdrop-filter:blur(10px);
-  border-radius:14px;
-  padding:10px 14px;
-  min-width:110px;
-  text-align:center;
+  background:rgba(255,255,255,0.09);
+  border:1px solid rgba(255,255,255,0.16);
+  backdrop-filter:blur(12px);
+  border-radius:14px;padding:10px 14px;
+  min-width:108px;text-align:center;
 }
 .stat-chip .num{font-family:var(--font-h);font-size:22px;color:#fff;display:block;}
-.stat-chip .lbl{font-size:9px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.50);display:block;margin-top:2px;}
+.stat-chip .lbl{font-size:9px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.45);display:block;margin-top:2px;}
 
-/* ── MARQUEE ── */
-.marquee-wrap{overflow:hidden;padding-block:13px;background:#0D0008;}
+/* MARQUEE */
+.marquee-wrap{overflow:hidden;padding-block:13px;}
 .marquee-track{display:flex;animation:mscroll 26s linear infinite;width:max-content;}
 .marquee-wrap.rev .marquee-track{animation-direction:reverse}
 @keyframes mscroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
@@ -263,22 +256,14 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
   to{opacity:1;transform:translateY(0)}
 }
 
-/* ── MOBILE ── */
+/* MOBILE */
 @media(max-width:860px){
-  .hero{
-    grid-template-columns:1fr;
-    grid-template-rows:auto auto;
-  }
-  .hero-left{
-    align-items:center;text-align:center;
-    padding:clamp(36px,5vh,56px) clamp(20px,5vw,40px);
-  }
+  .hero{grid-template-columns:1fr;grid-template-rows:auto auto;}
+  .hero-left{align-items:center;text-align:center;padding:clamp(36px,5vh,56px) clamp(20px,5vw,40px);}
   .hero-sub{text-align:center;max-width:46ch;}
   .hero-btns{justify-content:center;}
   .hero-dots{justify-content:center;}
-  .hero-right{
-    min-height:480px;
-  }
+  .hero-right{min-height:480px;}
   .card-stats{display:none;}
   .bowl-img{width:90%;}
   .glass-card{width:min(280px,80%);height:clamp(300px,42vw,400px);}
@@ -302,7 +287,6 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
 
   <!-- LEFT 48% -->
   <div class="hero-left">
-
     <div class="hero-badge">
       <span class="pulse"></span>
       The Science of Snacking Right
@@ -336,27 +320,24 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
       <span class="scroll-line"></span>
       Scroll to explore
     </div>
-
   </div>
 
   <!-- RIGHT 52% -->
   <div class="hero-right">
-    <div class="hero-right-bg" aria-hidden="true"></div>
-
     <!-- glass card -->
     <div class="glass-card">
       <div class="card-label">&#9889; Indian Snacks. Reimagined.</div>
 
-      <!-- bowl overflows above + below -->
+      <!-- transparent bowl PNG — overflows above + below -->
       <img
         class="bowl-img"
-        src="images/Heroimg-chipsbowl1.png"
+        src="images/Chipsbowl1.png"
         alt="Premium Indian snack bowl"
         loading="eager"
       />
     </div>
 
-    <!-- floating stat chips on right edge -->
+    <!-- floating stat chips -->
     <div class="card-stats">
       <div class="stat-chip">
         <span class="num">50+</span>
@@ -371,7 +352,6 @@ body{font-family:'Space Grotesk',sans-serif;color:#fff;-webkit-font-smoothing:an
         <span class="lbl">Rated</span>
       </div>
     </div>
-
   </div>
 
 </section>
